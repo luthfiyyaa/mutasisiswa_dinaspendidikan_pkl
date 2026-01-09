@@ -1,0 +1,27 @@
+[18-Dec-2018 12:43:18 Asia/Jakarta] PHP Warning:  Uncaught ErrorException: require(/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php): failed to open stream: No such file or directory in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php:133
+Stack trace:
+#0 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'require(/home/c...', '/home/c4r0l1n4/...', 133, Array)
+#1 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): require()
+#2 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(72): Dompdf\FontMetrics->loadFontFamilies()
+#3 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/Dompdf.php(295): Dompdf\FontMetrics->__construct(Object(Dompdf\Adapter\CPDF), Object(Dompdf\Options))
+#4 /home/c4r0l1n4/public_html/laravel/vendor/barryvdh/laravel-dompdf/src/ServiceProvider.php(49): Dompdf\Dompdf->__construct(Array)
+#5 /home/c4r0l1n4/publi in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
+[18-Dec-2018 12:43:18 Asia/Jakarta] PHP Fatal error:  Dompdf\FontMetrics::loadFontFamilies(): Failed opening required '/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php' (include_path='.:/opt/alt/php70/usr/share/pear') in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
+[18-Dec-2018 12:43:25 Asia/Jakarta] PHP Warning:  Uncaught ErrorException: require(/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php): failed to open stream: No such file or directory in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php:133
+Stack trace:
+#0 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'require(/home/c...', '/home/c4r0l1n4/...', 133, Array)
+#1 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): require()
+#2 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(72): Dompdf\FontMetrics->loadFontFamilies()
+#3 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/Dompdf.php(295): Dompdf\FontMetrics->__construct(Object(Dompdf\Adapter\CPDF), Object(Dompdf\Options))
+#4 /home/c4r0l1n4/public_html/laravel/vendor/barryvdh/laravel-dompdf/src/ServiceProvider.php(49): Dompdf\Dompdf->__construct(Array)
+#5 /home/c4r0l1n4/publi in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
+[18-Dec-2018 12:43:25 Asia/Jakarta] PHP Fatal error:  Dompdf\FontMetrics::loadFontFamilies(): Failed opening required '/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php' (include_path='.:/opt/alt/php70/usr/share/pear') in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
+[18-Dec-2018 12:43:27 Asia/Jakarta] PHP Warning:  Uncaught ErrorException: require(/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php): failed to open stream: No such file or directory in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php:133
+Stack trace:
+#0 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'require(/home/c...', '/home/c4r0l1n4/...', 133, Array)
+#1 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(133): require()
+#2 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php(72): Dompdf\FontMetrics->loadFontFamilies()
+#3 /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/Dompdf.php(295): Dompdf\FontMetrics->__construct(Object(Dompdf\Adapter\CPDF), Object(Dompdf\Options))
+#4 /home/c4r0l1n4/public_html/laravel/vendor/barryvdh/laravel-dompdf/src/ServiceProvider.php(49): Dompdf\Dompdf->__construct(Array)
+#5 /home/c4r0l1n4/publi in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
+[18-Dec-2018 12:43:27 Asia/Jakarta] PHP Fatal error:  Dompdf\FontMetrics::loadFontFamilies(): Failed opening required '/home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/lib/fonts/dompdf_font_family_cache.dist.php' (include_path='.:/opt/alt/php70/usr/share/pear') in /home/c4r0l1n4/public_html/laravel/vendor/dompdf/dompdf/src/FontMetrics.php on line 133
