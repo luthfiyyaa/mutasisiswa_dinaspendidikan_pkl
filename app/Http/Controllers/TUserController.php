@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 use App\GroupModel;
 use App\TUserModel;
 use App\MenuModel;
@@ -16,9 +17,10 @@ class TUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        //
+        //kalo perlu
+        return view('admin.t_user.index');
     }
 
     /**
@@ -26,9 +28,10 @@ class TUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
-        //
+        //kalo perlu
+        return view('admin.t_user.create');
     }
 
     /**
@@ -37,24 +40,35 @@ class TUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $t_user = new TUserModel;
-        $group_id = $request['group_id'];
+        $validated = $request->validate([
+            'group_id' => 'required|exist:tbl_group, group.id',
+            'menu_id' => 'nullable|array',
+            'menu_id.*' => 'exists:tbl_menu,menu_id'
+        ]);
 
-        DB::table('tbl_t_user')->where('group_id', '=', $group_id)->delete();
+        $group_id = $validated['group_id'];
+        
+        TUserModel::where('group_id', $group_id)->delete();
 
-        if(!empty($request['menu_id'])) {
-        foreach($request['menu_id'] as $menu_id){
-            // echo "value : ".$menu_id.'<br/>';
-            DB::table('tbl_t_user')->insert(array('group_id' => $group_id, 'menu_id' => $menu_id));
+        // Insert menu baru jika ada
+        if (!empty($validated['menu_id'])) {
+            $data = collect($validated['menu_id'])->map(function ($menu_id) use ($group_id) {
+                return [
+                    'group_id' => $group_id,
+                    'menu_id' => $menu_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            })->toArray();
 
+            DB::table('tbl_t_user')->insert($data);
         }
-        return Redirect::route('t_user.show',$group_id)->with('error',1);
-      }else {
-        return Redirect::route('t_user.show',$group_id)->with('error',1);
-      }
 
+        return redirect()
+            ->route('t_user.show', $group_id)
+            ->with('success', 'Hak akses menu berhasil diperbarui');
     }
 
     /**
@@ -67,6 +81,11 @@ class TUserController extends Controller
     {
         $menu = MenuModel::orderBy('menu_id_parent','ASC')->get();
         $nama_group = GroupModel::where('group_id','=',$id)->value('group_nama');
+        
+        if (!$nama_group){
+            abort(404, 'Group tidak ditemukan');
+        }
+
         $t_user = TUserModel::join('tbl_menu','tbl_menu.menu_id','=','tbl_t_user.menu_id')->where('tbl_t_user.group_id','=',$id)->get();
 
         $menu2 = MenuModel::where('menu_id_parent','=','0')->get();
@@ -82,7 +101,9 @@ class TUserController extends Controller
      */
     public function edit($id)
     {
-        //
+        // 
+        $t_user = TUserModel::findOrFail($id);
+        return view('admin.t_user.edit', compact('tUser'));
     }
 
     /**
@@ -92,9 +113,20 @@ class TUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         //
+        $validated = $request->validate([
+            'group_id' => 'required|exists:tbl_group,group_id',
+            'menu_id' => 'required|exists:tbl_menu,menu_id'
+        ]);
+
+        $t_user = TUserModel::findOrFail($id);
+        $t_user->update($validated);
+
+        return redirect()
+            ->route('t_user.index')
+            ->with('success', 'Data berhasil diperbarui');
     }
 
     /**
@@ -103,12 +135,32 @@ class TUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $group_id = TUserModel::where('t_user_id','=',$id)->value('group_id');
-        $t_user = TUserModel::find($id);
+    public function destroy(int $id): RedirectResponse
+    { 
+        $group_id = $t_user->group_id;
+        $t_user = TUserModel::findOrFail($id);
         $t_user->delete();
-        return Redirect::route('t_user.show',$group_id);
-        // dd($group_id);
+        return redirect()
+            ->route('t_user.show', $groupId)
+            ->with('success', 'Hak akses menu berhasil dihapus');
+
     }
+
+     public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'group_id' => 'required|exists:tbl_group,group_id',
+            'menu_ids' => 'required|array',
+            'menu_ids.*' => 'exists:tbl_t_user,t_user_id'
+        ]);
+
+        TUserModel::whereIn('t_user_id', $validated['menu_ids'])
+            ->where('group_id', $validated['group_id'])
+            ->delete();
+
+        return redirect()
+            ->route('t_user.show', $validated['group_id'])
+            ->with('success', 'Hak akses menu berhasil dihapus');
+    }
+
 }
