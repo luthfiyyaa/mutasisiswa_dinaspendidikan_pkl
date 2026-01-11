@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
-use App\Jenjang;
-use App\Pejabat;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\Jenjang;
+use App\Models\Pejabat;
 
 class JenjangController extends Controller
 {
@@ -19,10 +18,8 @@ class JenjangController extends Controller
      */
     public function index()
     {
-        $pejabat = Pejabat::orderBy('pejabat_id','desc')->get();
+        $pejabat = Pejabat::orderBy('pejabat_id', 'desc')->get();
         return view('admin.jenjang.index', compact('pejabat'));
-
-        // dd($pejabat);
     }
 
     /**
@@ -43,10 +40,17 @@ class JenjangController extends Controller
      */
     public function store(Request $request)
     {
-      $jenjang = new Jenjang;
-      $jenjang->jenjang_nama = $request['jenjang_nama'];
-      $jenjang->pejabat_id = $request['pejabat_id'];
-      $jenjang-> save();
+        $validated = $request->validate([
+            'jenjang_nama' => 'required|string|max:255',
+            'pejabat_id' => 'required|exists:pejabat,pejabat_id',
+        ]);
+
+        Jenjang::create([
+            'jenjang_nama' => $validated['jenjang_nama'],
+            'pejabat_id' => $validated['pejabat_id'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
     }
 
     /**
@@ -55,7 +59,7 @@ class JenjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -66,10 +70,10 @@ class JenjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-      $jenjang = Jenjang::find($id);
-      echo json_encode($jenjang);
+        $jenjang = Jenjang::findOrFail($id);
+        return response()->json($jenjang);
     }
 
     /**
@@ -79,12 +83,20 @@ class JenjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-      $jenjang = Jenjang::find($id);
-      $jenjang ->jenjang_nama = $request['jenjang_nama'];
-      $jenjang ->pejabat_id = $request['pejabat_id'];
-      $jenjang -> update();
+        $validated = $request->validate([
+            'jenjang_nama' => 'required|string|max:255',
+            'pejabat_id' => 'required|exists:pejabat,pejabat_id',
+        ]);
+
+        $jenjang = Jenjang::findOrFail($id);
+        $jenjang->update([
+            'jenjang_nama' => $validated['jenjang_nama'],
+            'pejabat_id' => $validated['pejabat_id'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
     }
 
     /**
@@ -93,42 +105,37 @@ class JenjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-      $jenjang = Jenjang::find($id);
-      $jenjang -> delete();
+        $jenjang = Jenjang::findOrFail($id);
+        $jenjang->delete();
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
     }
 
+    /**
+     * Get datatable listing
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listData()
     {
-      $jenjang = Jenjang::join('pejabat','jenjang.pejabat_id','=','pejabat.pejabat_id')
-                  ->orderBy('jenjang_id', 'ASC')
-                  ->get();
-      $kepada = "";
-      $no = 0;
-      $arr = array();
-      foreach ($jenjang as $list) {
+        $jenjang = Jenjang::query()
+            ->join('pejabat', 'jenjang.pejabat_id', '=', 'pejabat.pejabat_id')
+            ->select('jenjang.*', 'pejabat.pejabat_nama')
+            ->orderBy('jenjang_id', 'ASC');
 
-        if (count($jenjang) > 0) {
-
-          $no++;
-          $arr[] = array(
-              'no'=> $no,
-              'jenjang_nama'=> $list->jenjang_nama,
-              'pejabat_nama'=> $list->pejabat_nama,
-              'aksi'=> '<a onclick="editForm('.$list->jenjang_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-              <a onclick="deleteData('.$list->jenjang_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-            );
-
-          }else {
-            $arr = array();
-          }
-
-        }
-
-        $datas = new Collection($arr);
-        return Datatables::of($datas)->rawColumns(['no','jenjang_nama','pejabat_nama','aksi'])->make(true);
-
-      }
-
+        return DataTables::of($jenjang)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($row) {
+                return sprintf(
+                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    $row->jenjang_id,
+                    $row->jenjang_id
+                );
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
 }

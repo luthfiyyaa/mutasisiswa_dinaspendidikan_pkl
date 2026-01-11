@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
-use Illuminate\Support\Collection;
-use App\Kecamatan;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\Kecamatan;
 
 class KecamatanController extends Controller
 {
@@ -19,7 +17,6 @@ class KecamatanController extends Controller
     public function index()
     {
         return view('admin.kecamatan.index');
-        // return "oke kecamatan";
     }
 
     /**
@@ -29,7 +26,7 @@ class KecamatanController extends Controller
      */
     public function create()
     {
-      //
+        //
     }
 
     /**
@@ -40,10 +37,17 @@ class KecamatanController extends Controller
      */
     public function store(Request $request)
     {
-      $kecamatan = new Kecamatan;
-      $kecamatan->kecamatan_kode_wilayah = $request['kecamatan_kode_wilayah'];
-      $kecamatan->kecamatan_nama = $request['kecamatan_nama'];
-      $kecamatan-> save();
+        $validated = $request->validate([
+            'kecamatan_kode_wilayah' => 'required|string|max:50',
+            'kecamatan_nama' => 'required|string|max:255',
+        ]);
+
+        Kecamatan::create([
+            'kecamatan_kode_wilayah' => $validated['kecamatan_kode_wilayah'],
+            'kecamatan_nama' => $validated['kecamatan_nama'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
     }
 
     /**
@@ -52,7 +56,7 @@ class KecamatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -63,10 +67,10 @@ class KecamatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-      $kecamatan = Kecamatan::find($id);
-      echo json_encode($kecamatan);
+        $kecamatan = Kecamatan::findOrFail($id);
+        return response()->json($kecamatan);
     }
 
     /**
@@ -76,12 +80,20 @@ class KecamatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-      $kecamatan = Kecamatan::find($id);
-      $kecamatan ->kecamatan_kode_wilayah = $request['kecamatan_kode_wilayah'];
-      $kecamatan ->kecamatan_nama = $request['kecamatan_nama'];
-      $kecamatan -> update();
+        $validated = $request->validate([
+            'kecamatan_kode_wilayah' => 'required|string|max:50',
+            'kecamatan_nama' => 'required|string|max:255',
+        ]);
+
+        $kecamatan = Kecamatan::findOrFail($id);
+        $kecamatan->update([
+            'kecamatan_kode_wilayah' => $validated['kecamatan_kode_wilayah'],
+            'kecamatan_nama' => $validated['kecamatan_nama'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
     }
 
     /**
@@ -90,40 +102,34 @@ class KecamatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-      $kecamatan = Kecamatan::find($id);
-      $kecamatan -> delete();
+        $kecamatan = Kecamatan::findOrFail($id);
+        $kecamatan->delete();
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
     }
 
+    /**
+     * Get datatable listing
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listData()
     {
-      $kecamatan = Kecamatan::orderBy('kecamatan_id', 'ASC')->get();
-      $kepada = "";
-      $no = 0;
-      $arr = array();
-      foreach ($kecamatan as $list) {
+        $kecamatan = Kecamatan::query()->orderBy('kecamatan_id', 'ASC');
 
-        if (count($kecamatan) > 0) {
-
-          $no++;
-          $arr[] = array(
-              'no'=> $no,
-              'kecamatan_kode_wilayah'=> $list->kecamatan_kode_wilayah,
-              'kecamatan_nama'=> $list->kecamatan_nama,
-              'aksi'=> '<a onclick="editForm('.$list->kecamatan_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-              <a onclick="deleteData('.$list->kecamatan_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-            );
-
-          }else {
-            $arr = array();
-          }
-
-        }
-
-        $datas = new Collection($arr);
-        return Datatables::of($datas)->rawColumns(['no','kecamatan_kode_wilayah','kecamatan_nama','aksi'])->make(true);
-
-      }
-
+        return DataTables::of($kecamatan)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($row) {
+                return sprintf(
+                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    $row->kecamatan_id,
+                    $row->kecamatan_id
+                );
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
 }
