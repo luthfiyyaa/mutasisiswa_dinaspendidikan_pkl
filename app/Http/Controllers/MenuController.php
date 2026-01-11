@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use App\MenuModel;
+use Illuminate\Support\Facades\DB;
+use App\Models\MenuModel;
 
 class MenuController extends Controller
 {
@@ -16,8 +15,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-      $menu = MenuModel::where('menu_id_parent','=','0')->get();
-      return view('admin.menu.index', compact('menu'));
+        $menu = MenuModel::where('menu_id_parent', '0')->get();
+        return view('admin.menu.index', compact('menu'));
     }
 
     /**
@@ -38,11 +37,19 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-      $menu = new MenuModel;
-      $menu ->menu_id_parent = $request['menu_id_parent'];
-      $menu ->menu_nama = $request['menu_nama'];
-      $menu ->menu_link = $request['menu_link'];
-      $menu -> save();
+        $validated = $request->validate([
+            'menu_id_parent' => 'required|integer',
+            'menu_nama' => 'required|string|max:255',
+            'menu_link' => 'required|string|max:255',
+        ]);
+
+        MenuModel::create([
+            'menu_id_parent' => $validated['menu_id_parent'],
+            'menu_nama' => $validated['menu_nama'],
+            'menu_link' => $validated['menu_link'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Menu berhasil ditambahkan']);
     }
 
     /**
@@ -51,7 +58,7 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -62,10 +69,10 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-      $menu = MenuModel::find($id);
-      echo json_encode($menu);
+        $menu = MenuModel::findOrFail($id);
+        return response()->json($menu);
     }
 
     /**
@@ -75,13 +82,22 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-      $menu = MenuModel::find($id);
-      $menu ->menu_id_parent = $request['menu_id_parent'];
-      $menu ->menu_nama = $request['menu_nama'];
-      $menu ->menu_link = $request['menu_link'];
-      $menu -> update();
+        $validated = $request->validate([
+            'menu_id_parent' => 'required|integer',
+            'menu_nama' => 'required|string|max:255',
+            'menu_link' => 'required|string|max:255',
+        ]);
+
+        $menu = MenuModel::findOrFail($id);
+        $menu->update([
+            'menu_id_parent' => $validated['menu_id_parent'],
+            'menu_nama' => $validated['menu_nama'],
+            'menu_link' => $validated['menu_link'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Menu berhasil diupdate']);
     }
 
     /**
@@ -90,42 +106,44 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-      $menu = MenuModel::find($id);
-      $menu -> delete();
+        $menu = MenuModel::findOrFail($id);
+        $menu->delete();
+
+        return response()->json(['success' => true, 'message' => 'Menu berhasil dihapus']);
     }
 
+    /**
+     * Get datatable listing
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listData()
     {
-        $menu = MenuModel::orderBy('menu_id', 'DESC')->get();
-        $no = 0;
-        $data = array();
-        foreach ($menu as $list) {
+        $menu = MenuModel::query()
+            ->orderBy('menu_id', 'DESC')
+            ->get();
 
-          $menu_id = $list->menu_id_parent;
-          if ($menu_id!=0) {
-            $nama_menu = MenuModel::where('menu_id', '=', $menu_id)->value('menu_nama');
-          }else {
-            $nama_menu = "--";
-          }
+        $data = $menu->map(function ($list, $index) {
+            $nama_menu = $list->menu_id_parent != 0
+                ? MenuModel::where('menu_id', $list->menu_id_parent)->value('menu_nama') ?? '--'
+                : '--';
 
+            return [
+                $index + 1,
+                $list->menu_nama,
+                $list->menu_link,
+                $nama_menu,
+                sprintf(
+                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    $list->menu_id,
+                    $list->menu_id
+                )
+            ];
+        })->toArray();
 
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = $list->menu_nama;
-            $row[] = $list->menu_link;
-            $row[] = $nama_menu;
-            $row[] = '<a onclick="editForm('.$list->menu_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-            <a onclick="deleteData('.$list->menu_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>';
-            $data[] = $row;
-
-        }
-
-        $output = array("data" => $data);
-        return response()->json($output);
-
+        return response()->json(['data' => $data]);
     }
-
 }

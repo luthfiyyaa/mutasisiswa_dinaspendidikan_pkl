@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
+use Illuminate\Support\Facades\DB;
+// use Redirect;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Collection;
-use App\Jenjang;
-use App\Kecamatan;
-use App\Sekolah;
+use App\Models\Jenjang;
+use App\Models\Kecamatan;
+use App\Models\Sekolah;
 
 class SekolahController extends Controller
 {
@@ -18,7 +20,7 @@ class SekolahController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
       $jenjang = Jenjang::orderBy('jenjang_id','desc')->get();
       $kecamatan = Kecamatan::orderBy('kecamatan_id','desc')->get();
@@ -31,9 +33,13 @@ class SekolahController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         //
+        $jenjang = Jenjang::orderBy('jenjang_nama')->get();
+        $kecamatan = Kecamatan::orderBy('kecamatan_nama')->get();
+        
+        return view('admin.sekolah.create', compact('jenjang', 'kecamatan'));
     }
 
     /**
@@ -42,15 +48,23 @@ class SekolahController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-      $sekolah = new Sekolah;
-      $sekolah->kecamatan_id = $request['kecamatan_id'];
-      $sekolah->jenjang_id = $request['jenjang_id'];
-      $sekolah->sekolah_npsn = $request['sekolah_npsn'];
-      $sekolah->sekolah_nama = $request['sekolah_nama'];
-      $sekolah->sekolah_alamat = $request['sekolah_alamat'];
-      $sekolah-> save();
+      $validated = $request->validate([
+            'kecamatan_id' => 'required|exists:kecamatan,kecamatan_id',
+            'jenjang_id' => 'required|exists:jenjang,jenjang_id',
+            'sekolah_npsn' => 'required|string|max:20|unique:sekolah,sekolah_npsn',
+            'sekolah_nama' => 'required|string|max:255',
+            'sekolah_alamat' => 'required|string',
+        ]);
+
+        $sekolah = Sekolah::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data sekolah berhasil ditambahkan',
+            'data' => $sekolah
+        ], 201);
     }
 
     /**
@@ -59,9 +73,16 @@ class SekolahController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         //
+        $sekolah = Sekolah::with(['kecamatan', 'jenjang'])
+            ->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $sekolah
+        ]);
     }
 
     /**
@@ -70,10 +91,11 @@ class SekolahController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): JsonResponse
     {
-      $sekolah = Sekolah::find($id);
-      echo json_encode($sekolah);
+      $sekolah = Sekolah::with(['kecamatan', 'jenjang'])
+            ->findOrFail($id);
+      return response()->json($sekolah);
     }
 
     /**
@@ -83,15 +105,25 @@ class SekolahController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-      $sekolah = Sekolah::find($id);
-      $sekolah ->kecamatan_id = $request['kecamatan_id'];
-      $sekolah ->jenjang_id = $request['jenjang_id'];
-      $sekolah ->sekolah_npsn = $request['sekolah_npsn'];
-      $sekolah ->sekolah_nama = $request['sekolah_nama'];
-      $sekolah ->sekolah_alamat = $request['sekolah_alamat'];
-      $sekolah -> update();
+      $sekolah = Sekolah::findOrFail($id);
+      
+      $validated = $request->validate([
+            'kecamatan_id' => 'required|exists:kecamatan,kecamatan_id',
+            'jenjang_id' => 'required|exists:jenjang,jenjang_id',
+            'sekolah_npsn' => 'required|string|max:20|unique:sekolah,sekolah_npsn,' . $id . ',sekolah_id',
+            'sekolah_nama' => 'required|string|max:255',
+            'sekolah_alamat' => 'required|string',
+        ]);
+      
+        $sekolah -> update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data sekolah berhasil diperbarui',
+            'data' => $sekolah
+        ]);
     }
 
     /**
@@ -100,46 +132,89 @@ class SekolahController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-      $sekolah = Sekolah::find($id);
+      $sekolah = Sekolah::findOrFail($id);
       $sekolah -> delete();
+
+      return response()->json([
+            'success' => true,
+            'message' => 'Data sekolah berhasil dihapus'
+        ]);
     }
 
     public function listData()
     {
-      $sekolah = Sekolah::leftjoin('kecamatan','sekolah.kecamatan_id','=','kecamatan.kecamatan_id')
-                  ->leftjoin('jenjang','sekolah.jenjang_id','=','jenjang.jenjang_id')
-                  ->orderBy('sekolah_id', 'ASC')
-                  ->get();
-      $kepada = "";
-      $no = 0;
-      $arr = array();
-      foreach ($sekolah as $list) {
+      $sekolah = Sekolah::with(['kecamatan', 'jenjang'])
+            ->select('sekolah.*')
+            ->orderBy('sekolah_id', 'ASC');
 
-        if (count($sekolah) > 0) {
+      return DataTables::eloquent($sekolah)
+            ->addIndexColumn()
+            ->addColumn('jenjang_nama', function ($row) {
+                return $row->jenjang->jenjang_nama ?? '-';
+            })
+            ->addColumn('kecamatan_nama', function ($row) {
+                return $row->kecamatan->kecamatan_nama ?? '-';
+            })
+            ->addColumn('aksi', function ($row) {
+                return '
+                    <div class="btn-group" role="group">
+                        <button onclick="editForm(' . $row->sekolah_id . ')" 
+                                class="btn btn-sm btn-primary" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Edit Data">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button onclick="deleteData(' . $row->sekolah_id . ')" 
+                                class="btn btn-sm btn-danger" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Hapus Data">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                ';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
 
-          $no++;
-          $arr[] = array(
-              'no'=> $no,
-              'sekolah_nama'=> $list->sekolah_nama,
-              'sekolah_npsn'=> $list->sekolah_npsn,
-              'jenjang_nama'=> $list->jenjang_nama,
-              'kecamatan_nama'=> $list->kecamatan_nama,
-              'sekolah_alamat'=> $list->sekolah_alamat,
-              'aksi'=> '<a onclick="editForm('.$list->sekolah_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-              <a onclick="deleteData('.$list->sekolah_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-            );
+    /**
+     * Get sekolah by jenjang (untuk keperluan filter)
+     */
+    public function getByJenjang(Request $request): JsonResponse
+    {
+        $jenjangId = $request->get('jenjang_id');
+        
+        $sekolah = Sekolah::where('jenjang_id', $jenjangId)
+            ->orderBy('sekolah_nama')
+            ->get(['sekolah_id', 'sekolah_nama', 'sekolah_npsn']);
 
-          }else {
-            $arr = array();
-          }
+        return response()->json($sekolah);
+    }
 
-        }
+    /**
+     * Get sekolah by kecamatan (untuk keperluan filter)
+     */
+    public function getByKecamatan(Request $request): JsonResponse
+    {
+        $kecamatanId = $request->get('kecamatan_id');
+        
+        $sekolah = Sekolah::where('kecamatan_id', $kecamatanId)
+            ->orderBy('sekolah_nama')
+            ->get(['sekolah_id', 'sekolah_nama', 'sekolah_npsn']);
 
-        $datas = new Collection($arr);
-        return Datatables::of($datas)->rawColumns(['no','jenjang_nama','pejabat_nama','aksi'])->make(true);
+        return response()->json($sekolah);
+    }
 
-      }
-
+    /**
+     * Export data sekolah (contoh untuk Excel/PDF)
+     */
+    public function export(Request $request)
+    {
+        // Implementasi export jika diperlukan
+        // Bisa pakai Laravel Excel atau TCPDF
+    }
 }

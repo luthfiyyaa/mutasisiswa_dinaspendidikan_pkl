@@ -3,23 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
-use PDF;
-use Excel;
-use QrCode;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use App\Mutasi;
-use App\Jenjang;
-use App\Kecamatan;
-use App\Sekolah;
-use App\Pejabat;
-use App\NomorSuratMutasi;
+use App\Models\Mutasi;
+use App\Models\Jenjang;
+use App\Models\Kecamatan;
+use App\Models\Sekolah;
+use App\Models\Pejabat;
+use App\Models\NomorSuratMutasi;
 
 class LaporanMutasiMasukController extends Controller
 {
@@ -30,8 +29,8 @@ class LaporanMutasiMasukController extends Controller
      */
     public function index()
     {
-      $jenjang = Jenjang::All();
-      return view('admin.laporan_mutasi_masuk.index', compact('jenjang'));
+        $jenjang = Jenjang::all();
+        return view('admin.laporan_mutasi_masuk.index', compact('jenjang'));
     }
 
     /**
@@ -61,12 +60,12 @@ class LaporanMutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
-      $mutasi_id = $id;
-      $mutasi = Mutasi::where('mutasi_id','=',$mutasi_id)->get();
-      // dd($mutasi);
-      return view('admin.laporan_mutasi_masuk.detail', compact('mutasi_id','mutasi'));
+        $mutasi_id = $id;
+        $mutasi = Mutasi::where('mutasi_id', $mutasi_id)->get();
+        
+        return view('admin.laporan_mutasi_masuk.detail', compact('mutasi_id', 'mutasi'));
     }
 
     /**
@@ -75,7 +74,7 @@ class LaporanMutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -87,7 +86,7 @@ class LaporanMutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
     }
@@ -98,221 +97,184 @@ class LaporanMutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
     }
 
+    /**
+     * Get datatable listing
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listData()
     {
+        $mutasi_masuk = Mutasi::query()
+            ->join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
+            ->join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
+            ->where('mutasi.mutasi_jenis', '1')
+            ->select('mutasi.*', 'jenjang.jenjang_nama')
+            ->orderBy('mutasi.mutasi_id', 'DESC');
 
-      $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-      ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-      ->where([
-        ['mutasi.mutasi_jenis','=','1'],
-      ])
-      ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-
-      $no = 0;
-      $arr = array();
-      foreach ($mutasi_masuk as $list) {
-
-        if (count($mutasi_masuk) > 0) {
-
-          $no++;
-          $arr[] = array(
-            'no'=> $no,
-            'mutasi_nama_siswa'=> $list->mutasi_nama_siswa,
-            'mutasi_noinduk'=> $list->mutasi_noinduk,
-            'mutasi_nisn'=> $list->mutasi_nisn,
-            'mutasi_sekolah_asal_nama'=> $list->mutasi_sekolah_asal_nama,
-            'mutasi_sekolah_tujuan_nama'=> $list->mutasi_sekolah_tujuan_nama,
-            'aksi'=> '<a href="'.route('laporan_mutasi_masuk.show',$list->mutasi_id).'" class="btn btn-success" data-toggle="tooltip" data-placement="botttom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
-          );
-
-        }else {
-          $arr = array();
-        }
-
-      }
-
-      $datas = new Collection($arr);
-      return Datatables::of($datas)->rawColumns(['no','mutasi_nama_siswa','mutasi_noinduk','mutasi_nisn','mutasi_sekolah_asal_nama','mutasi_sekolah_tujuan_nama','aksi'])->make(true);
-
+        return DataTables::of($mutasi_masuk)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($row) {
+                return sprintf(
+                    '<a href="%s" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
+                    route('laporan_mutasi_masuk.show', $row->mutasi_id)
+                );
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
-    public function listDataFilter($tanggal_awal, $tanggal_akhir, $jenjang_id, $query)
+    /**
+     * Get filtered datatable listing
+     *
+     * @param  string  $tanggal_awal
+     * @param  string  $tanggal_akhir
+     * @param  string  $jenjang_id
+     * @param  string  $query
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listDataFilter(string $tanggal_awal, string $tanggal_akhir, string $jenjang_id, string $query)
     {
+        $mutasi_jenis = "1";
 
-      $mutasi_jenis = "1";
+        $mutasi_masuk = Mutasi::query()
+            ->join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
+            ->join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
+            ->where('mutasi.mutasi_jenis', $mutasi_jenis);
 
-      if ($query == "q1") {
-        $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-        ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-        ->where([
-          ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-        ])
-        ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-      }elseif ($query == "q2") {
-        $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-        ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-        ->where([
-          ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-          ['mutasi.jenjang_id', '=', $jenjang_id],
-        ])
-        ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-      }elseif ($query == "q3") {
-        $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-        ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-        ->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
-        ->where([
-          ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-        ])
-        ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-      }else {
-        $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-        ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-        ->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
-        ->where([
-          ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-          ['mutasi.jenjang_id', '=', $jenjang_id],
-        ])
-        ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-      }
+        // Apply filters based on query type
+        match ($query) {
+            'q1' => null, // No additional filters
+            'q2' => $mutasi_masuk->where('mutasi.jenjang_id', $jenjang_id),
+            'q3' => $mutasi_masuk->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir]),
+            default => $mutasi_masuk->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
+                                   ->where('mutasi.jenjang_id', $jenjang_id),
+        };
 
-      $no = 0;
-      $arr = array();
-      foreach ($mutasi_masuk as $list) {
+        $mutasi_masuk->select('mutasi.*', 'jenjang.jenjang_nama')
+                     ->orderBy('mutasi.mutasi_id', 'DESC');
 
-        if (count($mutasi_masuk) > 0) {
-
-          $no++;
-          $arr[] = array(
-            'no'=> $no,
-            'mutasi_nama_siswa'=> $list->mutasi_nama_siswa,
-            'mutasi_noinduk'=> $list->mutasi_noinduk,
-            'mutasi_nisn'=> $list->mutasi_nisn,
-            'mutasi_sekolah_asal_nama'=> $list->mutasi_sekolah_asal_nama,
-            'mutasi_sekolah_tujuan_nama'=> $list->mutasi_sekolah_tujuan_nama,
-            'aksi'=> '<a href="'.route('laporan_mutasi_masuk.show',$list->mutasi_id).'" class="btn btn-success" data-toggle="tooltip" data-placement="botttom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
-          );
-
-        }else {
-          $arr = array();
-        }
-
-      }
-
-      $datas = new Collection($arr);
-      return Datatables::of($datas)->rawColumns(['no','mutasi_nama_siswa','mutasi_noinduk','mutasi_nisn','mutasi_sekolah_asal_nama','mutasi_sekolah_tujuan_nama','aksi'])->make(true);
-
+        return DataTables::of($mutasi_masuk)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($row) {
+                return sprintf(
+                    '<a href="%s" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
+                    route('laporan_mutasi_masuk.show', $row->mutasi_id)
+                );
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
-    public function laporan_mutasi_masuk_excel_file($tanggal_awal,$tanggal_akhir,$jenjang_id,$query)
-    {
-      $data = new LaporanMasukExport($tanggal_awal, $tanggal_akhir, $jenjang_id, $query);
-      return ($data)->download('laporan_mutasi_masuk.xlsx');
+    /**
+     * Export laporan mutasi masuk to Excel
+     *
+     * @param  string  $tanggal_awal
+     * @param  string  $tanggal_akhir
+     * @param  string  $jenjang_id
+     * @param  string  $query
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function laporan_mutasi_masuk_excel_file(
+        string $tanggal_awal,
+        string $tanggal_akhir,
+        string $jenjang_id,
+        string $query
+    ) {
+        return Excel::download(
+            new LaporanMasukExport($tanggal_awal, $tanggal_akhir, $jenjang_id, $query),
+            'laporan_mutasi_masuk.xlsx'
+        );
     }
-
 }
 
 class LaporanMasukExport implements FromView
 {
-  use Exportable;
+    use Exportable;
 
-  public function __construct(string $tanggal_begin, string $tanggal_end, string $jenjang, string $qry)
-    {
-        $this->tanggal_begin = $tanggal_begin;
-        $this->tanggal_end = $tanggal_end;
-        $this->jenjang = $jenjang;
-        $this->qry = $qry;
-    }
+    /**
+     * Constructor
+     *
+     * @param  string  $tanggal_begin
+     * @param  string  $tanggal_end
+     * @param  string  $jenjang
+     * @param  string  $qry
+     */
+    public function __construct(
+        private readonly string $tanggal_begin,
+        private readonly string $tanggal_end,
+        private readonly string $jenjang,
+        private readonly string $qry
+    ) {}
 
+    /**
+     * Generate view for export
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function view(): View
     {
-      $tanggal_awal = $this->tanggal_begin;
-      $tanggal_akhir = $this->tanggal_end;
-      $jenjang_id = $this->jenjang;
-      $query = $this->qry;
+        $tanggal_awal = $this->tanggal_begin;
+        $tanggal_akhir = $this->tanggal_end;
+        $jenjang_id = $this->jenjang;
+        $query = $this->qry;
+        $mutasi_jenis = "1";
 
-      $mutasi_jenis = "1";
+        // Format dates for display
+        $begin_date = $tanggal_awal == 0 
+            ? "-" 
+            : tanggal_indonesia($tanggal_awal, false);
 
-      if ($tanggal_awal == 0) {
-        $begin_date = "-";
-      }else {
-        $begin_date = tanggal_indonesia($tanggal_awal, false);
-      }
+        $end_date = $tanggal_akhir == 0 
+            ? "-" 
+            : tanggal_indonesia($tanggal_akhir, false);
 
-      if ($tanggal_akhir == 0) {
-        $end_date = "-";
-      }else {
-        $end_date = tanggal_indonesia($tanggal_akhir, false);
-      }
+        // Get jenjang name
+        $jenjang_nama = $jenjang_id === "all"
+            ? "Semua Jenjang"
+            : Jenjang::where('jenjang_id', $jenjang_id)->value('jenjang_nama');
 
-      if ($jenjang_id == "all") {
-        $jenjang_nama = "Semua Jenjang";
-      }else {
-        $jenjang_nama = Jenjang::where('jenjang_id','=',$jenjang_id)->value('jenjang_nama');
-      }
+        // Build query based on filter type
+        $data_xl = Mutasi::query()
+            ->join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
+            ->join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
+            ->where('mutasi.mutasi_jenis', $mutasi_jenis);
 
+        // Apply filters
+        match ($query) {
+            'q1' => null, // No additional filters
+            'q2' => $data_xl->where('mutasi.jenjang_id', $jenjang_id),
+            'q3' => $data_xl->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir]),
+            default => $data_xl->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
+                              ->where('mutasi.jenjang_id', $jenjang_id),
+        };
 
-      if ($query == "q1") {
-        $data_xl = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-                  ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-                  ->where([
-                    ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-                  ])
-                  ->select('mutasi.mutasi_nama_siswa', 'mutasi.mutasi_sekolah_asal_nama','mutasi.mutasi_sekolah_asal_no_surat',
-                  'mutasi.mutasi_tanggal_mutasi', 'mutasi.mutasi_nisn', 'mutasi.mutasi_noinduk', 'mutasi.mutasi_tempat_lahir',
-                  'mutasi.mutasi_tanggal_lahir','mutasi.mutasi_tingkat_kelas','mutasi.mutasi_nama_wali','mutasi.mutasi_alamat',
-                  'mutasi.mutasi_sekolah_tujuan_nama','mutasi.mutasi_sekolah_tujuan_no_surat','mutasi.mutasi_tanggal_surat_diterima')
-                  ->get();
-      }elseif ($query == "q2") {
-        $data_xl = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-                  ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-                  ->where([
-                    ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-                    ['mutasi.jenjang_id', '=', $jenjang_id],
-                  ])
-                  ->select('mutasi.mutasi_nama_siswa', 'mutasi.mutasi_sekolah_asal_nama','mutasi.mutasi_sekolah_asal_no_surat',
-                  'mutasi.mutasi_tanggal_mutasi', 'mutasi.mutasi_nisn', 'mutasi.mutasi_noinduk', 'mutasi.mutasi_tempat_lahir',
-                  'mutasi.mutasi_tanggal_lahir','mutasi.mutasi_tingkat_kelas','mutasi.mutasi_nama_wali','mutasi.mutasi_alamat',
-                  'mutasi.mutasi_sekolah_tujuan_nama','mutasi.mutasi_sekolah_tujuan_no_surat','mutasi.mutasi_tanggal_surat_diterima')
-                  ->get();
-      }elseif ($query == "q3") {
-        $data_xl = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-                  ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-                  ->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
-                  ->where([
-                    ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-                  ])
-                  ->select('mutasi.mutasi_nama_siswa', 'mutasi.mutasi_sekolah_asal_nama','mutasi.mutasi_sekolah_asal_no_surat',
-                  'mutasi.mutasi_tanggal_mutasi', 'mutasi.mutasi_nisn', 'mutasi.mutasi_noinduk', 'mutasi.mutasi_tempat_lahir',
-                  'mutasi.mutasi_tanggal_lahir','mutasi.mutasi_tingkat_kelas','mutasi.mutasi_nama_wali','mutasi.mutasi_alamat',
-                  'mutasi.mutasi_sekolah_tujuan_nama','mutasi.mutasi_sekolah_tujuan_no_surat','mutasi.mutasi_tanggal_surat_diterima')
-                  ->get();
-      }else {
-        $data_xl = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-                  ->join('nomor_surat_mutasi','mutasi.mutasi_id','=','nomor_surat_mutasi.mutasi_id')
-                  ->whereBetween('nomor_surat_mutasi.tanggal', [$tanggal_awal, $tanggal_akhir])
-                  ->where([
-                    ['mutasi.mutasi_jenis','=',$mutasi_jenis],
-                    ['mutasi.jenjang_id', '=', $jenjang_id],
-                  ])
-                  ->select('mutasi.mutasi_nama_siswa', 'mutasi.mutasi_sekolah_asal_nama','mutasi.mutasi_sekolah_asal_no_surat',
-                  'mutasi.mutasi_tanggal_mutasi', 'mutasi.mutasi_nisn', 'mutasi.mutasi_noinduk', 'mutasi.mutasi_tempat_lahir',
-                  'mutasi.mutasi_tanggal_lahir','mutasi.mutasi_tingkat_kelas','mutasi.mutasi_nama_wali','mutasi.mutasi_alamat',
-                  'mutasi.mutasi_sekolah_tujuan_nama','mutasi.mutasi_sekolah_tujuan_no_surat','mutasi.mutasi_tanggal_surat_diterima')
-                  ->get();
-      }
+        $data_xl = $data_xl->select(
+            'mutasi.mutasi_nama_siswa',
+            'mutasi.mutasi_sekolah_asal_nama',
+            'mutasi.mutasi_sekolah_asal_no_surat',
+            'mutasi.mutasi_tanggal_mutasi',
+            'mutasi.mutasi_nisn',
+            'mutasi.mutasi_noinduk',
+            'mutasi.mutasi_tempat_lahir',
+            'mutasi.mutasi_tanggal_lahir',
+            'mutasi.mutasi_tingkat_kelas',
+            'mutasi.mutasi_nama_wali',
+            'mutasi.mutasi_alamat',
+            'mutasi.mutasi_sekolah_tujuan_nama',
+            'mutasi.mutasi_sekolah_tujuan_no_surat',
+            'mutasi.mutasi_tanggal_surat_diterima'
+        )->get();
 
-
-      // dd($query);
-      return view('admin.laporan_mutasi_masuk.laporan_mutasi_masuk_excel', [
-           'mutasi_masuk' => $data_xl,
-           'begin_date' => $begin_date,
-           'end_date' => $end_date,
-           'jenjang_nama' => $jenjang_nama,
-       ]);
+        return view('admin.laporan_mutasi_masuk.laporan_mutasi_masuk_excel', [
+            'mutasi_masuk' => $data_xl,
+            'begin_date' => $begin_date,
+            'end_date' => $end_date,
+            'jenjang_nama' => $jenjang_nama,
+        ]);
     }
 }

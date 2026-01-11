@@ -3,46 +3,98 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use App\GroupModel;
+use Illuminate\Support\Facades\DB;
+use App\Models\Group;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
 {
     /**
+     * Validation messages
+     *
+     * @var array
+     */
+    protected $pesan = [
+        'group_nama.required' => 'Nama group harus diisi',
+        'group_nama.string' => 'Nama group harus berupa teks',
+        'group_nama.max' => 'Nama group maksimal 100 karakter',
+        'group_nama.unique' => 'Nama group sudah digunakan',
+    ];
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // Tambahkan middleware role jika perlu
+        // $this->middleware('role:admin');
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.group.index');
     }
 
-    /**
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        // Not implemented - using AJAX modal
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-      $group = new GroupModel;
-      $group ->group_nama = $request['group_nama'];
-      $group -> save();
-    }
+        try {
+            // Validate request
+            $validator = Validator::make($request->all(), [
+                'group_nama' => ['required', 'string', 'max:100', 'unique:groups,group_nama']
+            ], $this->pesan);
 
-    /**
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Create new group
+            $group = Group::create([
+                'group_nama' => $request->group_nama
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Group berhasil ditambahkan',
+                'data' => $group
+            ], 201);
+
+           } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+     /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -50,19 +102,30 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        //
+        // Not implemented in original code
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit($id)
+     public function edit($id): JsonResponse
     {
-      $group = GroupModel::find($id);
-      echo json_encode($group);
+        try {
+            $group = Group::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $group
+            ]);
+         } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group tidak ditemukan'
+            ], 404);
+        }
     }
 
     /**
@@ -70,47 +133,141 @@ class GroupController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-      $group = GroupModel::find($id);
-      $group ->group_nama = $request['group_nama'];
-      $group -> update();
-    }
+      try {
+            // Find group
+            $group = Group::findOrFail($id);
 
-    /**
+            // Validate request - unique except current id
+            $validator = Validator::make($request->all(), [
+                'group_nama' => ['required', 'string', 'max:100', 'unique:groups,group_nama,' . $id . ',group_id']
+            ], $this->pesan);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            // Update group
+            $group->group_nama = $request->group_nama;
+            $group->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Group berhasil diupdate',
+                'data' => $group
+            ]);
+          } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+     
+     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+     public function destroy($id): JsonResponse
     {
-      $group = GroupModel::find($id);
-      $group -> delete();
-    }
+        try {
+            $group = Group::findOrFail($id);
+            
+            // Check if group has users
+            if ($group->users()->count() > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Group tidak dapat dihapus karena masih memiliki user'
+                ], 400);
+            }
 
-    public function listData()
-    {
-        $satuan = GroupModel::orderBy('group_id', 'DESC')->get();
-        $no = 0;
-        $data = array();
-        foreach ($satuan as $list) {
+            $group->delete();
 
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = $list->group_nama;
-            $row[] = '<a href="'.route('t_user.show',$list->group_id).'" class="btn btn-success" data-toggle="tooltip" data-placement="botttom" title="Setting Menu"><i class="fa fa-gear"></i></a>
-            <a onclick="editForm('.$list->group_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-            <a onclick="deleteData('.$list->group_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>';
-            $data[] = $row;
-
+            return response()->json([
+                'success' => true,
+                'message' => 'Group berhasil dihapus'
+            ]);
+           } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
+    }
+    
+    /**
+     * Get list data for DataTables
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+     public function listData(): JsonResponse
+    {
+        try {
+            $groups = Group::orderBy('group_id', 'DESC')->get();
+            $no = 0;
+            $data = [];
 
-        $output = array("data" => $data);
-        return response()->json($output);
+            foreach ($groups as $group) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = htmlspecialchars($group->group_nama);
+                $row[] = '
+                    <div class="btn-group" role="group">
+                        <a href="' . route('t_user.show', $group->group_id) . '" 
+                           class="btn btn-sm btn-success" 
+                           data-toggle="tooltip" 
+                           data-placement="top" 
+                           title="Setting Menu">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                        <button onclick="editForm(' . $group->group_id . ')" 
+                                class="btn btn-sm btn-primary" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Edit Data">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button onclick="deleteData(' . $group->group_id . ')" 
+                                class="btn btn-sm btn-danger" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Hapus Data">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                ';
+                $data[] = $row;
+            }
 
+            return response()->json([
+                'data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'data' => [],
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
+
+
+
+     
+
+
+    
+
+   
+    
+  

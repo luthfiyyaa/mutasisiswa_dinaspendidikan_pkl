@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use App\GroupModel;
-use App\MasterUserModel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Models\GroupModel;
+use App\Models\MasterUserModel;
 
 class MasterUserController extends Controller
 {
@@ -17,7 +17,7 @@ class MasterUserController extends Controller
      */
     public function index()
     {
-        $group = GroupModel::All();
+        $group = GroupModel::all();
         return view('admin.master_user.index', compact('group'));
     }
 
@@ -39,13 +39,23 @@ class MasterUserController extends Controller
      */
     public function store(Request $request)
     {
-      $master_user = new MasterUserModel;
-      $master_user ->group_id = $request['group_id'];
-      $master_user ->name = $request['name'];
-      $master_user ->email = $request['email'];
-      $master_user ->users_email = $request['users_email'];
-      $master_user ->password = bcrypt($request['password']);
-      $master_user -> save();
+        $validated = $request->validate([
+            'group_id' => 'required|exists:tbl_group,group_id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'users_email' => 'required|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+
+        MasterUserModel::create([
+            'group_id' => $validated['group_id'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'users_email' => $validated['users_email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'User berhasil ditambahkan']);
     }
 
     /**
@@ -54,7 +64,7 @@ class MasterUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -65,10 +75,10 @@ class MasterUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-      $master_user = MasterUserModel::find($id);
-      echo json_encode($master_user);
+        $master_user = MasterUserModel::findOrFail($id);
+        return response()->json($master_user);
     }
 
     /**
@@ -78,15 +88,33 @@ class MasterUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-      $master_user = MasterUserModel::find($id);
-      $master_user ->group_id = $request['group_id'];
-      $master_user ->name = $request['name'];
-      $master_user ->email = $request['email'];
-      $master_user ->users_email = $request['users_email'];
-      $master_user ->password = bcrypt($request['password']);
-      $master_user -> update();
+        $master_user = MasterUserModel::findOrFail($id);
+
+        $validated = $request->validate([
+            'group_id' => 'required|exists:tbl_group,group_id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'users_email' => 'required|email|max:255',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $updateData = [
+            'group_id' => $validated['group_id'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'users_email' => $validated['users_email'],
+        ];
+
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $master_user->update($updateData);
+
+        return response()->json(['success' => true, 'message' => 'User berhasil diupdate']);
     }
 
     /**
@@ -95,35 +123,44 @@ class MasterUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-      $master_user = MasterUserModel::find($id);
-      $master_user -> delete();
+        $master_user = MasterUserModel::findOrFail($id);
+        $master_user->delete();
+
+        return response()->json(['success' => true, 'message' => 'User berhasil dihapus']);
     }
 
+    /**
+     * Get datatable listing
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listData()
     {
-        $satuan = MasterUserModel::join('tbl_group', 'tbl_group.group_id','=','users.group_id')->orderBy('id', 'DESC')->get();
-        $no = 0;
-        $data = array();
-        foreach ($satuan as $list) {
+        $satuan = MasterUserModel::query()
+            ->join('tbl_group', 'tbl_group.group_id', '=', 'users.group_id')
+            ->select('users.*', 'tbl_group.group_nama')
+            ->orderBy('users.id', 'DESC')
+            ->get();
 
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = $list->name;
-            $row[] = $list->group_nama;
-            $row[] = $list->users_email;
-            $row[] = $list->email;
-            $row[] = "*************";
-            $row[] = '<a onclick="editForm('.$list->id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-            <a onclick="deleteData('.$list->id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>';
-            $data[] = $row;
+        $data = $satuan->map(function ($list, $index) {
+            return [
+                $index + 1,
+                $list->name,
+                $list->group_nama,
+                $list->users_email,
+                $list->email,
+                '*************',
+                sprintf(
+                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    $list->id,
+                    $list->id
+                )
+            ];
+        })->toArray();
 
-        }
-
-        $output = array("data" => $data);
-        return response()->json($output);
-
+        return response()->json(['data' => $data]);
     }
 }
