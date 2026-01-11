@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+// use Illuminate\Http\RedirectResponse;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Collection;
-use App\Pejabat;
+use App\Models\Pejabat;
 
 class PejabatController extends Controller
 {
@@ -16,7 +18,7 @@ class PejabatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.pejabat.index');
     }
@@ -26,9 +28,9 @@ class PejabatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('admin.pejabat.create');
     }
 
     /**
@@ -37,14 +39,27 @@ class PejabatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
+      $request->validate([
+        'pejabat_nip' => 'required|string|max:50|unique:pejabat,pejabat_nip',
+        'pejabat_nama' => 'required|string|max:255',
+        'pejabat_pangkat' => 'required|string|max:100',
+        'pejabat_jabatan' => 'required|string|max:255',
+      ]);
+
       $pejabat = new Pejabat;
       $pejabat->pejabat_nip = $request['pejabat_nip'];
       $pejabat->pejabat_nama = $request['pejabat_nama'];
       $pejabat->pejabat_pangkat = $request['pejabat_pangkat'];
       $pejabat->pejabat_jabatan = $request['pejabat_jabatan'];
       $pejabat-> save();
+
+      return response()->json([
+        'success' => true,
+        'message' => 'Data pejabat berhasil ditambahkan',
+        'data' => $pejabat
+      ], 201);
     }
 
     /**
@@ -53,9 +68,14 @@ class PejabatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        //
+      $pejabat = Pejabat::findOrFail($id);
+
+      return response()->json([
+        'success' => true,
+        'data' => $pejabat
+      ]);
     }
 
     /**
@@ -64,10 +84,10 @@ class PejabatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): JsonResponse
     {
-      $pejabat = Pejabat::find($id);
-      echo json_encode($pejabat);
+      $pejabat = Pejabat::findOrFail($id);
+      return response()->json($pejabat);
     }
 
     /**
@@ -77,14 +97,28 @@ class PejabatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-      $pejabat = Pejabat::find($id);
-      $pejabat ->pejabat_nip = $request['pejabat_nip'];
-      $pejabat ->pejabat_nama = $request['pejabat_nama'];
-      $pejabat ->pejabat_pangkat = $request['pejabat_pangkat'];
-      $pejabat ->pejabat_jabatan = $request['pejabat_jabatan'];
-      $pejabat -> update();
+      $pejabat = Pejabat::findOrFail($id);
+
+      $request->validate([
+        'pejabat_nip' => 'required|string|max:50|unique:pejabat,pejabat_nip,' . $id . ',pejabat_id',
+        'pejabat_nama' => 'required|string|max:255',
+        'pejabat_pangkat' => 'required|string|max:100',
+        'pejabat_jabatan' => 'required|string|max:255',
+      ]);
+
+      $pejabat->pejabat_nip = $request['pejabat_nip'];
+      $pejabat->pejabat_nama = $request['pejabat_nama'];
+      $pejabat->pejabat_pangkat = $request['pejabat_pangkat'];
+      $pejabat->pejabat_jabatan = $request['pejabat_jabatan'];
+      $pejabat-> update();
+
+      return response()->json([
+            'success' => true,
+            'message' => 'Data pejabat berhasil diperbarui',
+            'data' => $pejabat
+      ]);
     }
 
     /**
@@ -93,42 +127,44 @@ class PejabatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-      $pejabat = Pejabat::find($id);
+      $pejabat = Pejabat::findOrFail($id);
       $pejabat -> delete();
+
+      return response()->json([
+        'success' => true,
+        'message' => 'Data pejabat berhasil dihapus'
+      ]);
     }
 
     public function listData()
     {
-      $pejabat = Pejabat::orderBy('pejabat_id', 'DESC')->get();
-      $kepada = "";
-      $no = 0;
-      $arr = array();
-      foreach ($pejabat as $list) {
+      $pejabat = Pejabat::orderBy('pejabat_id', 'DESC');
 
-        if (count($pejabat) > 0) {
-
-          $no++;
-          $arr[] = array(
-              'no'=> $no,
-              'pejabat_nip'=> $list->pejabat_nip,
-              'pejabat_nama'=> $list->pejabat_nama,
-              'pejabat_pangkat'=> $list->pejabat_pangkat,
-              'pejabat_jabatan'=> $list->pejabat_jabatan,
-              'aksi'=> '<a onclick="editForm('.$list->pejabat_id.')" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-              <a onclick="deleteData('.$list->pejabat_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-            );
-
-          }else {
-            $arr = array();
-          }
-
-        }
-
-        $datas = new Collection($arr);
-        return Datatables::of($datas)->rawColumns(['no','kecamatan_kode_wilayah','kecamatan_nama','aksi'])->make(true);
-
-      }
-
+      return DataTables::eloquent($pejabat)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($list) {
+          return '
+            <div class="btn-group" role="group">
+                <button onclick="editForm(' . $list->pejabat_id . ')" 
+                    class="btn btn-sm btn-primary" 
+                    data-toggle="tooltip" 
+                    data-placement="top" 
+                    title="Edit Data">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button onclick="deleteData(' . $list->pejabat_id . ')" 
+                    class="btn btn-sm btn-danger" 
+                    data-toggle="tooltip" 
+                    data-placement="top" 
+                    title="Hapus Data">
+                    <i class="fa fa-trash"></i>
+                </button>
+              </div>
+                ';
+            })
+    ->rawColumns(['aksi'])
+    ->make(true);
+    }
 }

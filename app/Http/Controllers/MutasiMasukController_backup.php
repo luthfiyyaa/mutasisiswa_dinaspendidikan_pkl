@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Redirect;
-use DataTables;
-use PDF;
-use QrCode;
-use Illuminate\Support\Collection;
-use App\Mutasi;
-use App\Jenjang;
-use App\Kecamatan;
-use App\Sekolah;
-use App\Pejabat;
-use App\NomorSuratMutasi;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+// use Illuminate\Support\Collection;
+use App\Models\Mutasi;
+use App\Models\Jenjang;
+use App\Models\Kecamatan;
+use App\Models\Sekolah;
+use App\Models\Pejabat;
+use App\Models\NomorSuratMutasi;
+use Carbon\Carbon;
 
 class MutasiMasukController extends Controller
 {
@@ -23,9 +26,9 @@ class MutasiMasukController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        $jenjang = Jenjang::All();
+        $jenjang = Jenjang::all();
         return view('admin.mutasi_masuk.index', compact('jenjang'));
         // return "oke mutasi masuk";
     }
@@ -35,10 +38,10 @@ class MutasiMasukController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
-        $jenjang = Jenjang::All();
-        $kecamatan = Kecamatan::All();
+        $jenjang = Jenjang::all();
+        $kecamatan = Kecamatan::all();
         return view('admin.mutasi_masuk.create', compact('jenjang','kecamatan'));
     }
 
@@ -48,8 +51,25 @@ class MutasiMasukController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
+      $request->validate([
+        'sekolah_id' => 'required|exists:sekolah,sekolah_id',
+        'mutasi_nama_siswa' => 'required|string|max:255',
+        'mutasi_nisn' => 'required|string|max:20',
+        'mutasi_noinduk' => 'required|string|max:50',
+        'mutasi_tempat_lahir' => 'required|string|max:100',
+        'mutasi_tanggal_lahir' => 'required|date',
+        'mutasi_tingkat_kelas' => 'required|string|max:10',
+        'mutasi_nama_wali' => 'required|string|max:255',
+        'mutasi_alamat' => 'required|string',
+        'mutasi_sekolah_asal_nama' => 'required|string|max:255',
+        'mutasi_sekolah_asal_no_surat' => 'required|string|max:100',
+        'mutasi_tanggal_mutasi' => 'required|date',
+        'mutasi_sekolah_tujuan_no_surat' => 'required|string|max:100',
+        'mutasi_tanggal_surat_diterima' => 'required|date',
+        'jenjang_id' => 'required|exists:jenjang,jenjang_id',
+      ]);
 
       $sekolah_tujuan_id = $request['sekolah_id'];
       $sekolah_tujuan_nama = "";
@@ -112,7 +132,7 @@ class MutasiMasukController extends Controller
       $mutasi_masuk->mutasi_pejabat_nama = $pejabat_nama;
       $mutasi_masuk->mutasi_pejabat_pangkat = $pejabat_pangkat;
       $mutasi_masuk->mutasi_pejabat_jabatan = $pejabat_jabatan;
-      $mutasi_masuk-> save();
+      $mutasi_masuk->save();
 
       // dd($mutasi_masuk->mutasi_id);
 
@@ -131,12 +151,13 @@ class MutasiMasukController extends Controller
           'mutasi_id' => $mutasi_id,
           'nomor' => $nomor,
           'tanggal' => $tanggal_ini,
-           'nomor_surat' => '400.3.1/'.$nomor.'/406.009/'.$tahun_ini
+          'nomor_surat' => '400.3.1/'.$nomor.'/406.009/'.$tahun_ini
         ]);
       }
 
       // return view('admin.mutasi_masuk.sukses_tambah');
-      return redirect('sukses_tambah_mutasi_masuk/'.$mutasi_id);
+      return redirect('sukses_tambah_mutasi_masuk/' . $mutasi_id)
+        ->with('success', 'Data mutasi masuk berhasil ditambahkan');
     }
 
     /**
@@ -145,7 +166,7 @@ class MutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): View
     {
       $mutasi_id = $id;
       $mutasi = Mutasi::where('mutasi_id','=',$mutasi_id)->get();
@@ -159,9 +180,9 @@ class MutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
-        $mutasi = Mutasi::Find($id);
+        $mutasi = Mutasi::FindOrFail($id);
         $jenjang = Jenjang::All();
         $kecamatan = Kecamatan::All();
 
@@ -182,8 +203,26 @@ class MutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
+      $request->validate([
+            'sekolah_id' => 'required|exists:sekolah,sekolah_id',
+            'mutasi_nama_siswa' => 'required|string|max:255',
+            'mutasi_nisn' => 'required|string|max:20',
+            'mutasi_noinduk' => 'required|string|max:50',
+            'mutasi_tempat_lahir' => 'required|string|max:100',
+            'mutasi_tanggal_lahir' => 'required|date',
+            'mutasi_tingkat_kelas' => 'required|string|max:10',
+            'mutasi_nama_wali' => 'required|string|max:255',
+            'mutasi_alamat' => 'required|string',
+            'mutasi_sekolah_asal_nama' => 'required|string|max:255',
+            'mutasi_sekolah_asal_no_surat' => 'required|string|max:100',
+            'mutasi_tanggal_mutasi' => 'required|date',
+            'mutasi_sekolah_tujuan_no_surat' => 'required|string|max:100',
+            'mutasi_tanggal_surat_diterima' => 'required|date',
+            'jenjang_id' => 'required|exists:jenjang,jenjang_id',
+      ]);
+
       $sekolah_tujuan_id = $request['sekolah_id'];
       $sekolah_tujuan_nama = "";
       $sekolah_tujuan_alamat = "";
@@ -215,7 +254,7 @@ class MutasiMasukController extends Controller
 
 
 
-      $mutasi_masuk = Mutasi::find($id);
+      $mutasi_masuk = Mutasi::findOrFail($id);
       $mutasi_masuk->mutasi_jenis = "1";
       $mutasi_masuk->mutasi_nama_siswa = $request['mutasi_nama_siswa'];
       $mutasi_masuk->mutasi_sekolah_asal_id = "";
@@ -243,9 +282,10 @@ class MutasiMasukController extends Controller
       $mutasi_masuk->mutasi_pejabat_nama = $pejabat_nama;
       $mutasi_masuk->mutasi_pejabat_pangkat = $pejabat_pangkat;
       $mutasi_masuk->mutasi_pejabat_jabatan = $pejabat_jabatan;
-      $mutasi_masuk-> update();
+      $mutasi_masuk->update();
 
-      return redirect()->route('mutasi_masuk.index');
+      return redirect()->route('mutasi_masuk.index')
+            ->with('success', 'Data mutasi masuk berhasil diperbarui');
     }
 
     /**
@@ -254,52 +294,58 @@ class MutasiMasukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-      $mutasi_masuk = Mutasi::find($id);
+      $mutasi_masuk = Mutasi::findOrFail($id);
       $mutasi_masuk -> delete();
 
       $nomor_surat_mutasi = NomorSuratMutasi::where('mutasi_id','=',$id);
       $nomor_surat_mutasi -> delete();
+
+      return response()->json([
+            'success' => true,
+            'message' => 'Data mutasi berhasil dihapus'
+        ]);
     }
 
     public function listData()
     {
-      $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
-                        ->where('mutasi.mutasi_jenis','=','1')
-                        ->orderBy('mutasi.mutasi_id', 'DESC')->get();
-      $kepada = "";
-      $no = 0;
-      $arr = array();
-      foreach ($mutasi_masuk as $list) {
+     $mutasi_masuk = Mutasi::join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
+            ->where('mutasi.mutasi_jenis', '=', '1')
+            ->orderBy('mutasi.mutasi_id', 'DESC')
+            ->select('mutasi.*', 'jenjang.jenjang_nama');
+     
+      return DataTables::eloquent($mutasi_masuk)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($list) {
+                return '
+                    <div class="btn-group" role="group">
+                        <a href="' . route('mutasi_masuk.show', $list->mutasi_id) . '" 
+                           class="btn btn-sm btn-warning" 
+                           data-toggle="tooltip" 
+                           title="Cetak Surat">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        <a href="' . route('mutasi_masuk.edit', $list->mutasi_id) . '" 
+                           class="btn btn-sm btn-primary" 
+                           data-toggle="tooltip" 
+                           title="Edit Data">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <button onclick="deleteData(' . $list->mutasi_id . ')" 
+                                class="btn btn-sm btn-danger" 
+                                data-toggle="tooltip" 
+                                title="Hapus Data">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                ';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
 
-        if (count($mutasi_masuk) > 0) {
-
-          $no++;
-          $arr[] = array(
-              'no'=> $no,
-              'mutasi_nama_siswa'=> $list->mutasi_nama_siswa,
-              'mutasi_noinduk'=> $list->mutasi_noinduk,
-              'mutasi_nisn'=> $list->mutasi_nisn,
-              'mutasi_sekolah_asal_nama'=> $list->mutasi_sekolah_asal_nama,
-              'mutasi_sekolah_tujuan_nama'=> $list->mutasi_sekolah_tujuan_nama,
-              'aksi'=> '<a href="'.route('mutasi_masuk.show',$list->mutasi_id).'" class="btn btn-warning" data-toggle="tooltip" data-placement="botttom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
-              <a href="'.route('mutasi_masuk.edit',$list->mutasi_id).'" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-              <a onclick="deleteData('.$list->mutasi_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-            );
-
-          }else {
-            $arr = array();
-          }
-
-        }
-
-        $datas = new Collection($arr);
-        return Datatables::of($datas)->rawColumns(['no','mutasi_nama_siswa','mutasi_noinduk','mutasi_nisn','mutasi_sekolah_asal_nama','mutasi_sekolah_tujuan_nama','aksi'])->make(true);
-
-      }
-
-      public function listDataJenjang($id)
+      public function listDataJenjang(int $id)
       {
 
         $mutasi_masuk = Mutasi::join('jenjang','mutasi.jenjang_id','=','jenjang.jenjang_id')
@@ -309,54 +355,45 @@ class MutasiMasukController extends Controller
                             ])
                           ->orderBy('mutasi.mutasi_id', 'DESC')
                           ->get();
-        $kepada = "";
-        $no = 0;
-        $arr = array();
-        foreach ($mutasi_masuk as $list) {
+        return DataTables::eloquent($mutasi_masuk)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($list) {
+                return '
+                    <div class="btn-group" role="group">
+                        <a href="' . route('mutasi_masuk.show', $list->mutasi_id) . '" 
+                           class="btn btn-sm btn-warning">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        <a href="' . route('mutasi_masuk.edit', $list->mutasi_id) . '" 
+                           class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <button onclick="deleteData(' . $list->mutasi_id . ')" 
+                                class="btn btn-sm btn-danger">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                ';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
 
-          if (count($mutasi_masuk) > 0) {
-
-            $no++;
-            $arr[] = array(
-                'no'=> $no,
-                'mutasi_nama_siswa'=> $list->mutasi_nama_siswa,
-                'mutasi_noinduk'=> $list->mutasi_noinduk,
-                'mutasi_nisn'=> $list->mutasi_nisn,
-                'mutasi_sekolah_asal_nama'=> $list->mutasi_sekolah_asal_nama,
-                'mutasi_sekolah_tujuan_nama'=> $list->mutasi_sekolah_tujuan_nama,
-                'aksi'=> '<a href="'.route('mutasi_masuk.show',$list->mutasi_id).'" class="btn btn-warning" data-toggle="tooltip" data-placement="botttom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
-                <a href="'.route('mutasi_masuk.edit',$list->mutasi_id).'" class="btn btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa  fa-edit"></i></a>
-                <a onclick="deleteData('.$list->mutasi_id.')" class="btn btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a>',
-              );
-
-            }else {
-              $arr = array();
-            }
-
-          }
-
-          $datas = new Collection($arr);
-          return Datatables::of($datas)->rawColumns(['no','mutasi_nama_siswa','mutasi_noinduk','mutasi_nisn','mutasi_sekolah_asal_nama','mutasi_sekolah_tujuan_nama','aksi'])->make(true);
-
-        }
-
-        function search_sekolah(Request $request)
+        public function search_sekolah(Request $request): JsonResponse
         {
-
-          $search         = $request->select;
-          $kecamatan_id    = $request->kecamatan_id;
+          $search        = $request->select;
+          $kecamatan_id  = $request->kecamatan_id;
           $jenjang_id    = $request->jenjang_id;
 
           $sekolah = Sekolah::where([
-                          ['kecamatan_id','=',$kecamatan_id],
-                          ['jenjang_id', '=', $jenjang_id],
-                          ['sekolah_nama', 'like', '%'.$search.'%'],
-                      ])
-                    ->get();
+              ['kecamatan_id','=',$kecamatan_id],
+              ['jenjang_id', '=', $jenjang_id],
+              ['sekolah_nama', 'like', '%'.$search.'%'],
+          ])->get();
           return response()->json($sekolah);
         }
 
-        public function sukses_tambah_mutasi_masuk($mutasi_id)
+        public function sukses_tambah_mutasi_masuk($mutasi_id): View
         {
           $mutasi = Mutasi::where('mutasi_id','=',$mutasi_id)->get();
           // dd($mutasi);
@@ -402,13 +439,9 @@ class MutasiMasukController extends Controller
             'qrCode' => $qrCode
           ];
 
-          $options = array("format" => "folio",'orientation' => 'P');
-          $pdf = PDF::loadView('admin.mutasi_masuk.suket_mutasi_masuk_pdf', $data, [], $options);
-          return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
+          $pdf = Pdf::loadView('admin.mutasi_masuk.suket_mutasi_masuk_pdf', $data)
+            ->setPaper('folio', 'portrait');
 
-
-        }
-
-
-
+        return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
+    }
 }
