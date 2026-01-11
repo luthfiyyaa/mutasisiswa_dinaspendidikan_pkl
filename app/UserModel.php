@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -18,4 +18,20 @@ class UserModel extends Model
   protected $hidden = [
       'password', 'remember_token',
   ];
+
+  protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'group_id' => 'integer',
+        'jenjang_id' => 'integer',
+    ];
+
+    /**
+     * Get the main User model instance
+     * This is for backward compatibility
+     */
+    public static function getUser(int $id): ?User
+    {
+        return User::find($id);
+    }
 }
