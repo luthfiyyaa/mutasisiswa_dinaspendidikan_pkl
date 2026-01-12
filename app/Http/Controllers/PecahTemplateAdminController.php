@@ -16,24 +16,11 @@ class PecahTemplateAdminController extends Controller
 {
   public function index(): View
   {
-     // Get mutasi statistics
-        $statistics = $this->getMutasiStatistics();
+    $mutasi_masuk = Mutasi::where('mutasi_jenis', '=', '1')->count();
+    $mutasi_keluar = Mutasi::where('mutasi_jenis', '=', '2')->count();
         
-        // Get recent mutasi data
-        $recentMutasi = $this->getRecentMutasi();
-        
-        // Get monthly chart data
-        $chartData = $this->getMonthlyChartData();
-
-        return view('admin.index', [
-            'mutasi_masuk' => $statistics['mutasi_masuk'],
-            'mutasi_keluar' => $statistics['mutasi_keluar'],
-            'total_mutasi' => $statistics['total_mutasi'],
-            'mutasi_pending' => $statistics['mutasi_pending'],
-            'recent_mutasi' => $recentMutasi,
-            'chart_data' => $chartData,
-        ]);
-  }
+    return view('admin.index', compact('mutasi_masuk', 'mutasi_keluar'));
+    }
   /**
      * Get mutasi statistics
      */
