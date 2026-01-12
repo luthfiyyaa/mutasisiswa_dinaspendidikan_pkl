@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
 {
@@ -15,10 +17,15 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $guard = null): Response
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+        $guards = empty($guards) ? [null] : $guards;
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                // Redirect based on user role or default to dashboard
+                return redirect('/admin'); // Ganti sesuai route dashboard kamu
+            }
         }
 
         return $next($request);
