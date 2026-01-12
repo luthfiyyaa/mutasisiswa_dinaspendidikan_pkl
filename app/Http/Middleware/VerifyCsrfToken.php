@@ -9,9 +9,22 @@ class VerifyCsrfToken extends Middleware
     /**
      * The URIs that should be excluded from CSRF verification.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $except = [
-        //
+        // API routes (biasanya pakai token authentication)
+        'api/*',
+        
+        // Webhook endpoints dari third-party services
+        'webhooks/stripe',
+        'webhooks/paypal',
+        'webhooks/midtrans',
+        
+        // Payment gateway callbacks
+        'payments/*/callback',
+        'payments/*/notify',
+        
+        // Mobile app endpoints (jika tidak pakai Sanctum)
+        // 'mobile/api/*',
     ];
 }

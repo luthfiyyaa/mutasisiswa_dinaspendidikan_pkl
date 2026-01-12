@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Broadcast;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -11,6 +14,6 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('App.User.{id}', function (User $user, int $id): bool {
+    return $user->id === $id;
 });
