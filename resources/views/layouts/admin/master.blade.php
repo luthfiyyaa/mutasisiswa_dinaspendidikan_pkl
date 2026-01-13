@@ -72,7 +72,7 @@
               <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                  <img src="{{asset('public/admin/images/person-1824144_960_720.png')}}" class="img-circle" alt="User Image">
+                  <img src="{{asset('admin/images/person-1824144_960_720.png')}}" class="img-circle" alt="User Image">
 
                   <p>
                     {{Auth::user()->email}}
@@ -223,18 +223,18 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
-<script src="{{ asset('public/admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="{{ asset('public/admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <!-- SlimScroll -->
-<script src="{{ asset('public/admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
 <!-- FastClick -->
-<script src="{{ asset('public/admin/bower_components/fastclick/lib/fastclick.js') }}"></script>
+<script src="{{ asset('admin/bower_components/fastclick/lib/fastclick.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('public/admin/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('public/admin/dist/js/demo.js') }}"></script>
-<script type="text/javascript" src="{{ asset('public/js/validator.js') }}"></script>
+<script src="{{ asset('admin/dist/js/demo.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/validator.js') }}"></script>
 
 
 @yield('js')
