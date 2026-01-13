@@ -4,7 +4,7 @@
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="{{asset('public/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 
 <style>
 .example-modal .modal {
@@ -124,9 +124,9 @@
 
 @section('js')
 <!-- DataTables -->
-<script src="{{asset('public/admin/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('public/admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-<script src="{{asset('public/admin/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+<script src="{{asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('admin/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
 
 <script type="text/javascript">
 var table, save_method, tanggal_awal, tanggal_akhir, jenjang, query;
