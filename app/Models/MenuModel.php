@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Mutasi extends Model
+class MenuModel extends Model
 {
-    protected $table = 'mutasi';
-    protected $primaryKey = 'mutasi_id';
+    protected $table = 'tbl_menu';
+    protected $primaryKey = 'menu_id';
     
     /**
      * Indicates if the model should be timestamped.

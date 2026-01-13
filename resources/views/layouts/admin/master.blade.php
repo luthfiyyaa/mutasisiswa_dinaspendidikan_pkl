@@ -123,7 +123,7 @@
           <?php
 
           $id_user = Auth::user()->id;
-          $online = App\UserModel::join('tbl_group','users.group_id','=','tbl_group.group_id')
+          $online = App\Models\UserModel::join('tbl_group','users.group_id','=','tbl_group.group_id')
                       ->where('users.id','=',$id_user)
                       ->value('group_nama');
 
@@ -156,12 +156,12 @@
           </a>
         </li>
 
-        @foreach(App\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','desc')->where([
+        @foreach(App\Models\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','desc')->where([
         ['menu_id_parent', '=', '0'],
         ['group_id', '=', Auth::user()->group_id],
         ])->get() as $menuItem)
         <li class="treeview <?php
-        foreach(App\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','asc')->where([
+        foreach(App\Models\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','asc')->where([
           ['tbl_menu.menu_id_parent', '=', $menuItem->menu_id],
           ['tbl_t_user.group_id', '=', Auth::user()->group_id],
           ])->get() as $menuItemList1){
@@ -177,7 +177,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            @foreach(App\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','asc')->where([
+            @foreach(App\Models\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')->orderBy('tbl_menu.menu_id','asc')->where([
             ['tbl_menu.menu_id_parent', '=', $menuItem->menu_id],
             ['tbl_t_user.group_id', '=', Auth::user()->group_id],
             ])->get() as $menuItemList)

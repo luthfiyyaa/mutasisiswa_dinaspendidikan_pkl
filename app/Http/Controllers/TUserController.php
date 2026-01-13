@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-use App\GroupModel;
-use App\TUserModel;
-use App\MenuModel;
+use App\Models\GroupModel;
+use App\Models\TUserModel;
+use App\Models\MenuModel;
 
 class TUserController extends Controller
 {
