@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PembacaQrController;
 use App\Http\Controllers\PecahTemplateAdminController;
@@ -108,3 +109,6 @@ Route::middleware(['auth'])->group(function () {
     // T User
     Route::resource('t_user', TUserController::class);
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

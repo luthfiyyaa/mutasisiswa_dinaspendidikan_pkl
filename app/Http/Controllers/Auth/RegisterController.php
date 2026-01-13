@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -17,10 +15,13 @@ class RegisterController extends Controller
     | Register Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles the registration of new users (petugas) as well 
-    | as their validation and creation for the sistem mutasi siswa.
+    | This controller handles the registration of new users as well as their
+    | validation and creation. By default this controller uses a trait to
+    | provide this functionality without requiring any additional code.
     |
     */
+
+    use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -39,48 +40,19 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-
     /**
-     * Show the application registration form.
+     * Get a validator for an incoming registration request.
      *
-     * @return \Illuminate\View\View
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function showRegistrationForm()
+    protected function validator(array $data)
     {
-        return view('auth.register');
-    }
-
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function register(Request $request)
-    {
-        $validated = $request->validate([
+        return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed', Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-            ],
-            // Tambahan field untuk sistem mutasi siswa (opsional)
-            // 'nip' => ['required', 'string', 'max:18', 'unique:users'],
-            // 'role' => ['required', 'in:admin,petugas'],
-            // 'phone' => ['nullable', 'string', 'max:15'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-
-        $user = $this->create($validated);
-
-        // Login otomatis setelah register
-        Auth::login($user);
-
-        $request->session()->regenerate();
-
-        return redirect($this->redirectPath());
     }
 
     /**
@@ -95,24 +67,6 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            // Tambahan field untuk sistem mutasi siswa (opsional)
-            // 'nip' => $data['nip'] ?? null,
-            // 'role' => $data['role'] ?? 'petugas',
-            // 'phone' => $data['phone'] ?? null,
         ]);
     }
-
-    /**
-     * Get the post register redirect path.
-     *
-     * @return string
-     */
-    protected function redirectPath()
-    {
-        if (method_exists($this, 'redirectTo')) {
-            return $this->redirectTo();
-        }
-
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
-    }
-    }
+}

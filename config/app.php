@@ -165,8 +165,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        UxWeb\SweetAlert\SweetAlertServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        // niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
@@ -233,8 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'DOMPDF' => Barryvdh\DomPDF\Facade::class,
-        'Alert' => UxWeb\SweetAlert\SweetAlert::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        // 'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
