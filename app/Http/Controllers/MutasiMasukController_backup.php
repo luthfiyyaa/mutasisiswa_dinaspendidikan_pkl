@@ -19,7 +19,7 @@ use App\Models\Pejabat;
 use App\Models\NomorSuratMutasi;
 use Carbon\Carbon;
 
-class MutasiMasukController extends Controller
+class MutasiMasukController_backup extends Controller
 {
     /**
      * Display a listing of the resource.

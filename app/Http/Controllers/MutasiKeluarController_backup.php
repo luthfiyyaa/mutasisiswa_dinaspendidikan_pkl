@@ -15,7 +15,7 @@ use App\Models\Sekolah;
 use App\Models\Pejabat;
 use App\Models\NomorSuratMutasi;
 
-class MutasiKeluarController extends Controller
+class MutasiKeluarController_backup extends Controller
 {
     /**
      * Display a listing of the resource.
