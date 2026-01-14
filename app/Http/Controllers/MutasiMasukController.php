@@ -254,7 +254,7 @@ class MutasiMasukController extends Controller
     public function listData()
     {
       $mutasi = Mutasi::with(['jenjang'])
-        ->where('mutasi_jenis', Mutasi::JENIS_MASUK)
+        ->where('mutasi_jenis', 2)
         ->orderBy('mutasi_id', 'DESC');
 
       return DataTables::eloquent($mutasi)            ->addIndexColumn()
@@ -290,7 +290,7 @@ class MutasiMasukController extends Controller
       {
 
         $mutasi = Mutasi::with(['jenjang'])
-            ->where('mutasi_jenis', Mutasi::JENIS_MASUK)
+            ->where('mutasi_jenis', 2)
             ->where('jenjang_id', $id)
             ->orderBy('mutasi_id', 'DESC');
 

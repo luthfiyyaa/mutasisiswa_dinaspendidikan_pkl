@@ -86,7 +86,6 @@ $(function(){
   table = $('.table').DataTable({
     searching: true,
     processing: true,
-    serverSide: true,
     language: {
       processing: "Sedang diproses..."
     },
@@ -98,7 +97,7 @@ $(function(){
       }
     },
     columns: [
-      {data: 'no', name: 'no', className: 'text-center'},
+      { data: null, render: (d,t,r,m) => m.row + 1 },
       {data: 'jenjang_nama', name: 'jenjang_nama', className: 'text-left'},
       {data: 'pejabat_nama', name: 'pejabat_nama', className: 'text-left'},
       {data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false},
