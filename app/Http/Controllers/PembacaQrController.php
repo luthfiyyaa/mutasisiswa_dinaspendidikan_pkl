@@ -14,14 +14,14 @@ class PembacaQrController extends Controller
 {
   public function index($mutasi_kode_scan): View
   {
-    $mutasi = Mutasi::where('mutasi_kode_scan', $mutasiKodeScan)->first();
+    $mutasi = Mutasi::where('mutasi_kode_scan', $mutasi_kode_scan)->first();
         
     if (!$mutasi) {
         abort(404, 'Data mutasi tidak ditemukan');
     }
     // return "oke".$mutasi_id;
     return view('admin.qr_read.index', [
-            'mutasi_kode_scan' => $mutasiKodeScan,
+            'mutasi_kode_scan' => $mutasi_kode_scan,
             'mutasi' => $mutasi
         ]);
   }
@@ -45,7 +45,7 @@ class PembacaQrController extends Controller
   {
 
     $mutasi = Mutasi::where('mutasi_kode_scan','=',$mutasi_kode_scan)->get();
-    $mutasi = Mutasi::where('mutasi_kode_scan', $mutasiKodeScan)->first();
+    $mutasi = Mutasi::where('mutasi_kode_scan', $mutasi_kode_scan)->first();
 
         if (!$mutasi) {
             return DataTables::of(collect([]))

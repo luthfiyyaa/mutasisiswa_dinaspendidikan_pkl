@@ -329,32 +329,33 @@ class MutasiKeluarController extends Controller
         $this->createNomorSurat($mutasi_id);
 
         // Get nomor surat
-        $no_usulan_tampil = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->get();
+        $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->first();
 
         // Get mutasi data
         $mutasi = Mutasi::query()
             ->join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
             ->where('mutasi.mutasi_id', $mutasi_id)
             ->select('mutasi.*', 'nomor_surat_mutasi.*')
-            ->get();
+            ->first();
 
         // Get QR code
         $mutasi_kode_scan = Mutasi::where('mutasi_id', $mutasi_id)->value('mutasi_kode_scan');
         $qrCode = QrCode::style('round')->size(75)->generate(url('qr_read', $mutasi_kode_scan));
         $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
 
-        $data = [
-            'mutasi' => $mutasi,
-            'no_usulan_tampil' => $no_usulan_tampil,
-            'qrCode' => $qrCode
-        ];
+        // $data = [
+        //     'mutasi' => $mutasi,
+        //     'nomorSurat' => $nomorSurat,
+        //     'qrCode' => $qrCode
+        // ];
 
-        $pdf = PDF::loadView('admin.mutasi_masuk.suket_mutasi_masuk_pdf', $data, [], [
-            'format' => 'A4',
-            'orientation' => 'P'
-        ]);
+        $pdf = Pdf::loadView(
+            'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
+            compact('mutasi', 'nomorSurat', 'qrCode')
+        )->setPaper('A4', 'portrait');
 
-        return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
+        return $pdf->stream('suket_mutasi_keluar_pdf.pdf');
+
     }
 
     /**

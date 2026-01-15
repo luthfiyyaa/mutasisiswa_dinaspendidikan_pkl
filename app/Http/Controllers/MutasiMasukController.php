@@ -355,7 +355,7 @@ class MutasiMasukController extends Controller
         $mutasi = Mutasi::join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
             ->where('mutasi.mutasi_id', $mutasi_id)
             ->select('mutasi.*', 'nomor_surat_mutasi.*')
-            ->get();
+            ->first();
 
         $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->get();
 
@@ -369,16 +369,18 @@ class MutasiMasukController extends Controller
 
         $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
 
-        $data = [
-            'mutasi' => $mutasi,
-            'no_usulan_tampil' => $nomorSurat,
-            'qrCode' => $qrCode
-        ];
+        // $data = [
+        //     'mutasi' => $mutasi,
+        //     'nomorSurat' => $nomorSurat,
+        //     'qrCode' => $qrCode
+        // ];
 
-        $pdf = Pdf::loadView('admin.mutasi_masuk.suket_mutasi_masuk_pdf', $data)
-            ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView(
+            'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
+            compact('mutasi', 'nomorSurat', 'qrCode')
+        )->setPaper('A4', 'portrait');
 
-        return $pdf->stream('surat-mutasi-masuk-' . $mutasi_id . '.pdf');
+        return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
     }
 
     /**

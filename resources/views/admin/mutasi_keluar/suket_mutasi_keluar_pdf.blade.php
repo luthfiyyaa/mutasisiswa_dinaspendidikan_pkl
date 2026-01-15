@@ -124,7 +124,7 @@
 		<hr >
 	</header>
 
-@foreach($mutasi as $data)
+{{-- @foreach($mutasi as $mutasi) --}}
 
 
 	<br>
@@ -134,7 +134,7 @@
   		<div class="" style="text-align:center">
   			<u><b>SURAT KETERANGAN MUTASI SISWA</b></u>
         <br>
-  			Nomor : {{$data->nomor_surat}}
+  			Nomor : {{ $nomorSurat->nomor_surat ?? '-' }}
   		</div>
 
   		<br>
@@ -150,44 +150,37 @@
    			<tr>
    				<td style="width:170px;">Nama</td>
    				<td style="width:5px;">:</td>
-   				<td style="">{{$data->mutasi_nama_siswa}}</td>
-   				<!-- <td style="width:79%;">dr. Maya Syahria Saleh</td> -->
+   				<td style="">{{$mutasi->mutasi_nama_siswa}}</td>
    			</tr>
    			<tr>
    				<td>No. Induk / NISN</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_noinduk}} / {{$data->mutasi_nisn}}</td>
-   				<!-- <td>195904151986112001</td> -->
+   				<td>{{$mutasi->mutasi_noinduk}} / {{$mutasi->mutasi_nisn}}</td>
    			</tr>
    			<tr>
    				<td>Tempat Tanggal lahir</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_tempat_lahir}}, {{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false)}}</td>
-   				<!-- <td>Pembina Tingkat I / IV B</td> -->
+   				<td>{{$mutasi->mutasi_tempat_lahir}}, {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_lahir, false)}}</td>
    			</tr>
    			<tr>
    				<td>Asal Sekolah</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_sekolah_asal_nama}}</td>
-   				<!-- <td>Direktur</td> -->
+   				<td>{{$mutasi->mutasi_sekolah_asal_nama}}</td>
    			</tr>
    			<tr>
    				<td>Tingkat / Kelas</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_tingkat_kelas}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
+   				<td>{{$mutasi->mutasi_tingkat_kelas}}</td>
    			</tr>
         <tr>
    				<td>Nama Orang Tua / Wali</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_nama_wali}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
+   				<td>{{$mutasi->mutasi_nama_wali}}</td>
    			</tr>
         <tr>
    				<td>Alamat</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_alamat}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
+   				<td>{{$mutasi->mutasi_alamat}}</td>
    			</tr>
    		</table>
      </div>
@@ -197,10 +190,10 @@
   		<br>
 
       <p style="text-indent: 40px;">
-        Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$data->mutasi_sekolah_asal_nama}} Nomor :
-        {{$data->mutasi_sekolah_asal_no_surat}} Tanggal {{tanggal_indonesia($data->mutasi_tanggal_mutasi, false)}}
-				serta Surat	Keterangan Kesediaan Menerima dari {{$data->mutasi_sekolah_tujuan_nama}}
-				 Nomor : {{$data->mutasi_sekolah_tujuan_no_surat}} Tanggal {{tanggal_indonesia($data->mutasi_tanggal_surat_diterima, false)}}
+        Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$mutasi->mutasi_sekolah_asal_nama}} Nomor :
+        {{$mutasi->mutasi_sekolah_asal_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_mutasi, false)}}
+				serta Surat	Keterangan Kesediaan Menerima dari {{$mutasi->mutasi_sekolah_tujuan_nama}}
+				 Nomor : {{$mutasi->mutasi_sekolah_tujuan_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_surat_diterima, false)}}
 				 pada prinsipnya kami menyetujui
         mutasi siswa tersebut.
       </p>
@@ -221,14 +214,14 @@
 		<tr>
 			<td style="width: 50%;"></td>
 			<td style="width: 50%;">
-        Trenggalek, {{App\Helpers\TanggalIndonesia::format($data->tanggal,false)}}
+        Trenggalek, {{App\Helpers\TanggalIndonesia::format($mutasi->tanggal,false)}}
         <br>
         <br>
         a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga
         <br>
         Kabupaten Trenggalek
         <br>
-        {!! $data->mutasi_pejabat_jabatan !!}
+        {!! $mutasi->mutasi_pejabat_jabatan !!}
 				<br>
 				<br>
 				<br>
@@ -236,13 +229,13 @@
 				<br>
 				<u>
 					<b>
-						{{$data->mutasi_pejabat_nama}}
+						{{$mutasi->mutasi_pejabat_nama}}
 					</b>
 				</u>
 				<br>
-				{{$data->mutasi_pejabat_pangkat}}
+				{{$mutasi->mutasi_pejabat_pangkat}}
 				<br>
-				NIP. {{$data->mutasi_pejabat_nip}}
+				NIP. {{$mutasi->mutasi_pejabat_nip}}
 			</td>
 		</tr>
 
@@ -276,11 +269,7 @@
 </tr>
 </table>
 
-
-
-
-
-@endforeach
+{{-- @endforeach --}}
 
 
 </body>
