@@ -162,7 +162,7 @@
    			<tr>
    				<td>Tempat Tanggal lahir</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_tempat_lahir}}, {{tanggal_indonesia($data->mutasi_tanggal_lahir, false)}}</td>
+   				<td>{{$data->mutasi_tempat_lahir}}, {{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false)}}</td>
    				<!-- <td>Pembina Tingkat I / IV B</td> -->
    			</tr>
    			<tr>
@@ -221,7 +221,7 @@
 		<tr>
 			<td style="width: 50%;"></td>
 			<td style="width: 50%;">
-        Trenggalek, {{tanggal_indonesia($data->tanggal,false)}}
+        Trenggalek, {{App\Helpers\TanggalIndonesia::format($data->tanggal,false)}}
         <br>
         <br>
         a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga
