@@ -111,7 +111,7 @@
             <tr>
               <td>Tanggal Surat</td>
               <td>:</td>
-              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false) }}</td>
+              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false) }}  </td>
             </tr>
             <tr>
               <td colspan="3"> <b>SEKOLAH TUJUAN SISWA</b>  </td>
@@ -129,7 +129,7 @@
             <tr>
               <td>Tanggal Surat</td>
               <td>:</td>
-              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false) }}</td>
+              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_surat_diterima, false) }}</td>
             </tr>
             @endforeach
           </table>
