@@ -92,7 +92,6 @@ $(function(){
   table = $('.table').DataTable({
     searching: true,
     processing: true,
-    serverSide: true,
     language: {
       processing: "Sedang diproses..."
     },
@@ -104,7 +103,7 @@ $(function(){
       }
     },
     columns: [
-      {data: 'no', name: 'no', className: 'text-center'},
+      {data: null, render: (d,t,r,m) => m.row + 1},
       {data: 'kecamatan_kode_wilayah', name: 'kecamatan_kode_wilayah', className: 'text-left'},
       {data: 'kecamatan_nama', name: 'kecamatan_nama', className: 'text-left'},
       {data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false},

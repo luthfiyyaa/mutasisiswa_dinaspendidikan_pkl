@@ -103,12 +103,18 @@ $(function(){
 
   table = $('.table').DataTable({
     processing: true,
+    searching: true,
     language: {
       processing: "Sedang diproses..."
     },
-    ajax: url: '{{ route('data_mutasi_masuk') }}',
+    ajax: {
+      url: '{{ route('data_mutasi_masuk') }}',
+      type: 'GET',
+      data: function(d){
+      }
+    },
     columns: [
-      { data: null, render: (d,t,r,m) => m.row + 1 },
+      {data: null, render: (d,t,r,m) => m.row + 1},
       {data: 'mutasi_nama_siswa', name: 'mutasi_nama_siswa', className: 'text-left'},
       {data: 'mutasi_noinduk', name: 'mutasi_noinduk', className: 'text-left'},
       {data: 'mutasi_nisn', name: 'mutasi_nisn', className: 'text-left'},
@@ -166,8 +172,5 @@ $(function () {
   })
 })
 </script>
-
-
-
 
 @endsection

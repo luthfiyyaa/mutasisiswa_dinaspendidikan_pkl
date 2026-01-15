@@ -253,9 +253,8 @@ class MutasiKeluarController extends Controller
     public function listData()
     {
         $mutasi_keluar = Mutasi::query()
-            ->join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
             ->where('mutasi.mutasi_jenis', '2')
-            ->select('mutasi.*', 'jenjang.jenjang_nama')
+            // ->select('mutasi.*', 'jenjang.jenjang_nama')
             ->orderBy('mutasi.mutasi_id', 'DESC');
 
         return DataTables::of($mutasi_keluar)

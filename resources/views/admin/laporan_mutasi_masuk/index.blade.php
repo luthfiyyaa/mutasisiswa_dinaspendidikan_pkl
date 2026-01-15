@@ -145,7 +145,6 @@ $(function(){
       url: '{{ route('data_laporan_mutasi_masuk') }}',
       type: 'GET',
       data: function(d){
-
       }
     },
     columns: [

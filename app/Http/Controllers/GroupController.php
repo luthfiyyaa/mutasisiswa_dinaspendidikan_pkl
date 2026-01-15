@@ -8,6 +8,7 @@ use App\Models\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
+use App\Models\GroupModel;
 
 class GroupController extends Controller
 {
@@ -76,7 +77,7 @@ class GroupController extends Controller
             }
 
             // Create new group
-            $group = Group::create([
+            $group = GroupModel::create([
                 'group_nama' => $request->group_nama
             ]);
 
@@ -114,7 +115,7 @@ class GroupController extends Controller
      public function edit($id): JsonResponse
     {
         try {
-            $group = Group::findOrFail($id);
+            $group = GroupModel::findOrFail($id);
             
             return response()->json([
                 'success' => true,
@@ -139,7 +140,7 @@ class GroupController extends Controller
     {
       try {
             // Find group
-            $group = Group::findOrFail($id);
+            $group = GroupModel::findOrFail($id);
 
             // Validate request - unique except current id
             $validator = Validator::make($request->all(), [
@@ -179,7 +180,7 @@ class GroupController extends Controller
      public function destroy($id): JsonResponse
     {
         try {
-            $group = Group::findOrFail($id);
+            $group = GroupModel::findOrFail($id);
             
             // Check if group has users
             if ($group->users()->count() > 0) {
@@ -211,7 +212,7 @@ class GroupController extends Controller
      public function listData(): JsonResponse
     {
         try {
-            $groups = Group::orderBy('group_id', 'DESC')->get();
+            $groups = GroupModel::orderBy('group_id', 'DESC')->get();
             $no = 0;
             $data = [];
 

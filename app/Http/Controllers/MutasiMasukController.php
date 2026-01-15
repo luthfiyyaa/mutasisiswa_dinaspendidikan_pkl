@@ -253,9 +253,9 @@ class MutasiMasukController extends Controller
 
     public function listData()
     {
-      $mutasi = Mutasi::with(['jenjang'])
-        ->where('mutasi_jenis', 2)
-        ->orderBy('mutasi_id', 'DESC');
+      $mutasi = Mutasi::query()
+        ->where('mutasi.mutasi_jenis', 1)
+        ->orderBy('mutasi.mutasi_id', 'DESC');
 
       return DataTables::eloquent($mutasi)            ->addIndexColumn()
         ->addColumn('aksi', function ($row) {
