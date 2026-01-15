@@ -165,7 +165,7 @@
    			<tr>
    				<td>Tempat Tanggal lahir</td>
    				<td>:</td>
-   				<td>{{$data->mutasi_tempat_lahir}}, {{tanggal_indonesia($data->mutasi_tanggal_lahir, false)}}</td>
+   				<td>{{$data->mutasi_tempat_lahir}}, {{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false) }}</td>
    				<!-- <td>Pembina Tingkat I / IV B</td> -->
    			</tr>
    			<tr>
@@ -198,9 +198,9 @@
 
       <p style="text-indent: 40px;">
         Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$data->mutasi_sekolah_asal_nama}} Nomor :
-        {{$data->mutasi_sekolah_asal_no_surat}} Tanggal {{tanggal_indonesia($data->mutasi_tanggal_mutasi, false)}}
+        {{$data->mutasi_sekolah_asal_no_surat}} Tanggal {{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false) }}
 				serta Surat	Keterangan Kesediaan Menerima dari {{$data->mutasi_sekolah_tujuan_nama}}
-				 Nomor : {{$data->mutasi_sekolah_tujuan_no_surat}} Tanggal {{tanggal_indonesia($data->mutasi_tanggal_surat_diterima, false)}}
+				 Nomor : {{$data->mutasi_sekolah_tujuan_no_surat}} Tanggal {{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_surat_diterima, false) }}
 				 pada prinsipnya kami menyetujui
         mutasi siswa tersebut.
       </p>
@@ -216,7 +216,7 @@
 		<tr>
 			<td style="width: 40%;"></td>
 			<td style="width: 60%;">
-        Trenggalek, {{tanggal_indonesia($data->tanggal,false)}}
+        Trenggalek, {{ App\Helpers\TanggalIndonesia::format($data->tanggal, false) }}
         <br>
         a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga
         <br>
