@@ -80,7 +80,7 @@
             <tr>
               <td style="width:150px;">Tempat/Tgl Lahir</td>
               <td style="width:10px;">:</td>
-              <td>{{$data->mutasi_tempat_lahir}} / {{tanggal_indonesia($data->mutasi_tanggal_lahir,false)}}</td>
+              <td>{{$data->mutasi_tempat_lahir}} / {{ App\Helpers\tanggal_indonesia::format($data->mutasi_tanggal_lahir, false) }}</td>
             </tr>
             <tr>
               <td style="width:150px;">Nama Wali</td>

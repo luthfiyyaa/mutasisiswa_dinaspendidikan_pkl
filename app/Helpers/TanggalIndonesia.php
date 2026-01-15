@@ -25,7 +25,7 @@ class tanggal_indonesia
 	   }
 
 	   $bulan = self::$nama_bulan[$date->month];
-	   $text .= $date->day . ' ' . $date->year;
+	   $text .= $date->day . ' ' . $bulan . ' ' . $date->year;
 
 	   return $text;
 	}
