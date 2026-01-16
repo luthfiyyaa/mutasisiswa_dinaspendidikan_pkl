@@ -68,8 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('data_mutasi_masuk', [MutasiMasukController::class, 'listData'])->name('data_mutasi_masuk');
     Route::get('data_mutasi_masuk_jenjang/{id}', [MutasiMasukController::class, 'listDataJenjang']);
     Route::get('search_sekolah', [MutasiMasukController::class, 'search_sekolah'])->name('search_sekolah');
-    Route::get('sukses_tambah_mutasi_masuk/{mutasi_id}', [MutasiMasukController::class, 'sukses_tambah_mutasi_masuk']);
-    Route::get('suket_mutasi_masuk_pdf/{mutasi_id}', [MutasiMasukController::class, 'suket_mutasi_masuk_pdf']);
+    Route::get('/mutasi-masuk/pdf/{mutasi_id}', [MutasiMasukController::class, 'suket_mutasi_masuk_pdf'])->name('mutasi.masuk.pdf');
+    Route::get('/mutasi-masuk/download/{mutasi_id}', [MutasiMasukController::class, 'download_suket_mutasi_masuk_pdf'])->name('mutasi.masuk.download');
     
     // Mutasi Keluar
     Route::resource('mutasi_keluar', MutasiKeluarController::class);

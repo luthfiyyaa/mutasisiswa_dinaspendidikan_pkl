@@ -52,7 +52,7 @@
         <div class="box-body">
 
 
-          <a style="float:left;" href="{{url('suket_mutasi_masuk_pdf')}}/{{$mutasi_id}}" target="_blank" class="btn btn-primary"> <i class="fa fa-print"></i>  Cetak Surat Rekomendasi</a>
+          <a style="float:left;" href="{{url('/mutasi-masuk/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn btn-primary"> <i class="fa fa-print"></i>  Cetak Surat Rekomendasi</a>
           <br><br><br>
 
           <table class="table table-bordered table-striped" >

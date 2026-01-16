@@ -116,9 +116,8 @@ class MutasiMasukController extends Controller
         // Generate nomor surat
         $this->generateNomorSurat($mutasi->mutasi_id, '400.3.1');
 
-        return redirect()
-            ->route('mutasi_masuk.sukses_tambah', $mutasi->mutasi_id)
-            ->with('success', 'Data mutasi masuk berhasil ditambahkan');
+        return redirect()->route('mutasi_masuk.index')
+            ->with('success', 'Data mutasi masuk berhasil ditambahkan!');
   }
 
 
@@ -334,55 +333,7 @@ class MutasiMasukController extends Controller
 
           return response()->json($sekolah);
         }
-
-        public function sukses_tambah_mutasi_masuk($mutasi_id): View
-        {
-          $mutasi = Mutasi::with(['sekolahTujuan', 'jenjang'])
-            ->findOrFail($mutasi_id);
-          return view('admin.mutasi_masuk.sukses_tambah', [
-            'mutasi_id' => $mutasi_id,
-            'mutasi' => collect([$mutasi])
-        ]);
-        }
-
-        public function suket_mutasi_masuk_pdf(int $mutasi_id)
-        {
-
-           // Generate nomor surat if not exists
-        $this->generateNomorSurat($mutasi_id, '421.2');
-
-        // Get mutasi data with nomor surat
-        $mutasi = Mutasi::join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
-            ->where('mutasi.mutasi_id', $mutasi_id)
-            ->select('mutasi.*', 'nomor_surat_mutasi.*')
-            ->first();
-
-        $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->get();
-
-        // Generate QR Code
-        $mutasiKodeScan = Mutasi::where('mutasi_id', $mutasi_id)
-            ->value('mutasi_kode_scan');
-
-        $qrCode = QrCode::style('round')
-            ->size(75)
-            ->generate(url('qr_read') . '/' . $mutasiKodeScan);
-
-        $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
-
-        // $data = [
-        //     'mutasi' => $mutasi,
-        //     'nomorSurat' => $nomorSurat,
-        //     'qrCode' => $qrCode
-        // ];
-
-        $pdf = Pdf::loadView(
-            'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
-            compact('mutasi', 'nomorSurat', 'qrCode')
-        )->setPaper('A4', 'portrait');
-
-        return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
-    }
-
+  
     /**
      * Get pejabat by jenjang
      */
@@ -413,21 +364,118 @@ class MutasiMasukController extends Controller
     /**
      * Generate nomor surat
      */
-    private function generateNomorSurat(int $mutasi_id, string $prefix): void
+    private function generateNomorSurat(int $mutasi_id, string $kode_surat): void
     {
         $exists = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->exists();
-
+        
         if (!$exists) {
-            $tahun = Carbon::now()->year;
-            $maxNomor = NomorSuratMutasi::whereYear('tanggal', $tahun)->max('nomor');
-            $nomor = ($maxNomor ?? 0) + 1;
-
+            $tahun = date('Y');
+            $lastNomor = NomorSuratMutasi::whereYear('created_at', $tahun)
+                ->orderBy('nomor_urut', 'desc')
+                ->first();
+            
+            $nomorUrut = $lastNomor ? $lastNomor->nomor_urut + 1 : 1;
+            
+            $nomorSurat = sprintf(
+                '%s/%03d/408.22/%s',
+                $kode_surat,
+                $nomorUrut,
+                $tahun
+            );
+            
             NomorSuratMutasi::create([
                 'mutasi_id' => $mutasi_id,
-                'nomor' => $nomor,
-                'tanggal' => Carbon::today(),
-                'nomor_surat' => "{$prefix}/{$nomor}/406.009/{$tahun}"
+                'nomor_surat' => $nomorSurat,
+                'nomor_urut' => $nomorUrut,
+                'tahun' => $tahun
             ]);
         }
     }
+
+    // Surat keterangan mutasi
+    public function suket_mutasi_masuk_pdf(int $mutasi_id)
+    {
+        try {
+            // Set timeout dan memory
+            set_time_limit(300);
+            ini_set('memory_limit', '512M');
+
+            // Generate nomor surat
+            $this->generateNomorSurat($mutasi_id, '421.2');
+
+            // Get data
+            $mutasi = Mutasi::findOrFail($mutasi_id);
+            $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
+
+            // Generate QR Code
+            $qrCodeUrl = url('qr_read/' . $mutasi->mutasi_kode_scan);
+            $qrCode = QrCode::style('round')->size(75)->generate($qrCodeUrl);
+            $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
+
+            // Load PDF dengan options
+            $pdf = Pdf::loadView(
+                'admin.mutasi_masuk.suket_mutasi_masuk_pdf',
+                compact('mutasi', 'nomorSurat', 'qrCode')
+            )
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'sans-serif',
+                'enable_php' => false
+            ]);
+
+            // Return PDF stream
+            return $pdf->stream('Surat_Keterangan_Mutasi_' . $mutasi->mutasi_nama_siswa . '.pdf');
+
+        } catch (\Exception $e) {
+            // Log error
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal generate PDF: ' . $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
+        }
+    }
+
+    // Method untuk download PDF
+    public function download_suket_mutasi_masuk_pdf(int $mutasi_id)
+    {
+        try {
+            set_time_limit(300);
+            ini_set('memory_limit', '512M');
+
+            $this->generateNomorSurat($mutasi_id, '421.2');
+
+            $mutasi = Mutasi::findOrFail($mutasi_id);
+            $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
+
+            $qrCodeUrl = url('qr_read/' . $mutasi->mutasi_kode_scan);
+            $qrCode = QrCode::style('round')->size(75)->generate($qrCodeUrl);
+            $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
+
+            $pdf = Pdf::loadView(
+                'admin.mutasi_masuk.suket_mutasi_masuk_pdf',
+                compact('mutasi', 'nomorSurat', 'qrCode')
+            )
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'sans-serif'
+            ]);
+
+            return $pdf->download('Surat_Keterangan_Mutasi_' . $mutasi->mutasi_nama_siswa . '.pdf');
+
+        } catch (\Exception $e) {
+            \Log::error('PDF Download Error: ' . $e->getMessage());
+            
+            return back()->with('error', 'Gagal download PDF: ' . $e->getMessage());
+        }
+    }
+
 }

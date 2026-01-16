@@ -1,282 +1,336 @@
-<?php $hari_ini = date("Y-m-d"); ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-	<title>Surat Keterangan Mutasi</title>
-	<style type="text/css">
-	@page {
-        margin-top: 5mm;
-        margin-bottom: 5mm;
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Surat Keterangan Mutasi - {{ $mutasi->mutasi_nama_siswa }}</title>
+    <style>
+        @page {
+            margin: 15mm 15mm 15mm 15mm;
+        }
 
-	body {
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: 12pt;
-	}
-	.text-center {
-		text-align: center;
-	}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-	.text-left {
-		text-align: left;
-	}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #000;
+        }
 
-	.text-right {
-		text-align: right;
-	}
+        .text-center { 
+            text-align: center; 
+        }
 
-	.text-uppercase {
-		text-transform: uppercase;
-	}
+        .header-wrapper {
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-	.text-lowercase {
-		text-transform: lowercase;
-	}
+        .header-table {
+            width: 100%;
+            border: none;
+        }
 
-	.text-capital {
-		text-transform: capitalize;
-	}
+        .header-table td {
+            vertical-align: middle;
+            border: none;
+        }
 
-	.text-underline {
-		text-decoration: underline;
-		text-decoration-color: #000;
-	}
+        .logo-cell {
+            width: 100px;
+            text-align: left;
+        }
 
-	.font-sm {
-		font-size: 12px;
-	}
+        .header-logo {
+            width: 80px;
+            height: auto;
+        }
 
-	.bg-red {
-		background-color: red;
-	}
+        .header-text {
+            text-align: center;
+        }
 
-	.bg-grey {
-		background-color: rgb(220, 220, 220);
-	}
+        .header-text p {
+            margin: 2px 0;
+            line-height: 1.3;
+        }
 
-	.table {
-		border-collapse: collapse;
-		border-spacing: 0;
-		width: 100%;
-		border: solid 1px black;
-	}
+        .header-title {
+            font-size: 12pt;
+            font-weight: bold;
+        }
 
-	.table th, .table td{
-		border: 1px solid black;
-		font-size: 12px;
-	}
+        .header-main {
+            font-size: 16pt;
+            font-weight: bold;
+        }
 
-	.mb-0 {
-		margin-bottom: 0px;
-	}
+        .header-address {
+            font-size: 11pt;
+        }
 
-	.mt-0 {
-		margin-top: 0px;
-	}
+        .header-city {
+            font-size: 13pt;
+            font-weight: bold;
+        }
 
-	.my-0 {
-		margin-bottom: 0px;
-		margin-top: 0px;
-	}
-	.mb-1 {
-		margin-bottom: 1.5px;
-	}
+        .header-line {
+            border: none;
+            border-top: 3px solid #000;
+            margin: 2px 0;
+        }
 
-	.mar {
-		margin-top: 10px;
-		margin-bottom: 10px
-	}
+        .header-line-thin {
+            border: none;
+            border-top: 1px solid #000;
+            margin: 2px 0 15px 0;
+        }
 
-	hr {
-		display: block;
-		margin-top: 0.3em;
-		margin-bottom: -0.2em;
-		margin-left: auto;
-		margin-right: auto;
-		border-style: inset;
-		border-width: 3px;
-		color: black;
-	}
-	ol {
-		display: block;
-		margin-top: 0em;
-		margin-bottom: 1em;
-		margin-left: 0;
-		margin-right: 0;
-		padding-left: 17px;
-		padding-top: -15px;
-	}
+        .document-title {
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 15px 0 5px 0;
+            font-size: 13pt;
+        }
 
-	</style>
+        .document-number {
+            margin-bottom: 15px;
+            font-size: 12pt;
+        }
+
+        .content-text {
+            text-align: justify;
+            text-indent: 40px;
+            margin: 10px 0;
+        }
+
+        .data-section {
+            margin: 15px 0 15px 40px;
+        }
+
+        .data-table {
+            width: 100%;
+            border: none;
+        }
+
+        .data-table td {
+            padding: 3px 0;
+            vertical-align: top;
+            border: none;
+        }
+
+        .data-label {
+            width: 180px;
+        }
+
+        .data-colon {
+            width: 15px;
+        }
+
+        .signature-wrapper {
+            margin-top: 25px;
+        }
+
+        .signature-table {
+            width: 100%;
+            border: none;
+        }
+
+        .signature-table td {
+            border: none;
+            vertical-align: top;
+        }
+
+        .signature-left {
+            width: 35%;
+        }
+
+        .signature-right {
+            width: 65%;
+            text-align: center;
+        }
+
+        .signature-space {
+            height: 70px;
+        }
+
+        .signature-name {
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 5px 0;
+        }
+
+        .footer-wrapper {
+            margin-top: 20px;
+        }
+
+        .footer-table {
+            width: 100%;
+            border: none;
+        }
+
+        .footer-table td {
+            border: none;
+            vertical-align: top;
+        }
+
+        .footer-left {
+            width: 50%;
+        }
+
+        .footer-right {
+            width: 50%;
+            text-align: center;
+        }
+
+        .tembusan-indent {
+            margin-left: 14px;
+        }
+
+        .qr-code {
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .qr-text {
+            font-size: 8pt;
+            line-height: 1.3;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-	<header>
-		<table class="text-center" border="0" style="width: 100%;">
-			<tr>
-				<td align="left"><img src="{{ asset("admin/images/logo_trenggalek_hitam_putih.jpg") }}" style="width: 90px;"></td>
-				<td>
+    {{-- Header --}}
+    <div class="header-wrapper">
+        <table class="header-table">
+            <tr>
+                <td class="logo-cell">
+                    @if(file_exists(public_path('admin/images/logo_trenggalek_hitam_putih.jpg')))
+                        <img src="{{ public_path('admin/images/logo_trenggalek_hitam_putih.jpg') }}" 
+                             class="header-logo" 
+                             alt="Logo Trenggalek">
+                    @endif
+                </td>
+                <td class="header-text">
+                    <p class="header-title">PEMERINTAH KABUPATEN TRENGGALEK</p>
+                    <p class="header-main">DINAS PENDIDIKAN, PEMUDA DAN OLAHRAGA</p>
+                    <p class="header-address">Jalan RA. Kartini Nomor 76 Telp. (0355) 791344 Fax. (0355) 791129</p>
+                    <p class="header-city">TRENGGALEK (66315)</p>
+                </td>
+            </tr>
+        </table>
+        <hr class="header-line">
+        <hr class="header-line-thin">
+    </div>
 
-          <p style="font-size:12pt;"> <b>PEMERINTAH KABUPATEN TRENGGALEK</b> </p>
-					<p style="font-size:16pt;"> <b>DINAS PENDIDIKAN, PEMUDA DAN OLAHRAGA</b> </p>
-          <p style="font-size:12pt;">Jalan RA. Kartini Nomor 76 Telp. (0355) 791344 Fax. (0355) 791129	</p>
-					<p style="font-size:14pt;"><b>TRENGGALEK	(66315)</b></p>
+    {{-- Document Title --}}
+    <div class="text-center">
+        <p class="document-title">SURAT KETERANGAN MUTASI SISWA</p>
+        <p class="document-number">Nomor : {{ $nomorSurat->nomor_surat }}</p>
+    </div>
 
-				</td>
-			</tr>
-		</table>
-		<hr style="height: 2px;">
-		<hr >
-	</header>
+    {{-- Content --}}
+    <p class="content-text">
+        Yang bertanda tangan dibawah ini Kepala Dinas Pendidikan, Pemuda dan Olahraga 
+        Kabupaten Trenggalek menerangkan bahwa :
+    </p>
 
-{{-- @foreach($mutasi as $mutasi) --}}
+    <div class="data-section">
+        <table class="data-table">
+            <tr>
+                <td class="data-label">Nama</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_nama_siswa }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">No. Induk / NISN</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_noinduk }} / {{ $mutasi->mutasi_nisn }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">Tempat Tanggal Lahir</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_tempat_lahir }}, {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_lahir, false) }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">Asal Sekolah</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_sekolah_asal_nama }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">Tingkat / Kelas</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_tingkat_kelas }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">Nama Orang Tua / Wali</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_nama_wali }}</td>
+            </tr>
+            <tr>
+                <td class="data-label">Alamat</td>
+                <td class="data-colon">:</td>
+                <td>{{ $mutasi->mutasi_alamat }}</td>
+            </tr>
+        </table>
+    </div>
 
+    <p class="content-text">
+        Berdasarkan Surat Keterangan Pindah / Mutasi dari {{ $mutasi->mutasi_sekolah_asal_nama }} 
+        Nomor : {{ $mutasi->mutasi_sekolah_asal_no_surat }} 
+        Tanggal {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_mutasi, false) }} 
+        serta Surat Keterangan Kesediaan Menerima dari {{ $mutasi->mutasi_sekolah_tujuan_nama }} 
+        Nomor : {{ $mutasi->mutasi_sekolah_tujuan_no_surat }} 
+        Tanggal {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_surat_diterima, false) }} 
+        pada prinsipnya kami menyetujui mutasi siswa tersebut.
+    </p>
 
-	<br>
-  <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-  	<div style="text-align:justify" class="">
-
-  		<div class="" style="text-align:center">
-  			<u><b>SURAT KETERANGAN MUTASI SISWA</b></u>
-        <br>
-  			Nomor : {{ $nomorSurat->nomor_surat ?? '-' }}
-  		</div>
-
-
-  	 <p style="text-indent: 40px;">
-       Yang bertanda tangan dibawah ini Kepala Dinas Pendidikan, Pemuda dan Olahraga Kabupaten Trenggalek
-       menerangkan bahwa :
-     </p>
-
-     <div class="" style="margin-left:40px;">
-       <table border="0" style="width: 100%; vertical-align: top;">
-   			<tr>
-   				<td style="width:175px;">Nama</td>
-   				<td style="width:5px;">:</td>
-   				<td style="">{{$mutasi->mutasi_nama_siswa}}</td>
-   				<!-- <td style="width:79%;">dr. Maya Syahria Saleh</td> -->
-   			</tr>
-   			<tr>
-   				<td>No. Induk / NISN</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_noinduk}} / {{$mutasi->mutasi_nisn}}</td>
-   				<!-- <td>195904151986112001</td> -->
-   			</tr>
-   			<tr>
-   				<td>Tempat Tanggal lahir</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_tempat_lahir}}, {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_lahir, false) }}</td>
-   				<!-- <td>Pembina Tingkat I / IV B</td> -->
-   			</tr>
-   			<tr>
-   				<td>Asal Sekolah</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_sekolah_asal_nama}}</td>
-   				<!-- <td>Direktur</td> -->
-   			</tr>
-   			<tr>
-   				<td>Tingkat / Kelas</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_tingkat_kelas}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
-   			</tr>
-        <tr>
-   				<td>Nama Orang Tua / Wali</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_nama_wali}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
-   			</tr>
-        <tr>
-   				<td>Alamat</td>
-   				<td>:</td>
-   				<td>{{$mutasi->mutasi_alamat}}</td>
-   				<!-- <td>RSUD Bhakti Dharma Husada Surabaya</td> -->
-   			</tr>
-   		</table>
-     </div>
-
-
-      <p style="text-indent: 40px;">
-        Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$mutasi->mutasi_sekolah_asal_nama}} Nomor :
-        {{$mutasi->mutasi_sekolah_asal_no_surat}} Tanggal {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_mutasi, false) }}
-				serta Surat	Keterangan Kesediaan Menerima dari {{$mutasi->mutasi_sekolah_tujuan_nama}}
-				 Nomor : {{$mutasi->mutasi_sekolah_tujuan_no_surat}} Tanggal {{ App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_surat_diterima, false) }}
-				 pada prinsipnya kami menyetujui
-        mutasi siswa tersebut.
-      </p>
-
-      <p style="text-indent: 40px;">
+    <p class="content-text">
         Demikian Surat keterangan ini diberikan untuk dapat digunakan sebagaimana mestinya.
-      </p>
+    </p>
 
-  	</div>
+    {{-- Signature --}}
+    <div class="signature-wrapper">
+        <table class="signature-table">
+            <tr>
+                <td class="signature-left">&nbsp;</td>
+                <td class="signature-right">
+                    <p>Trenggalek, {{ App\Helpers\TanggalIndonesia::format($mutasi->tanggal, false) }}</p>
+                    <p>a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga</p>
+                    <p>Kabupaten Trenggalek</p>
+                    <p>{!! $mutasi->mutasi_pejabat_jabatan !!}</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name">{{ $mutasi->mutasi_pejabat_nama }}</p>
+                    <p>{{ $mutasi->mutasi_pejabat_pangkat }}</p>
+                    <p>NIP. {{ $mutasi->mutasi_pejabat_nip }}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-	<table class="text-center" border="0" style="width: 100%;">
-
-		<tr>
-			<td style="width: 40%;"></td>
-			<td style="width: 60%;">
-        Trenggalek, {{ App\Helpers\TanggalIndonesia::format($mutasi->tanggal, false) }}
-        <br>
-        a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga
-        <br>
-        Kabupaten Trenggalek
-        <br>
-        {!! $mutasi->mutasi_pejabat_jabatan !!}
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<u>
-					<b>
-						{{$mutasi->mutasi_pejabat_nama}}
-					</b>
-				</u>
-				<br>
-				{{$mutasi->mutasi_pejabat_pangkat}}
-				<br>
-				NIP. {{$mutasi->mutasi_pejabat_nip}}
-			</td>
-		</tr>
-
-	</table>
-
-	<br>
-
-<table class="text-left" border="0" style="width: 100%;">
-<tr>
-	<td style="width: 50%;">
-		Tembusan disampaikan kepada Yth :
-		<br>
-			1. Kepala Disdikpora Kab. Trenggalek
-		<br>
-	  <div style="margin-left:14px;">(sebagai Laporan)</div>
-	</td>
-	<td style="width: 50%;" class="text-center">
-		<div class="visible-print text-center">
-	    <!-- {!! QrCode::format('svg')->size(75)->generate('https://www.google.com/'); !!}
-	    <p>Scan me to return to the original page.</p> -->
-			{!! $qrCode !!}
-			<br>
-			<br>
-			<p style="font-size:8pt;">
-			    Scan QRcode untuk 
-			    <br>
-			    menampilkan dokumen secara online.
-			</p>
-			
-	  </div>
-	</td>
-</tr>
-</table>
-
-
-
-
-
-{{-- @endforeach --}}
-
-
+    {{-- Footer --}}
+    <div class="footer-wrapper">
+        <table class="footer-table">
+            <tr>
+                <td class="footer-left">
+                    <p><strong>Tembusan disampaikan kepada Yth :</strong></p>
+                    <p>1. Kepala Disdikpora Kab. Trenggalek</p>
+                    <p class="tembusan-indent">(sebagai Laporan)</p>
+                </td>
+                <td class="footer-right">
+                    <div class="qr-code">{!! $qrCode !!}</div>
+                    <p class="qr-text">
+                        Scan QRcode untuk<br>
+                        menampilkan dokumen secara online.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
