@@ -6,7 +6,7 @@
 	<title>Surat Keterangan Mutasi</title>
 	<style type="text/css">
 	body {
-		font-family: "Times New Roman", Times, serif;
+		font-family: Arial, Helvetica, sans-serif;
 		font-size: 10pt;
 	}
 	.text-center {
@@ -113,8 +113,8 @@
 				<td style="width: 100%">
 
           <p style="font-size:12pt;"> <b>PEMERINTAH KABUPATEN TRENGGALEK</b> </p>
-					<p style="font-size:16pt;"> <b>DINAS PENDIDIKAN, PEMUDA DAN OLAHRAGA</b> </p>
-          <p style="font-size:12pt;">Jalan RA. Kartini Nomor 76 Telp. (0355) 791344 Fax. (0355) 791129	</p>
+					<p style="font-size:16pt;"> <b>DINAS PENDIDIKAN</b> </p>
+					<p style="font-size:12pt;">Jalan RA. Kartini Nomor 76 Telp. (0355) 791344 Fax. (0355) 791129	</p>
 					<p style="font-size:14pt;"><b>TRENGGALEK	(66315)</b></p>
 
 				</td>
@@ -123,8 +123,6 @@
 		<hr style="height: 2px;">
 		<hr >
 	</header>
-
-{{-- @foreach($mutasi as $mutasi) --}}
 
 
 	<br>
@@ -141,7 +139,7 @@
   		<br>
 
   	 <p style="text-indent: 40px;">
-       Yang bertanda tangan dibawah ini Kepala Dinas Pendidikan, Pemuda dan Olahraga Kabupaten Trenggalek
+       Yang bertanda tangan dibawah ini Kepala Dinas Pendidikan, Kabupaten Trenggalek
        menerangkan bahwa :
      </p>
 
@@ -184,9 +182,6 @@
    			</tr>
    		</table>
      </div>
-
-
-
   		<br>
 
       <p style="text-indent: 40px;">
@@ -206,9 +201,6 @@
 
 	<br>
 
-
-
-
 	<table class="text-center" border="0" style="width: 100%;">
 
 		<tr>
@@ -217,7 +209,7 @@
         Trenggalek, {{App\Helpers\TanggalIndonesia::format($mutasi->tanggal,false)}}
         <br>
         <br>
-        a.n. Kepala Dinas Pendidikan, Pemuda dan Olahraga
+        a.n. Kepala Dinas Pendidikan
         <br>
         Kabupaten Trenggalek
         <br>
@@ -248,7 +240,7 @@
 	<td style="width: 50%;">
 		Tembusan disampaikan kepada Yth :
 		<br>
-			1. Kepala Disdikpora Kab. Trenggalek
+			1. Kepala Dindik Kab. Trenggalek
 		<br>
 	  <div style="margin-left:14px;">(sebagai Laporan)</div>
 	</td>
@@ -268,8 +260,6 @@
 	</td>
 </tr>
 </table>
-
-{{-- @endforeach --}}
 
 
 </body>

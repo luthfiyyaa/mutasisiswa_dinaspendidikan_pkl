@@ -75,8 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('mutasi_keluar', MutasiKeluarController::class);
     Route::get('data_mutasi_keluar', [MutasiKeluarController::class, 'listData'])->name('data_mutasi_keluar');
     Route::get('data_mutasi_keluar_jenjang/{id}', [MutasiKeluarController::class, 'listDataJenjang']);
-    Route::get('sukses_tambah_mutasi_keluar/{mutasi_id}', [MutasiKeluarController::class, 'sukses_tambah_mutasi_keluar']);
-    Route::get('suket_mutasi_keluar_pdf/{mutasi_id}', [MutasiKeluarController::class, 'suket_mutasi_keluar_pdf']);
+    Route::get('/mutasi-keluar/pdf/{mutasi_id}', [MutasiKeluarController::class, 'suket_mutasi_keluar_pdf'])->name('mutasi.keluar.pdf');
+    Route::get('/mutasi-keluar/download/{mutasi_id}', [MutasiKeluarController::class, 'download_suket_mutasi_keluar_pdf'])->name('mutasi.keluar.download');
 
     // ========== LAPORAN ==========
     
