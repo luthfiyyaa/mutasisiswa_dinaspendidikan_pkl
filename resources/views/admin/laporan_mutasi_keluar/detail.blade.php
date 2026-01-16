@@ -80,7 +80,7 @@
             <tr>
               <td style="width:150px;">Tempat/Tgl Lahir</td>
               <td style="width:10px;">:</td>
-              <td>{{$data->mutasi_tempat_lahir}} / {{tanggal_indonesia($data->mutasi_tanggal_lahir,false)}}</td>
+              <td>{{$data->mutasi_tempat_lahir}} / {{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir,false)}}</td>
             </tr>
             <tr>
               <td style="width:150px;">Nama Wali</td>
@@ -108,7 +108,7 @@
             <tr>
               <td>Tanggal Surat</td>
               <td>:</td>
-              <td>{{tanggal_indonesia($data->mutasi_tanggal_mutasi, false)}}</td>
+              <td>{{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false)}}</td>
             </tr>
             <tr>
               <td colspan="3"> <b>SEKOLAH TUJUAN SISWA</b>  </td>
@@ -126,7 +126,7 @@
             <tr>
               <td>Tanggal Surat</td>
               <td>:</td>
-              <td>{{tanggal_indonesia($data->mutasi_tanggal_surat_diterima,false)}}</td>
+              <td>{{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_surat_diterima,false)}}</td>
             </tr>
             @endforeach
           </table>

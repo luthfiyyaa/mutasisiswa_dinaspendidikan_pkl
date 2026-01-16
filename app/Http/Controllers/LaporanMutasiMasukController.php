@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use App\Helpers\TanggalIndonesia;
 use App\Models\Mutasi;
 use App\Models\Jenjang;
 use App\Models\Kecamatan;
@@ -33,26 +34,6 @@ class LaporanMutasiMasukController extends Controller
         return view('admin.laporan_mutasi_masuk.index', compact('jenjang'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -66,40 +47,6 @@ class LaporanMutasiMasukController extends Controller
         $mutasi = Mutasi::where('mutasi_id', $mutasi_id)->get();
         
         return view('admin.laporan_mutasi_masuk.detail', compact('mutasi_id', 'mutasi'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, int $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(int $id)
-    {
-        //
     }
 
     /**
