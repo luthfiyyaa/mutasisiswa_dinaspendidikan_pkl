@@ -19,16 +19,6 @@ use App\Http\Controllers\MasterUserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TUserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Auth::routes();
 
@@ -37,78 +27,118 @@ Route::get('qr_read/{mutasi_kode_scan}', [PembacaQrController::class, 'index']);
 Route::get('getDataMutasi', [PembacaQrController::class, 'getDataMutasi'])->name('getDataMutasi');
 Route::get('getDataMutasiCek/{mutasi_kode_scan}', [PembacaQrController::class, 'getDataMutasiCek']);
 
-// Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', [PecahTemplateAdminController::class, 'index']);
-    Route::resource('admin_user', AdminUserController::class);
+    Route::get('/', [PecahTemplateAdminController::class, 'index'])->name('dashboard');
 
-    // ========== MASTER DATA ==========
-    
-    // Kecamatan
-    Route::resource('kecamatan', KecamatanController::class);
-    Route::get('data_kecamatan', [KecamatanController::class, 'listData'])->name('data_kecamatan');
-    
-    // Pejabat
-    Route::resource('pejabat', PejabatController::class);
-    Route::get('data_pejabat', [PejabatController::class, 'listData'])->name('data_pejabat');
-    
-    // Jenjang
-    Route::resource('jenjang', JenjangController::class);
-    Route::get('data_jenjang', [JenjangController::class, 'listData'])->name('data_jenjang');
-    
-    // Sekolah
-    Route::resource('sekolah', SekolahController::class);
-    Route::get('data_sekolah', [SekolahController::class, 'listData'])->name('data_sekolah');
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('admin_user', AdminUserController::class);
 
-    // ========== MUTASI SISWA ==========
-    
-    // Mutasi Masuk
-    Route::resource('mutasi_masuk', MutasiMasukController::class);
-    Route::get('data_mutasi_masuk', [MutasiMasukController::class, 'listData'])->name('data_mutasi_masuk');
-    Route::get('data_mutasi_masuk_jenjang/{id}', [MutasiMasukController::class, 'listDataJenjang']);
-    Route::get('search_sekolah', [MutasiMasukController::class, 'search_sekolah'])->name('search_sekolah');
-    Route::get('/mutasi-masuk/pdf/{mutasi_id}', [MutasiMasukController::class, 'suket_mutasi_masuk_pdf'])->name('mutasi.masuk.pdf');
-    Route::get('/mutasi-masuk/download/{mutasi_id}', [MutasiMasukController::class, 'download_suket_mutasi_masuk_pdf'])->name('mutasi.masuk.download');
-    
-    // Mutasi Keluar
-    Route::resource('mutasi_keluar', MutasiKeluarController::class);
-    Route::get('data_mutasi_keluar', [MutasiKeluarController::class, 'listData'])->name('data_mutasi_keluar');
-    Route::get('data_mutasi_keluar_jenjang/{id}', [MutasiKeluarController::class, 'listDataJenjang']);
-    Route::get('/mutasi-keluar/pdf/{mutasi_id}', [MutasiKeluarController::class, 'suket_mutasi_keluar_pdf'])->name('mutasi.keluar.pdf');
-    Route::get('/mutasi-keluar/download/{mutasi_id}', [MutasiKeluarController::class, 'download_suket_mutasi_keluar_pdf'])->name('mutasi.keluar.download');
+        // ========== MUTASI ==========
+        //Mutasi Masuk
+        Route::resource('mutasi_masuk', MutasiMasukController::class);
+        Route::get('data_mutasi_masuk', [MutasiMasukController::class, 'listData'])->name('data_mutasi_masuk');
+        Route::get('data_mutasi_masuk_jenjang/{id}', [MutasiMasukController::class, 'listDataJenjang']);
+        Route::get('search_sekolah', [MutasiMasukController::class, 'search_sekolah'])->name('search_sekolah');
+        Route::get('/mutasi-masuk/pdf/{mutasi_id}', [MutasiMasukController::class, 'suket_mutasi_masuk_pdf'])->name('mutasi.masuk.pdf');
+        Route::get('/mutasi-masuk/download/{mutasi_id}', [MutasiMasukController::class, 'download_suket_mutasi_masuk_pdf'])->name('mutasi.masuk.download');
+        
+        // Mutasi Keluar
+        Route::resource('mutasi_keluar', MutasiKeluarController::class);
+        Route::get('data_mutasi_keluar', [MutasiKeluarController::class, 'listData'])->name('data_mutasi_keluar');
+        Route::get('data_mutasi_keluar_jenjang/{id}', [MutasiKeluarController::class, 'listDataJenjang']);
+        Route::get('/mutasi-keluar/pdf/{mutasi_id}', [MutasiKeluarController::class, 'suket_mutasi_keluar_pdf'])->name('mutasi.keluar.pdf');
+        Route::get('/mutasi-keluar/download/{mutasi_id}', [MutasiKeluarController::class, 'download_suket_mutasi_keluar_pdf'])->name('mutasi.keluar.download');
 
-    // ========== LAPORAN ==========
-    
-    // Laporan Mutasi Masuk
-    Route::resource('laporan_mutasi_masuk', LaporanMutasiMasukController::class);
-    Route::get('data_laporan_mutasi_masuk', [LaporanMutasiMasukController::class, 'listData'])->name('data_laporan_mutasi_masuk');
-    Route::get('data_laporan_mutasi_masuk_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'listDataFilter']);
-    Route::get('laporan_mutasi_masuk_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'laporan_mutasi_masuk_excel_file'])->name('laporan_mutasi_masuk.downloadExcel');
-    
-    // Laporan Mutasi Keluar
-    Route::resource('laporan_mutasi_keluar', LaporanMutasiKeluarController::class);
-    Route::get('data_laporan_mutasi_keluar', [LaporanMutasiKeluarController::class, 'listData'])->name('data_laporan_mutasi_keluar');
-    Route::get('data_laporan_mutasi_keluar_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'listDataFilter']);
-    Route::get('laporan_mutasi_keluar_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'laporan_mutasi_keluar_excel_file'])->name('laporan_mutasi_keluar.downloadExcel');
+        // ========== LAPORAN ==========
+        // Laporan Mutasi Masuk
+        Route::resource('laporan_mutasi_masuk', LaporanMutasiMasukController::class);
+        Route::get('data_laporan_mutasi_masuk', [LaporanMutasiMasukController::class, 'listData'])->name('data_laporan_mutasi_masuk');
+        Route::get('data_laporan_mutasi_masuk_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_masuk_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'laporan_mutasi_masuk_excel_file'])->name('laporan_mutasi_masuk.downloadExcel');
+        
+        // Laporan Mutasi Keluar
+        Route::resource('laporan_mutasi_keluar', LaporanMutasiKeluarController::class);
+        Route::get('data_laporan_mutasi_keluar', [LaporanMutasiKeluarController::class, 'listData'])->name('data_laporan_mutasi_keluar');
+        Route::get('data_laporan_mutasi_keluar_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_keluar_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'laporan_mutasi_keluar_excel_file'])->name('laporan_mutasi_keluar.downloadExcel');
 
-    // ========== MANAJEMEN USER ==========
-    
-    // Group
-    Route::resource('group', GroupController::class);
-    Route::get('data_group', [GroupController::class, 'listData'])->name('data_group');
-    
-    // Master User
-    Route::resource('master_user', MasterUserController::class);
-    Route::get('data_master_user', [MasterUserController::class, 'listData'])->name('data_master_user');
-    
-    // Menu
-    Route::resource('menu', MenuController::class);
-    Route::get('data_menu', [MenuController::class, 'listData'])->name('data_menu');
-    
-    // T User
-    Route::resource('t_user', TUserController::class);
+        // ========== MASTER DATA ==========
+        // Kecamatan
+        Route::resource('kecamatan', KecamatanController::class);
+        Route::get('data_kecamatan', [KecamatanController::class, 'listData'])->name('data_kecamatan');
+        // Pejabat
+        Route::resource('pejabat', PejabatController::class);
+        Route::get('data_pejabat', [PejabatController::class, 'listData'])->name('data_pejabat');
+        // Jenjang
+        Route::resource('jenjang', JenjangController::class);
+        Route::get('data_jenjang', [JenjangController::class, 'listData'])->name('data_jenjang');
+        // Sekolah
+        Route::resource('sekolah', SekolahController::class);
+        Route::get('data_sekolah', [SekolahController::class, 'listData'])->name('data_sekolah');
+
+        // ========== MANAJEMEN USER ==========
+        // Group
+        Route::resource('group', GroupController::class);
+        Route::get('data_group', [GroupController::class, 'listData'])->name('data_group');
+        // Master User
+        Route::resource('master_user', MasterUserController::class);
+        Route::get('data_master_user', [MasterUserController::class, 'listData'])->name('data_master_user');
+        // Menu
+        Route::resource('menu', MenuController::class);
+        Route::get('data_menu', [MenuController::class, 'listData'])->name('data_menu');
+        // T User
+        Route::resource('t_user', TUserController::class);
+    });
+
+    Route::middleware(['role:operator_bidang'])->group(function () {
+        // ========== LAPORAN ==========
+        // Laporan Mutasi Masuk
+        Route::resource('laporan_mutasi_masuk', LaporanMutasiMasukController::class);
+        Route::get('data_laporan_mutasi_masuk', [LaporanMutasiMasukController::class, 'listData'])->name('data_laporan_mutasi_masuk');
+        Route::get('data_laporan_mutasi_masuk_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_masuk_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'laporan_mutasi_masuk_excel_file'])->name('laporan_mutasi_masuk.downloadExcel');
+        
+        // Laporan Mutasi Keluar
+        Route::resource('laporan_mutasi_keluar', LaporanMutasiKeluarController::class);
+        Route::get('data_laporan_mutasi_keluar', [LaporanMutasiKeluarController::class, 'listData'])->name('data_laporan_mutasi_keluar');
+        Route::get('data_laporan_mutasi_keluar_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_keluar_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'laporan_mutasi_keluar_excel_file'])->name('laporan_mutasi_keluar.downloadExcel');
+    });
+
+    Route::middleware(['role:operator_usc'])->group(function () {
+        // ========== MUTASI ==========
+        //Mutasi Masuk
+        Route::resource('mutasi_masuk', MutasiMasukController::class);
+        Route::get('data_mutasi_masuk', [MutasiMasukController::class, 'listData'])->name('data_mutasi_masuk');
+        Route::get('data_mutasi_masuk_jenjang/{id}', [MutasiMasukController::class, 'listDataJenjang']);
+        Route::get('search_sekolah', [MutasiMasukController::class, 'search_sekolah'])->name('search_sekolah');
+        Route::get('/mutasi-masuk/pdf/{mutasi_id}', [MutasiMasukController::class, 'suket_mutasi_masuk_pdf'])->name('mutasi.masuk.pdf');
+        Route::get('/mutasi-masuk/download/{mutasi_id}', [MutasiMasukController::class, 'download_suket_mutasi_masuk_pdf'])->name('mutasi.masuk.download');
+        
+        // Mutasi Keluar
+        Route::resource('mutasi_keluar', MutasiKeluarController::class);
+        Route::get('data_mutasi_keluar', [MutasiKeluarController::class, 'listData'])->name('data_mutasi_keluar');
+        Route::get('data_mutasi_keluar_jenjang/{id}', [MutasiKeluarController::class, 'listDataJenjang']);
+        Route::get('/mutasi-keluar/pdf/{mutasi_id}', [MutasiKeluarController::class, 'suket_mutasi_keluar_pdf'])->name('mutasi.keluar.pdf');
+        Route::get('/mutasi-keluar/download/{mutasi_id}', [MutasiKeluarController::class, 'download_suket_mutasi_keluar_pdf'])->name('mutasi.keluar.download');
+
+        // ========== LAPORAN ==========
+        // Laporan Mutasi Masuk
+        Route::resource('laporan_mutasi_masuk', LaporanMutasiMasukController::class);
+        Route::get('data_laporan_mutasi_masuk', [LaporanMutasiMasukController::class, 'listData'])->name('data_laporan_mutasi_masuk');
+        Route::get('data_laporan_mutasi_masuk_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_masuk_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiMasukController::class, 'laporan_mutasi_masuk_excel_file'])->name('laporan_mutasi_masuk.downloadExcel');
+        
+        // Laporan Mutasi Keluar
+        Route::resource('laporan_mutasi_keluar', LaporanMutasiKeluarController::class);
+        Route::get('data_laporan_mutasi_keluar', [LaporanMutasiKeluarController::class, 'listData'])->name('data_laporan_mutasi_keluar');
+        Route::get('data_laporan_mutasi_keluar_filter/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'listDataFilter']);
+        Route::get('laporan_mutasi_keluar_excel_file/{tanggal_awal}/{tanggal_akhir}/{jenjang_id}/{query}', [LaporanMutasiKeluarController::class, 'laporan_mutasi_keluar_excel_file'])->name('laporan_mutasi_keluar.downloadExcel');
+    });
+
 });
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

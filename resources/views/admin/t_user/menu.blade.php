@@ -105,12 +105,12 @@ hr.style3 {
 
 
                         <?php
-                        $t_user_id = TUserModel::where([
+                        $t_user_id = App\Models\TUserModel::where([
                           ['menu_id', '=', $data->menu_id],
                           ['group_id', '=', $id],
                           ])->value('t_user_id');
                           // echo "string = ".$t_user_id;
-                          $menu_id = TUserModel::where('t_user_id','=',$t_user_id)->value('menu_id');
+                          $menu_id = App\Models\TUserModel::where('t_user_id','=',$t_user_id)->value('menu_id');
 
                           ?>
                           <input type="checkbox" name='menu_id[]' value="{{$data->menu_id}}" <?php if(($data->menu_id==$menu_id)) { ?> checked="checked" <?php } ?> >
@@ -123,7 +123,7 @@ hr.style3 {
                   </div>
                   <hr class="style3" style="margin:-3px">
 
-                @foreach(App\MenuModel::where('menu_id_parent', '=', $data->menu_id)->get() as $menuItem)
+                @foreach(App\Models\MenuModel::where('menu_id_parent', '=', $data->menu_id)->get() as $menuItem)
 
                 <div class="form-group" >
                   <?php
@@ -142,12 +142,12 @@ hr.style3 {
 
 
                         <?php
-                        $t_user_id = TUserModel::where([
+                        $t_user_id = App\Models\TUserModel::where([
                           ['menu_id', '=', $menuItem->menu_id],
                           ['group_id', '=', $id],
                           ])->value('t_user_id');
                           // echo "string = ".$t_user_id;
-                          $menu_id = TUserModel::where('t_user_id','=',$t_user_id)->value('menu_id');
+                          $menu_id = App\Models\TUserModel::where('t_user_id','=',$t_user_id)->value('menu_id');
 
                           ?>
                           <input type="checkbox" name='menu_id[]' value="{{$menuItem->menu_id}}" <?php if(($menuItem->menu_id==$menu_id)) { ?> checked="checked" <?php } ?> >
