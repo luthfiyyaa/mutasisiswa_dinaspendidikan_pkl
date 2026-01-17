@@ -109,7 +109,7 @@
 	<header>
 		<table class="text-center" border="0" style="width: 100%;">
 			<tr>
-				<td  align="left"><img src="{{ asset("admin/images/logo_trenggalek_hitam_putih.jpg") }}" style="width: 90px;"></td>
+				<img src="{{ public_path('admin/images/logo_trenggalek_hitam_putih.jpg') }}" style="width:90px;">
 				<td style="width: 100%">
 
           <p style="font-size:12pt;"> <b>PEMERINTAH KABUPATEN TRENGGALEK</b> </p>

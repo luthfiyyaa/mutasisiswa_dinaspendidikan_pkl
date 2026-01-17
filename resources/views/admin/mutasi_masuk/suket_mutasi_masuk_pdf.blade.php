@@ -209,13 +209,8 @@
     <div class="header-wrapper">
         <table class="header-table">
             <tr>
-                <td class="logo-cell">
-                    @if(file_exists(public_path('admin/images/logo_trenggalek_hitam_putih.jpg')))
-                        <img src="{{ public_path('admin/images/logo_trenggalek_hitam_putih.jpg') }}" 
-                             class="header-logo" 
-                             alt="Logo Trenggalek">
-                    @endif
-                </td>
+                <img src="{{ public_path('admin/images/logo_trenggalek_hitam_putih.jpg') }}" style="width:90px;">
+
                 <td class="header-text">
                     <p class="header-title">PEMERINTAH KABUPATEN TRENGGALEK</p>
                     <p class="header-main">DINAS PENDIDIKAN, PEMUDA DAN OLAHRAGA</p>
