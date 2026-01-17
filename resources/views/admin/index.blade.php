@@ -30,7 +30,7 @@
         <div class="icon">
           <i class="fa fa-indent"></i>
         </div>
-        <!--<a href="{{route('laporan_mutasi_masuk.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>-->
+        <a href="{{route('laporan_mutasi_masuk.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -45,7 +45,7 @@
         <div class="icon">
           <i class="fa fa-outdent"></i>
         </div>
-        <!--<a href="{{route('laporan_mutasi_keluar.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>-->
+        <a href="{{route('laporan_mutasi_keluar.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
