@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -109,19 +100,6 @@ class HomeController extends Controller
         return collect([]);
     }
 
-     /**
-     * Check if user is admin
-     *
-     * @param  \App\Models\User  $user
-     * @return bool
-     */
-    private function isAdmin($user): bool
-    {
-        // Adjust this based on your role system
-        return $user->group_id == 1 || 
-               (isset($user->role) && $user->role === 'admin') ||
-               (isset($user->group->group_nama) && strtolower($user->group->group_nama) === 'admin');
-    }
 
     /**
      * Get chart data for dashboard

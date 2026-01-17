@@ -1,60 +1,41 @@
 <?php $hal = "index"; ?>
 @extends('layouts.admin.master')
-@section('title', 'DISDIKPORA - Beranda')
 
-@section('css')
-@endsection
-
+@section('title','DISDIKPORA - Dashboard')
 
 @section('content')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Beranda
-    <!-- <small>it all starts here</small> -->
-  </h1>
-</section>
-<!-- Main content -->
-<section class="content">
+<div class="page-header">
+    <h1 class="page-title">Dashboard Beranda</h1>
+    <p class="page-subtitle">Selamat datang di sistem informasi DISDIKPORA</p>
+</div>
 
-
-  <div class="row">
-    <div class="col-lg-3 col-xs-6">
-      <!-- small box -->
-      <div class="small-box bg-aqua">
-        <div class="inner">
-          <h3>{{$mutasi_masuk}}</h3>
-
-          <p>Total Mutasi Masuk</p>
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-icon">
+            <i class="fas fa-sign-in-alt"></i>
         </div>
-        <div class="icon">
-          <i class="fa fa-indent"></i>
+        <div class="stat-value">{{ $mutasi_masuk }}</div>
+        <div class="stat-label">Total Mutasi Masuk</div>
+        <div class="stat-footer">
+            <a href="{{ route('laporan_mutasi_masuk.index') }}" class="stat-link">
+                Info selengkapnya
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-        <a href="{{route('laporan_mutasi_masuk.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
     </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-xs-6">
-      <!-- small box -->
-      <div class="small-box bg-green">
-        <div class="inner">
-          <h3>{{$mutasi_keluar}}</h3>
 
-          <p>Total Mutasi Keluar</p>
+    <div class="stat-card green">
+        <div class="stat-icon">
+            <i class="fas fa-sign-out-alt"></i>
         </div>
-        <div class="icon">
-          <i class="fa fa-outdent"></i>
+        <div class="stat-value">{{ $mutasi_keluar }}</div>
+        <div class="stat-label">Total Mutasi Keluar</div>
+        <div class="stat-footer">
+            <a href="{{ route('laporan_mutasi_keluar.index') }}" class="stat-link">
+                Info selengkapnya
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-        <a href="{{route('laporan_mutasi_keluar.index')}}" class="small-box-footer">Info selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
     </div>
-    <!-- ./col -->
-
-  </div>
-
-  <!-- /.content -->
-  @endsection
-
-
-  @section('js')
-  @endsection
+</div>
+@endsection
