@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use App\Helpers\TanggalIndonesia;
 use App\Models\Mutasi;
 use App\Models\Jenjang;
 use App\Models\Kecamatan;
@@ -33,26 +34,7 @@ class LaporanMutasiKeluarController extends Controller
         return view('admin.laporan_mutasi_keluar.index', compact('jenjang'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    
 
     /**
      * Display the specified resource.
@@ -68,39 +50,6 @@ class LaporanMutasiKeluarController extends Controller
         return view('admin.laporan_mutasi_keluar.detail', compact('mutasi_id', 'mutasi'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(int $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, int $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(int $id)
-    {
-        //
-    }
 
     /**
      * Get datatable listing
@@ -227,11 +176,11 @@ class LaporanKeluarExport implements FromView
         // Format dates for display
         $begin_date = $tanggal_awal == 0 
             ? "-" 
-            : tanggal_indonesia($tanggal_awal, false);
+            : TanggalIndonesia::format($tanggal_awal, false);
 
         $end_date = $tanggal_akhir == 0 
             ? "-" 
-            : tanggal_indonesia($tanggal_akhir, false);
+            : TanggalIndonesia::format($tanggal_akhir, false);
 
         // Get jenjang name
         $jenjang_nama = $jenjang_id === "all"

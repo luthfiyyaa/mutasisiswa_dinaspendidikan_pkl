@@ -174,11 +174,11 @@ class LaporanMasukExport implements FromView
         // Format dates for display
         $begin_date = $tanggal_awal == 0 
             ? "-" 
-            : tanggal_indonesia($tanggal_awal, false);
+            : TanggalIndonesia::format($tanggal_awal, false);
 
         $end_date = $tanggal_akhir == 0 
             ? "-" 
-            : tanggal_indonesia($tanggal_akhir, false);
+            : TanggalIndonesia::format($tanggal_akhir, false);
 
         // Get jenjang name
         $jenjang_nama = $jenjang_id === "all"

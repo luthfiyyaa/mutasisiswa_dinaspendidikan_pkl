@@ -36,7 +36,7 @@
       <td style="border: 7px solid black;">{{ $data->mutasi_sekolah_asal_no_surat }}</td>
       <td style="border: 7px solid black;">{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false) }}</td>
       <td style="border: 7px solid black;">{{ $data->mutasi_noinduk }} / {{ $data->mutasi_nisn }}</td>
-      <td style="border: 7px solid black;">{{ $data->mutasi_tempat_lahir }}, {{ tanggal_indonesia($data->mutasi_tanggal_lahir, false) }}</td>
+      <td style="border: 7px solid black;">{{ $data->mutasi_tempat_lahir }}, {{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir, false) }}</td>
       <td style="border: 7px solid black;">{{ $data->mutasi_tingkat_kelas }}</td>
       <td style="border: 7px solid black;">{{ $data->mutasi_nama_wali }}</td>
       <td style="border: 7px solid black;">{{ $data->mutasi_alamat }}</td>
