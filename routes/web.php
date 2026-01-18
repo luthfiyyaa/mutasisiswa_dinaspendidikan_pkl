@@ -17,7 +17,7 @@ use App\Http\Controllers\LaporanMutasiKeluarController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MasterUserController;
 use App\Http\Controllers\MenuController;
-use App\Http\Controllers\TUserController;
+use App\Http\Controllers\TUserController;   
 
 
 Auth::routes();

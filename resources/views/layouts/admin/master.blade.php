@@ -11,6 +11,8 @@
     {{-- Custom UI --}}
     <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
 
+    <link rel="shortcut icon" href="{{ asset('admin/images/logo_trenggalek.ico') }}" type="image/x-icon">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
 </head>
@@ -124,7 +126,7 @@
     {{-- FOOTER --}}
     <footer class="footer">
         Copyright © 2026 PKL FILKOM UB
-        <a href="http://dikpora.trenggalekkab.go.id/">
+        <a href="https://dindik.trenggalekkab.go.id/">
             Dinas Pendidikan Kabupaten Trenggalek
         </a>.
         All rights reserved. | Version 2.0
@@ -155,6 +157,27 @@
         mainContent.classList.toggle('expanded');
     });
 </script>
+
+<!-- jQuery 3 -->
+<script src="{{ asset('admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ asset('admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- SlimScroll -->
+<script src="{{ asset('admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ asset('admin/bower_components/fastclick/lib/fastclick.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('admin/dist/js/adminlte.min.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('admin/dist/js/demo.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/validator.js') }}"></script>
+
+@yield('js')
+
+<script>
+$(document).ready(function () {
+  $('.sidebar-menu').tree()
+})
 
 
 </html>
