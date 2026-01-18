@@ -35,6 +35,76 @@
   font-size: 0.875rem;
 }
 
+.dataTables_wrapper .row:first-child {
+  display: flex;
+  align-items: center;
+}
+
+/* kolom kiri */
+.dataTables_wrapper .row:first-child > div:first-child {
+  flex: 1;
+}
+
+/* kolom kanan */
+.dataTables_wrapper .row:first-child > div:last-child {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dataTables_processing {
+  background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(102,170,234,.4);
+}
+
+.pagination {
+  margin: 0;
+  display: flex;
+  gap: 0.25rem;
+  list-style: none !important;
+  justify-content: flex-end;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  transition: all .2s ease;
+  margin: 0;
+  background: white;
+  font-size: 0.875rem;
+  min-width: 36px;
+  text-align: center;
+}
+
+.pagination > li > a:hover {
+  background: #66aaea;
+  color: white;
+  border-color: #66aaea;
+}
+
+.pagination > .active > a,
+.pagination > .active > span {
+  background: #66aaea;
+  color: white;
+  border-color: #66aaea;
+}
+
+.pagination > .disabled > a,
+.pagination > .disabled > span {
+  background: #f8fafc;
+  color: #cbd5e1;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
 table.dataTable thead th {
   background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
   color: white;
@@ -203,6 +273,10 @@ table.dataTable tbody tr:hover {
 .btn-info-action:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
+}
+
+.text-center {
+  text-align: center;
 }
 
 /* Page header styling */
@@ -408,11 +482,21 @@ $(function(){
   table = $('#datatable1').DataTable({
     searching: true,
     processing: true,
-    oLanguage: {
-        "sEmptyTable": "Tidak ada data"
-      },
     language: {
-      processing: "Sedang diproses..."
+      processing: '<i class="fa fa-spinner fa-spin"></i> Sedang memproses...',
+      search: "Cari:",
+      lengthMenu: "Tampilkan _MENU_",
+      info: "Menampilkan _START_-_END_ dari _TOTAL_ data",
+      infoEmpty: "Tidak ada data",
+      infoFiltered: "(disaring dari _MAX_)",
+      zeroRecords: "Tidak ada data yang ditemukan",
+      emptyTable: "Tidak ada data tersedia",
+      paginate: {
+        first: '«',
+        last: '»',
+        next: '›',
+        previous: '‹'
+      }
     },
     ajax: {
       url: '{{ route('data_laporan_mutasi_keluar') }}',
