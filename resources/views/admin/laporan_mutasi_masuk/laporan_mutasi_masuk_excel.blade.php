@@ -1,4 +1,4 @@
-<table border="1" width="100%">
+<table style="table-layout: fixed; width: 100%">
   <thead>
     <tr>
       <th colspan="13" align="center" style="font-size: 14pt"><b>Data Laporan Mutasi Masuk</b></th>

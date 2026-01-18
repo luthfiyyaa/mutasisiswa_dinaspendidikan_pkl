@@ -265,9 +265,9 @@ class MutasiKeluarController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
-                    <a href="%s" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<a href="%s" class="btn btn-warning text-center"  data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
+                    <a href="%s" class="btn btn-primary text-center" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn btn-danger text-center" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
                     route('mutasi_keluar.show', $row->mutasi_id),
                     route('mutasi_keluar.edit', $row->mutasi_id),
                     $row->mutasi_id
