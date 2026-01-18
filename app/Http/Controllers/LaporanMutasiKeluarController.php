@@ -111,7 +111,7 @@ class LaporanMutasiKeluarController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
+                    '<a href="%s" class="btn-action btn-info-action" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
                     route('laporan_mutasi_keluar.show', $row->mutasi_id)
                 );
             })

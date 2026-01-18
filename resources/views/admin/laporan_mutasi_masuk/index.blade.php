@@ -11,14 +11,15 @@
 <style>
 /* DataTables custom styling */
 .dataTables_wrapper {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .dataTables_filter input {
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px solid #e5e7eb;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   transition: all 0.3s ease;
+  font-size: 0.875rem;
 }
 
 .dataTables_filter input:focus {
@@ -27,12 +28,26 @@
   box-shadow: 0 0 0 3px rgba(102, 170, 234, 0.1);
 }
 
+.dataTables_length select {
+  border-radius: 6px;
+  border: 2px solid #e5e7eb;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
 table.dataTable thead th {
   background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
   color: white;
   font-weight: 600;
   border: none;
-  padding: 1rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+table.dataTable tbody td {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  vertical-align: middle;
 }
 
 table.dataTable tbody tr {
@@ -43,54 +58,65 @@ table.dataTable tbody tr:hover {
   background: rgba(102, 170, 234, 0.05);
 }
 
+.text-center {
+  text-align: center;
+}
+
+
 /* Card styling sesuai dengan CSS */
 .content-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-bottom: 2rem;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  margin-bottom: 1.25rem;
 }
 
 .content-card-header {
   border-bottom: 2px solid #f3f4f6;
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .content-card-title {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #1a202c;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .content-card-title i {
   color: #66aaea;
+  font-size: 1.1rem;
 }
 
 /* Form styling */
 .form-group-modern {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .form-label-modern {
   font-weight: 600;
   color: #4a5568;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.825rem;
+}
+
+.form-label-modern i {
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 .form-control-modern {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.55rem 0.85rem;
   border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
   transition: all 0.3s ease;
   background: white;
 }
@@ -103,39 +129,43 @@ table.dataTable tbody tr:hover {
 
 /* Button styling */
 .btn-modern {
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   text-decoration: none;
+}
+
+.btn-modern i {
+  font-size: 0.8rem;
 }
 
 .btn-primary-modern {
   background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 170, 234, 0.3);
+  box-shadow: 0 3px 10px rgba(102, 170, 234, 0.3);
 }
 
 .btn-primary-modern:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 170, 234, 0.4);
+  box-shadow: 0 5px 14px rgba(102, 170, 234, 0.4);
 }
 
 .btn-success-modern {
   background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
 }
 
 .btn-success-modern:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 5px 14px rgba(16, 185, 129, 0.4);
 }
 
 .btn-modern:disabled {
@@ -146,48 +176,90 @@ table.dataTable tbody tr:hover {
 
 .btn-group-modern {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
 
 /* Action button in table */
-.btn-sm-modern {
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  border-radius: 8px;
+.btn-action {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-action i {
+  font-size: 0.7rem;
+}
+
+.btn-info-action {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+
+.btn-info-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
 }
 
 /* Page header styling */
 .page-header-modern {
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .page-title-modern {
-  font-size: 2rem;
+  font-size: 1.65rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-title-modern i {
+  font-size: 1.5rem;
 }
 
 .page-subtitle-modern {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 /* Filter section */
 .filter-section {
   background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 0;
 }
 
 /* Table wrapper */
 .table-wrapper {
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
+}
+
+/* Row spacing */
+.row {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.row > [class*="col-"] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 /* Responsive */
@@ -197,7 +269,21 @@ table.dataTable tbody tr:hover {
   }
   
   .content-card {
-    padding: 1rem;
+    padding: 0.875rem;
+  }
+  
+  .page-title-modern {
+    font-size: 1.35rem;
+  }
+  
+  table.dataTable tbody td {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.6rem;
+  }
+  
+  table.dataTable thead th {
+    font-size: 0.8rem;
+    padding: 0.55rem 0.6rem;
   }
 }
 </style>
@@ -209,8 +295,8 @@ table.dataTable tbody tr:hover {
 <!-- Page Header -->
 <div class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-file-alt"></i>
-    Laporan Mutasi Masuk</h1>
+    <i class="fas fa-file-alt"></i>Laporan Mutasi Masuk
+  </h1>
 </div>
 
 <!-- Main content -->
@@ -233,7 +319,7 @@ table.dataTable tbody tr:hover {
               <div class="col-md-4">
                 <div class="form-group-modern">
                   <label class="form-label-modern">
-                    <i class="far fa-calendar-alt"></i> Tanggal Awal
+                    <i class="far fa-calendar-alt"></i>Tanggal Awal
                   </label>
                   <input type="date" class="form-control-modern" name="tanggal_awal" id="tanggal_awal">
                 </div>
@@ -242,7 +328,7 @@ table.dataTable tbody tr:hover {
               <div class="col-md-4">
                 <div class="form-group-modern">
                   <label class="form-label-modern">
-                    <i class="far fa-calendar-check"></i> Tanggal Akhir
+                    <i class="far fa-calendar-check"></i>Tanggal Akhir
                   </label>
                   <input type="date" class="form-control-modern" name="tanggal_akhir" id="tanggal_akhir">
                 </div>
@@ -251,7 +337,7 @@ table.dataTable tbody tr:hover {
               <div class="col-md-4">
                 <div class="form-group-modern">
                   <label class="form-label-modern">
-                    <i class="fas fa-graduation-cap"></i> Jenjang
+                    <i class="fas fa-graduation-cap"></i>Jenjang
                   </label>
                   <select name="jenjang" id="jenjang" class="form-control-modern">
                     <option selected value="all">- Semua Jenjang -</option>
@@ -294,12 +380,12 @@ table.dataTable tbody tr:hover {
             <thead>
               <tr>
                 <th style="text-align:center;width:5%">No</th>
-                <th style="width:25%">Nama</th>
+                <th style="width:22%">Nama</th>
                 <th style="width:10%">No. Induk</th>
                 <th style="width:10%">NISN</th>
                 <th style="width:20%">Sekolah Asal</th>
                 <th style="width:20%">Sekolah Tujuan</th>
-                <th style="text-align:center;width:10%">Action</th>
+                <th style="text-align:center;width:8%">Action</th>
               </tr>
             </thead>
             <tbody></tbody>
