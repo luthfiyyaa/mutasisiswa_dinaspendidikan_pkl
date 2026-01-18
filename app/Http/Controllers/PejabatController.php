@@ -148,14 +148,14 @@ class PejabatController extends Controller
           return '
             <div class="btn-group" role="group">
                 <button onclick="editForm(' . $list->pejabat_id . ')" 
-                    class="btn btn-sm btn-primary" 
+                    class="btn-action btn-warning-action text-center" 
                     data-toggle="tooltip" 
                     data-placement="top" 
                     title="Edit Data">
                   <i class="fa fa-edit"></i>
                 </button>
                 <button onclick="deleteData(' . $list->pejabat_id . ')" 
-                    class="btn btn-sm btn-danger" 
+                    class="btn-action btn-danger-action text-center" 
                     data-toggle="tooltip" 
                     data-placement="top" 
                     title="Hapus Data">

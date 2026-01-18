@@ -6,7 +6,7 @@
 @section('content')
 <div class="page-header">
     <h1 class="page-title">Dashboard Beranda</h1>
-    <p class="page-subtitle">Selamat datang di sistem informasi DISDIKPORA</p>
+    <p class="page-subtitle">Selamat datang di website mutasi Dinas Pendidikan Kabupaten Trenggalek</p>
 </div>
 
 <div class="stats-grid">
