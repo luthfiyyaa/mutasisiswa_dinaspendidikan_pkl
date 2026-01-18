@@ -1,6 +1,6 @@
 <?php $hal = "mutasi_keluar"; ?>
 @extends('layouts.admin.master')
-@section('title', 'DISDIKPORA | Mutasi Keluar')
+@section('title', 'DINDIK | Mutasi Keluar')
 
 @section('css')
 <!-- DataTables -->
@@ -12,13 +12,6 @@
 /* =====================
    GLOBAL & BACKGROUND
 ===================== */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
-  min-height: 100vh;
-  font-size: 13px;
-}
-
 .content-wrapper {
   background: transparent !important;
 }
@@ -27,11 +20,11 @@ body {
    PAGE HEADER
 ===================== */
 .content-header {
-  padding: 0rem 1rem 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .page-title {
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 700;
   color: white;
   margin-bottom: 0.5rem;
@@ -42,7 +35,7 @@ body {
 }
 
 .page-title i {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
 /* =====================
@@ -59,7 +52,7 @@ body {
 }
 
 .box-header {
-  background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
+  background: rgba(255,255,255,.98);
   padding: 1rem 1.5rem;
   border: none !important;
   position: relative;
@@ -78,7 +71,7 @@ body {
 }
 
 .box-title {
-  color: white !important;
+  color: black !important;
   font-size: 1.1rem;
   font-weight: 600;
   position: relative;
@@ -86,6 +79,12 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  margin: 0;
+}
+
+.box-title i {
+  font-size: 1.1rem;
+  color: #66aaea;
 }
 
 .box-body {
@@ -155,11 +154,13 @@ body {
 .btn-primary {
   background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%) !important;
   box-shadow: 0 3px 10px rgba(102,170,234,.3);
+  color: white !important;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102,170,234,.4);
+  color: white !important;
 }
 
 .btn-warning {
@@ -171,6 +172,7 @@ body {
 .btn-warning:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(245,158,11,.35);
+  color: white !important;
 }
 
 .btn-danger {
@@ -182,6 +184,7 @@ body {
 .btn-danger:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(239,68,68,.35);
+  color: white !important;
 }
 
 .btn-sm {
@@ -277,8 +280,17 @@ body {
   padding-top: 1rem;
 }
 
-.dataTables_length {
+/* Wrapper untuk Tampilkan dan Cari - Sejajar */
+.dataTables_wrapper .row:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+.dataTables_length {
+  margin-bottom: 0 !important;
+  float: left;
 }
 
 .dataTables_length label {
@@ -288,6 +300,7 @@ body {
   font-weight: 500;
   color: #64748b;
   font-size: 0.875rem;
+  margin: 0;
 }
 
 .dataTables_length select {
@@ -300,7 +313,8 @@ body {
 }
 
 .dataTables_filter {
-  margin-bottom: 1rem;
+  margin-bottom: 0 !important;
+  float: right;
 }
 
 .dataTables_filter label {
@@ -310,6 +324,7 @@ body {
   font-weight: 500;
   color: #64748b;
   font-size: 0.875rem;
+  margin: 0;
 }
 
 .dataTables_filter input {
@@ -341,6 +356,7 @@ body {
 table.dataTable {
   border-collapse: separate !important;
   border-spacing: 0;
+  width: 100% !important;
 }
 
 table.dataTable thead th {
@@ -370,38 +386,49 @@ table.dataTable tbody tr:hover {
 }
 
 /* =====================
-   PAGINATION MODERN - MINIMAL
+   PAGINATION - KECIL DI KANAN BAWAH
 ===================== */
+.dataTables_wrapper .row:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
 .dataTables_info {
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   font-weight: 500;
   color: #64748b;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  float: left;
 }
 
 .dataTables_paginate {
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
+  float: right;
+  text-align: right;
 }
 
 .pagination {
-  margin: 0;
-  display: flex;
-  gap: 0.25rem;
+  margin: 0 !important;
+  display: inline-flex !important;
+  gap: 0.15rem;
 }
 
 .pagination > li > a,
 .pagination > li > span {
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem !important;
   color: #64748b;
   font-weight: 500;
   transition: all .2s ease;
   margin: 0;
   background: white;
-  font-size: 0.875rem;
-  min-width: 36px;
+  font-size: 0.7rem !important;
+  min-width: 28px;
   text-align: center;
+  line-height: 1.2;
 }
 
 .pagination > li > a:hover {
@@ -440,11 +467,15 @@ table.dataTable tbody tr:hover {
 }
 
 .action-buttons .btn i {
-  font-size: 0.5rem;         /* ← Ukuran icon tombol */
+  font-size: 0.75rem;
 }
 
 .text-center {
   text-align: center;
+}
+
+.text-left {
+  text-align: left;
 }
 
 /* =====================
@@ -480,6 +511,18 @@ table.dataTable tbody tr:hover {
     padding: 1.25rem;
   }
 
+  .dataTables_wrapper .row:first-child {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .dataTables_length,
+  .dataTables_filter {
+    float: none !important;
+    width: 100%;
+  }
+
   .dataTables_filter input {
     min-width: 100%;
   }
@@ -488,8 +531,18 @@ table.dataTable tbody tr:hover {
     flex-direction: column;
   }
 
+  .dataTables_wrapper .row:last-child {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dataTables_info,
+  .dataTables_paginate {
+    float: none !important;
+    text-align: center !important;
+  }
+
   .pagination {
-    flex-wrap: wrap;
     justify-content: center;
   }
 }
@@ -525,6 +578,31 @@ table.dataTable tbody tr:hover {
   </h1>
 </section>
 
+<!-- Filter Section - Outside box -->
+<div class="filter-section">
+  <div class="filter-header">
+    <i class="fa fa-filter"></i>
+    <h4 class="filter-header-title">Filter Data</h4>
+  </div>
+  <div class="form-group row">
+    <div class="col-md-6">
+      <label class="filter-label">
+        <i class="fa fa-school"></i>
+        Filter Berdasarkan Jenjang Pendidikan
+      </label>
+      <select name="jenjang" id="jenjang" class="form-control">
+        <option disabled selected value="">-- Pilih Jenjang Pendidikan --</option>
+        <?php
+        foreach ($jenjang as $key => $value) {
+          $attr = " jenjang_id='$value->jenjang_id' jenjang_nama='$value->jenjang_nama'";
+          ?>
+          <option {{$attr}} value="{{$value->jenjang_id}}">{{$value->jenjang_nama}}</option>
+        <?php } ?>
+      </select>
+    </div>
+  </div>
+</div>
+
 <!-- Main content -->
 <section class="content">
   <div class="row">
@@ -537,7 +615,7 @@ table.dataTable tbody tr:hover {
             Data Mutasi Keluar
           </h3>
         </div>
-        
+
         <div class="box-body">
           <!-- Action Header -->
           <div class="action-header">
@@ -548,42 +626,17 @@ table.dataTable tbody tr:hover {
             </div>
           </div>
 
-          <!-- Filter Section -->
-          <div class="filter-section">
-            <div class="filter-header">
-              <i class="fa fa-filter"></i>
-              <h4 class="filter-header-title">Filter Data</h4>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-6">
-                <label class="filter-label">
-                  <i class="fa fa-school"></i>
-                  Filter Berdasarkan Jenjang Pendidikan
-                </label>
-                <select name="jenjang" id="jenjang" class="form-control">
-                  <option disabled selected value="">-- Pilih Jenjang Pendidikan --</option>
-                  <?php
-                  foreach ($jenjang as $key => $value) {
-                    $attr = " jenjang_id='$value->jenjang_id' jenjang_nama='$value->jenjang_nama'";
-                    ?>
-                    <option {{$attr}} value="{{$value->jenjang_id}}">{{$value->jenjang_nama}}</option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-          </div>
-
           <!-- Table -->
           <div class="table-responsive table-wrapper">
             <table id="datatable1" class="table table-bordered table-striped">
               <thead>
                 <tr>
                   <th style="text-align: center; width: 5%">No</th>
-                  <th style="width: 20%">Nama Siswa</th>
-                  <th style="width: 7%">No. Induk</th>
-                  <th style="width: 10%">NISN</th>
-                  <th style="width: 20%">Sekolah Asal</th>
-                  <th style="width: 20%">Sekolah Tujuan</th>
+                  <th style="text-align: center; width: 20%">Nama Siswa</th>
+                  <th style="text-align: center; width: 7%">No. Induk</th>
+                  <th style="text-align: center; width: 10%">NISN</th>
+                  <th style="text-align: center;width: 20%">Sekolah Asal</th>
+                  <th style="text-align: center; width: 20%">Sekolah Tujuan</th>
                   <th style="text-align: center; width: 18%">Aksi</th>
                 </tr>
               </thead>
@@ -611,7 +664,7 @@ table.dataTable tbody tr:hover {
 var table, save_method;
 
 $(function(){
-  table = $('.table').DataTable({
+  table = $('#datatable1').DataTable({
     searching: true,
     processing: true,
     language: {

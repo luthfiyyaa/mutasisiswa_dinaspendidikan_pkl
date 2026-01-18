@@ -1,7 +1,7 @@
 <?php $hal = "index"; ?>
 @extends('layouts.admin.master')
 
-@section('title','DISDIKPORA - Dashboard')
+@section('title','DINDIK - Dashboard')
 
 @section('content')
 <div class="page-header">

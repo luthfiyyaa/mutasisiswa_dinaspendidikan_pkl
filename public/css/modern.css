@@ -9,6 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
             min-height: 100vh;
+            font-size: 13px;
         }
 
         .logo {
