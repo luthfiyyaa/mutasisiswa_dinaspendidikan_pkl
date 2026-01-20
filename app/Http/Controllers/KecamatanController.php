@@ -103,8 +103,8 @@ class KecamatanController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a onclick="editForm(%d)" class="btn-action btn-warning-action text-center" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn-action btn-danger-action text-center" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<a onclick="editForm(%d)" class="btn-modern btn-warning-modern text-center" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern text-center" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
                     $row->kecamatan_id,
                     $row->kecamatan_id
                 );
