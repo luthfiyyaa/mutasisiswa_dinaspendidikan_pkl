@@ -1,100 +1,124 @@
-<div class="modal fade modal-slide-from-bottom" id="modal-form" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
+<div class="modal fade app-modal" id="modal-form" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog app-modal-dialog">
+    <div class="modal-content app-modal-content">
+      <div class="app-modal-header">
+        <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="app-modal-title">
+          <i class="fas fa-school"></i>
+          Form Sekolah
+        </h4>
+      </div>
+      
+      <form class="form-horizontal" data-toggle="validator" method="post">
+        {{ csrf_field() }} {{ method_field('POST') }}
+        
+        <div class="modal-body">
+          <input type="hidden" id="id" name="id">
 
+          <div class="app-form-group">
+            <label class="app-form-label">
+              <i class="fas fa-school"></i>
+              Nama Sekolah
+            </label>
+            <input 
+              type="text" 
+              class="app-form-control" 
+              required 
+              name="sekolah_nama" 
+              id="sekolah_nama" 
+              placeholder="Masukkan nama sekolah"
+            >
+            <span class="app-form-error help-block with-errors"></span>
+          </div>
 
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Default Modal</h4>
-        </div>
-        <form class="form-horizontal" data-toggle="validator" method="post">
-          {{ csrf_field() }} {{ method_field('POST') }}
-          <div class="modal-body">
-            <input type="hidden" id="id" name="id">
+          <div class="app-form-group">
+            <label class="app-form-label">
+              <i class="fas fa-id-card"></i>
+              NPSN
+            </label>
+            <input 
+              type="text" 
+              class="app-form-control" 
+              required 
+              name="sekolah_npsn" 
+              id="sekolah_npsn" 
+              placeholder="Masukkan NPSN"
+            >
+            <span class="app-form-error help-block with-errors"></span>
+          </div>
 
-            <div class="box-body" style="padding-left:30px !important;padding-right:30px !important;">
+          <div class="app-form-group">
+            <label class="app-form-label">
+              <i class="fas fa-graduation-cap"></i>
+              Jenjang
+            </label>
+            <select 
+              required 
+              id="jenjang_id" 
+              name="jenjang_id" 
+              class="app-form-control" 
+              style="width: 100%;"
+            >
+              <option value="">-- Pilih Jenjang --</option>
+              @foreach($jenjang as $list)
+                <option value="{{ $list->jenjang_id }}">{{ $list->jenjang_nama }}</option>
+              @endforeach
+            </select>
+            <span class="app-form-error help-block with-errors"></span>
+          </div>
 
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">Nama Sekolah</label>
+          <div class="app-form-group">
+            <label class="app-form-label">
+              <i class="fas fa-map-marker-alt"></i>
+              Kecamatan
+            </label>
+            <select 
+              required 
+              id="kecamatan_id" 
+              name="kecamatan_id" 
+              class="app-form-control js-example-basic-single" 
+              style="width: 100%;"
+            >
+              <option value="">-- Pilih Kecamatan --</option>
+              @foreach($kecamatan as $list2)
+                <option value="{{ $list2->kecamatan_id }}">{{ $list2->kecamatan_nama }}</option>
+              @endforeach
+            </select>
+            <span class="app-form-error help-block with-errors"></span>
+          </div>
 
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <input type="text" class="form-control" required name="sekolah_nama" id="sekolah_nama" placeholder="Nama Sekolah" >
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">NPSN</label>
-
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <input type="text" class="form-control" required name="sekolah_npsn" id="sekolah_npsn" placeholder="NPSN" >
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Jenjang</label>
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <select required id="jenjang_id" name="jenjang_id" class="form-control" style="width: 100%;">
-                    <option value="" >--Pilih--</option>
-                    @foreach($jenjang as $list)
-                      <option  value="{{ $list->jenjang_id }}"> {{ $list->jenjang_nama }}</option>
-                    @endforeach
-                  </select>
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Kecamatan</label>
-
-
-
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <select required id="kecamatan_id" name="kecamatan_id" class="form-control js-example-basic-single" style="width: 100%;">
-                    <option value="" >--Pilih--</option>
-                    @foreach($kecamatan as $list2)
-                      <option  value="{{ $list2->kecamatan_id }}">{{ $list2->kecamatan_nama }}</option>
-                    @endforeach
-                  </select>
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">Alamat</label>
-
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <input type="text" class="form-control" required name="sekolah_alamat" id="sekolah_alamat" placeholder="Alamat" >
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-
-
+          <div class="app-form-group">
+            <label class="app-form-label">
+              <i class="fas fa-home"></i>
+              Alamat
+            </label>
+            <input 
+              type="text" 
+              class="app-form-control" 
+              required 
+              name="sekolah_alamat" 
+              id="sekolah_alamat" 
+              placeholder="Masukkan alamat lengkap"
+            >
+            <span class="app-form-error help-block with-errors"></span>
           </div>
 
         </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-warning pull-left" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
-            <button type="submit" class="btn btn-primary btn-save"><i class="fa fa-floppy-o"></i> Simpan </button>
-          </div>
+        
+        <div class="app-modal-footer">
+          <button type="button" class="btn-modal btn-danger-modern" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+            Batal
+          </button>
+          <button type="submit" class="btn-modal btn-primary-modern">
+            <i class="fa fa-save"></i>
+            Simpan Data
+          </button>
         </div>
-
       </form>
 
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
+</div>

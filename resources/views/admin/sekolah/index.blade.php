@@ -6,71 +6,59 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 <link rel="stylesheet" href="{{asset('admin/bower_components/select2/dist/css/select2.min.css')}}">
-
-<style>
-    .example-modal .modal {
-      position: relative;
-      top: auto;
-      bottom: auto;
-      right: auto;
-      left: auto;
-      display: block;
-      z-index: 1;
-    }
-
-    .example-modal .modal {
-      background: transparent !important;
-    }
-  </style>
-
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 @endsection
 
 
 @section('content')
-<!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
+<!-- Page Header -->
+<div class="page-header-modern">
+  <h1 class="page-title-modern">
+    <i class="fas fa-school"></i>
     Master Sekolah
-    <!-- <small>Data barang</small> -->
   </h1>
-</section>
+</div>
+
 <!-- Main content -->
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
 
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Data Master Sekolah</h3>
+      <div class="content-card">
+        <div class="content-card-header">
+          <h3 class="content-card-title">
+            <i class="fas fa-table"></i>
+            Data Master Sekolah
+          </h3>
+          <button onclick="addForm()" class="btn-modern btn-primary-modern">
+            <i class="fa fa-plus"></i>
+            Tambah Data
+          </button>
         </div>
-        <a onclick="addForm()"  style="margin-bottom:20px;margin-left:10px;" class="card-body-title"><button class="btn btn-primary"><i class="fa  fa-plus-square-o"></i> Tambah</button></a>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <table id="datatable1" class="table table-bordered table-striped">
+
+        <div class="table-wrapper">
+          <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
-                <th style="text-align: center;width:5%">No #</th>
+                <th class="text-center" style="width:5%">No</th>
                 <th style="width:20%">Nama Sekolah</th>
                 <th style="width:15%">NPSN</th>
                 <th style="width:10%">Jenjang</th>
                 <th style="width:15%">Kecamatan</th>
                 <th style="width:20%">Alamat</th>
-                <th style="text-align: center;width:15%">Action</th>
+                <th class="text-center" style="width:15%">Action</th>
               </tr>
             </thead>
-            <tbody>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
-        <!-- /.box-body -->
       </div>
-      <!-- /.box -->
+
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
+
 @include('admin.sekolah.form')
 @endsection
 
@@ -85,12 +73,17 @@
 var table, save_method;
 $(function(){
 
-
-  table = $('.table').DataTable({
+  table = $('#datatable1').DataTable({
     searching: true,
     processing: true,
     language: {
-      processing: "Sedang diproses..."
+      processing: "Sedang diproses...",
+      paginate: {
+        first: "Pertama",
+        last: "Terakhir",
+        next: "Selanjutnya",
+        previous: "Sebelumnya"
+      }
     },
     ajax: {
       url: '{{ route('data_sekolah') }}',
@@ -100,7 +93,7 @@ $(function(){
       }
     },
     columns: [
-      { data: null, render: (d,t,r,m) => m.row + 1 },
+      {data: null, render: (d,t,r,m) => m.row + 1, className: 'text-center'},
       {data: 'sekolah_nama', name: 'sekolah_nama', className: 'text-left'},
       {data: 'sekolah_npsn', name: 'sekolah_npsn', className: 'text-left'},
       {data: 'jenjang_nama', name: 'jenjang_nama', className: 'text-left'},
@@ -109,7 +102,6 @@ $(function(){
       {data: 'aksi', name: 'aksi', className: 'text-center', orderable: false, searchable: false},
     ]
   });
-
 
   $('#modal-form form').validator().on('submit', function(e){
     if(!e.isDefaultPrevented()){
@@ -133,13 +125,17 @@ $(function(){
     }
   });
 });
+
 function addForm(){
   save_method = "add";
   $('input[name=_method]').val('POST');
   $('#modal-form').modal('show');
   $('#modal-form form')[0].reset();
-  $('.modal-title').text('Tambah Data Sekolah');
+  $('.app-modal-title').text('Tambah Data Sekolah');
+  $('#jenjang_id').val('').trigger('change');
+  $('#kecamatan_id').val('').trigger('change');
 }
+
 function editForm(id){
   save_method = "edit";
   $('input[name=_method]').val('PATCH');
@@ -150,12 +146,12 @@ function editForm(id){
     dataType : "JSON",
     success : function(data){
       $('#modal-form').modal('show');
-      $('.modal-title').text('Edit Data Sekolah');
+      $('.app-modal-title').text('Edit Data Sekolah');
       $('#id').val(data.sekolah_id);
-      $('#kecamatan_id').val(data.kecamatan_id).trigger('change');
-      $('#jenjang_id').val(data.jenjang_id).trigger('change');
-      $('#sekolah_npsn').val(data.sekolah_npsn);
       $('#sekolah_nama').val(data.sekolah_nama);
+      $('#sekolah_npsn').val(data.sekolah_npsn);
+      $('#jenjang_id').val(data.jenjang_id).trigger('change');
+      $('#kecamatan_id').val(data.kecamatan_id).trigger('change');
       $('#sekolah_alamat').val(data.sekolah_alamat);
     },
     error : function(){
@@ -163,6 +159,7 @@ function editForm(id){
     }
   });
 }
+
 function deleteData(id){
   if(confirm("Apakah yakin data akan dihapus?")){
     $.ajax({
@@ -171,7 +168,7 @@ function deleteData(id){
       data : {'_method' : 'DELETE', '_token' : $('meta[name=csrf-token]').attr('content')},
       success : function(data){
         table.ajax.reload();
-         location.reload();
+        location.reload();
       },
       error : function(){
         alert("Tidak dapat menghapus data!");
@@ -182,31 +179,11 @@ function deleteData(id){
 </script>
 
 <script>
-$(function () {
-  $('#example1').DataTable()
-  $('#example2').DataTable({
-    'paging'      : true,
-    'lengthChange': false,
-    'searching'   : false,
-    'ordering'    : true,
-    'info'        : true,
-    'autoWidth'   : false
-  })
-})
-</script>
-
-
-<script>
-  // $(function () {
-  //   //Initialize Select2 Elements
-  //   $('.select2').select2()
-  // })
-  $(document).ready(function() {
+$(document).ready(function() {
   $('.js-example-basic-single').select2({
-    dropdownParent: $(".modal")
+    dropdownParent: $("#modal-form")
   });
 });
 </script>
-
 
 @endsection
