@@ -3,48 +3,36 @@
 @section('title', 'Manajemen User - Group')
 
 @section('css')
-<!-- DataTables -->
 <link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
-
-<style>
-    .example-modal .modal {
-      position: relative;
-      top: auto;
-      bottom: auto;
-      right: auto;
-      left: auto;
-      display: block;
-      z-index: 1;
-    }
-
-    .example-modal .modal {
-      background: transparent !important;
-    }
-  </style>
-
 @endsection
-
 
 @section('content')
 <!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Data Group
-    <!-- <small>Data barang</small> -->
+<section class="page-header-modern">
+  <h1 class="page-title-modern">
+    <i class="fas fa-users"></i> Data Group
   </h1>
 </section>
+
 <!-- Main content -->
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
 
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Data Master Group</h3>
+      <div class="content-card">
+        <div class="content-card-header">
+          <h3 class="content-card-title">
+            <i class="fas fa-table"></i> Data Master Group
+          </h3>
         </div>
-        <a onclick="addForm()"  style="margin-bottom:20px;margin-left:10px;" class="card-body-title"><button class="btn btn-primary"><i class="fa  fa-plus-square-o"></i> Tambah</button></a>
-        <!-- /.box-header -->
-        <div class="box-body">
+
+        <div class="btn-group-modern" style="margin-bottom: 20px; margin-left: 15px;">
+          <button onclick="addForm()" class="btn-modern btn-primary-modern">
+            <i class="fa fa-plus-square-o"></i> Tambah
+          </button>
+        </div>
+
+        <div class="table-wrapper">
           <table id="datatable1" class="table table-bordered table-striped">
             <thead>
               <tr>
@@ -57,21 +45,17 @@
             </tbody>
           </table>
         </div>
-        <!-- /.box-body -->
+
       </div>
-      <!-- /.box -->
+
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
+
 @include('admin.group.form')
 @endsection
 
-
 @section('js')
-<!-- DataTables -->
 <script src="{{asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{asset('admin/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
@@ -163,8 +147,5 @@ $(function () {
   })
 })
 </script>
-
-
-
 
 @endsection

@@ -704,14 +704,14 @@ $(function(){
 
 $(document).ready(function() {
     $('#jenjang').change(function () {
-     var optionSelected = $(this).find("option:selected");
-     var jenjang_id  = optionSelected.val();
-     var jenjang_nama   = optionSelected.text();
+      var optionSelected = $(this).find("option:selected");
+      var jenjang_id  = optionSelected.val();
+      var jenjang_nama   = optionSelected.text();
 
-     console.log('jenjang_id = '+jenjang_id);
-     console.log('jenjang_nama = '+jenjang_nama);
+    console.log('jenjang_id = '+jenjang_id);
+    console.log('jenjang_nama = '+jenjang_nama);
 
-     table.ajax.url("{{ url('/data_mutasi_keluar_jenjang') }}/"+jenjang_id).load();
+    table.ajax.url("{{ url('/data_mutasi_keluar_jenjang') }}/"+jenjang_id).load();
     });
 });
 

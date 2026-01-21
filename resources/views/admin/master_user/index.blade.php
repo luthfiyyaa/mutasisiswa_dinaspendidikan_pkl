@@ -3,58 +3,46 @@
 @section('title', 'Master User')
 
 @section('css')
-<!-- DataTables -->
 <link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 <link rel="stylesheet" href="{{asset('admin/bower_components/select2/dist/css/select2.min.css')}}">
-
-<style>
-    .example-modal .modal {
-      position: relative;
-      top: auto;
-      bottom: auto;
-      right: auto;
-      left: auto;
-      display: block;
-      z-index: 1;
-    }
-
-    .example-modal .modal {
-      background: transparent !important;
-    }
-  </style>
-
 @endsection
-
 
 @section('content')
 <!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    Master Users
-    <!-- <small>Data barang</small> -->
+<section class="page-header-modern">
+  <h1 class="page-title-modern">
+    <i class="fas fa-users"></i> Master Users
   </h1>
 </section>
+
 <!-- Main content -->
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
 
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Data Master Users</h3>
+      <div class="content-card">
+        <div class="content-card-header">
+          <h3 class="content-card-title">
+            <i class="fas fa-table"></i> Data Master Users
+          </h3>
         </div>
-        <a onclick="addForm()"  style="margin-bottom:20px;margin-left:10px;" class="card-body-title"><button class="btn btn-primary"><i class="fa  fa-plus-square-o"></i> Tambah</button></a>
-        <!-- /.box-header -->
-        <div class="box-body">
+
+        <div class="btn-group-modern" style="margin-bottom: 20px; margin-left: 15px;">
+          <button onclick="addForm()" class="btn-modern btn-primary-modern">
+            <i class="fa fa-plus-square-o"></i> Tambah
+          </button>
+        </div>
+
+        <div class="table-wrapper">
           <table id="datatable1" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th style="width:5%">No #</th>
-                <th style="width:16%">Nama </th>
+                <th style="width:16%">Nama</th>
                 <th style="width:16%">Group</th>
-                <th style="width:16%;">Email</th>
-                <th style="width:16%;">Username</th>
-                <th style="width:16%;">Password</th>
+                <th style="width:16%">Email</th>
+                <th style="width:16%">Username</th>
+                <th style="width:16%">Password</th>
                 <th style="width:15%">Action</th>
               </tr>
             </thead>
@@ -62,21 +50,17 @@
             </tbody>
           </table>
         </div>
-        <!-- /.box-body -->
+
       </div>
-      <!-- /.box -->
+
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
+
 @include('admin.master_user.form')
 @endsection
 
-
 @section('js')
-<!-- DataTables -->
 <script src="{{asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{asset('admin/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
@@ -117,7 +101,7 @@ function addForm(){
   $('input[name=_method]').val('POST');
   $('#modal-form').modal('show');
   $('#modal-form form')[0].reset();
-  $('.modal-title').text('Tambah Data Users');
+  $('.app-modal-title').text('Tambah Data Users');
 }
 function editForm(id){
   save_method = "edit";
@@ -129,7 +113,7 @@ function editForm(id){
     dataType : "JSON",
     success : function(data){
       $('#modal-form').modal('show');
-      $('.modal-title').text('Edit Data Users');
+      $('.app-modal-title').text('Edit Data Users');
       $('#id').val(data.id);
       $('#group_id').val(data.group_id).trigger('change');
       $('#name').val(data.name);
@@ -172,37 +156,30 @@ $(function () {
 })
 </script>
 
-
 <script>
-
   $(document).ready(function() {
-  $('.js-example-basic-single').select2({
-    dropdownParent: $(".modal")
+    $('.js-example-basic-single').select2({
+      dropdownParent: $(".modal")
+    });
   });
-});
 
-$(' #confirm_password').on('keyup', function () {
-  if ($('#password').val() == $('#confirm_password').val()) {
-    $('#message').html('').css('color', 'green');
-  } else
-    $('#message').html('Password tidak cocok').css('color', 'red');
-});
-
-
-$('#confirm_password').keyup(function(){
-    var pass    =   $('#password').val();
-    var cpass   =   $('#confirm_password').val();
-    if(pass!=cpass){
-        $('#submit').attr({disabled:true});
+  $('#confirm_password').on('keyup', function () {
+    if ($('#password').val() == $('#confirm_password').val()) {
+      $('#message').html('').css('color', 'green');
+    } else {
+      $('#message').html('Password tidak cocok').css('color', 'red');
     }
-    else{
-        $('#submit').attr({disabled:false});
+  });
+
+  $('#confirm_password').keyup(function(){
+    var pass = $('#password').val();
+    var cpass = $('#confirm_password').val();
+    if(pass != cpass){
+      $('#submit').attr({disabled:true});
+    } else {
+      $('#submit').attr({disabled:false});
     }
-});
-
-
-
+  });
 </script>
-
 
 @endsection
