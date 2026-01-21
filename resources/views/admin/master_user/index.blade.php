@@ -25,11 +25,8 @@
           <h3 class="content-card-title">
             <i class="fas fa-table"></i> Data Master Users
           </h3>
-        </div>
-
-        <div class="btn-group-modern" style="margin-bottom: 20px; margin-left: 15px;">
           <button onclick="addForm()" class="btn-modern btn-primary-modern">
-            <i class="fa fa-plus-square-o"></i> Tambah
+            <i class="fa fa-plus"></i> Tambah
           </button>
         </div>
 
@@ -69,7 +66,21 @@
 var table, save_method;
 $(function(){
   table = $('.table').DataTable({
-    "processing" : true,
+    language: {
+      processing: '<i class="fa fa-spinner fa-spin"></i> Sedang memproses...',
+      search: "Cari:",
+      lengthMenu: "Tampilkan _MENU_",
+      info: "Menampilkan _START_-_END_ dari _TOTAL_ data",
+      infoFiltered: "(disaring dari _MAX_)",
+      zeroRecords: "Tidak ada data yang ditemukan",
+      emptyTable: "Tidak ada data tersedia",
+      paginate: {
+        first: '«',
+        last: '»',
+        next: '›',
+        previous: '‹'
+      }
+    },
     "ajax" : {
       "url" : "{{ route('data_master_user') }}",
       "type" : "GET"

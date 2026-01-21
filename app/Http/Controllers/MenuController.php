@@ -136,8 +136,9 @@ class MenuController extends Controller
                 $list->menu_link,
                 $nama_menu,
                 sprintf(
-                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<div class="btn-group-modern text-center">
+                    <a onclick="editForm(%d)" class="btn-modern btn-warning-modern text-center" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern text-center" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a></div>',
                     $list->menu_id,
                     $list->menu_id
                 )

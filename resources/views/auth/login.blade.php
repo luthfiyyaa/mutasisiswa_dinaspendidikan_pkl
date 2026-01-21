@@ -6,117 +6,71 @@
   <title>DINDIK | Mutasi</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   
-  <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="{{ asset('admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('admin/bower_components/font-awesome/css/font-awesome.min.css') }}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="{{ asset('admin/bower_components/Ionicons/css/ionicons.min.css') }}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('admin/dist/css/AdminLTE.min.css') }}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{ asset('admin/plugins/iCheck/square/blue.css') }}">
   <!-- Modern CSS -->
-  <link rel="stylesheet" href="{{ asset('admin/css/modern.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
 
   <link rel="shortcut icon" href="{{ asset('admin/images/logo_trenggalek.ico') }}" type="image/x-icon">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-  
+
   <style>
-    .login-page {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .login-box {
-      width: 400px;
-      margin: 0 auto;
-    }
-    
-    .login-logo {
-      text-align: center;
-      margin-bottom: 25px;
-      animation: fadeInDown 0.8s ease-out;
-    }
-    
-    .login-logo img {
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-    }
-    
-    .login-box-body {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: fadeInUp 0.8s ease-out;
-    }
-    
-    .login-box-msg {
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-control {
-      border-radius: 8px;
-      border: 2px solid #e5e7eb;
-      padding: 12px 15px 12px 45px;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-    
-    .form-control:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      outline: none;
-    }
-    
-    .form-control-feedback {
-      line-height: 48px;
-      color: #94a3b8;
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-weight: 600;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-    }
-    
-    .help-block {
-      color: #ef4444;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    
-    @keyframes fadeInDown {
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 35px 30px;
+  }
+
+  .login-logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .login-logo img {
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .content-card-title {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 25px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-control {
+    height: 45px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .form-control:focus {
+    border-color: #2a5298;
+    box-shadow: 0 0 0 2px rgba(42,82,152,.15);
+  }
+
+  .help-block {
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 4px;
+  }
+
+  @keyframes fadeInDown {
       from {
         opacity: 0;
         transform: translateY(-20px);
@@ -126,32 +80,22 @@
         transform: translateY(0);
       }
     }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+</style>
+
 </head>
-<body class="hold-transition login-page">
-  <div class="login-box">
+<body>
+  <div class="content-card">
     <div class="login-logo">
       <img alt="Logo Trenggalek" src="{{ asset('admin/images/logo_trenggalek.png') }}" height="100"/>
     </div>
 
-    <div class="login-box-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+    <div class="detail-card">
+      <p class="content-card-title">Sign in to start your session</p>
 
       <form action="{{ route('login') }}" method="POST">
         {{ csrf_field() }}
         
-        <div class="form-group has-feedback">
+        <div class="form-group">
           <input id="email" type="text" placeholder="Enter your Username" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
           @if ($errors->has('email'))
           <span class="help-block">
@@ -161,7 +105,7 @@
           <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
 
-        <div class="form-group has-feedback">
+        <div class="form-group">
           <input id="password" type="password" placeholder="Enter your password" class="form-control" name="password" required>
           @if ($errors->has('password'))
           <span class="help-block">
@@ -172,11 +116,8 @@
         </div>
 
         <div class="row">
-          <div class="col-xs-8">
-            <!-- Space for remember me or other options -->
-          </div>
           <div class="col-xs-4">
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            <button type="submit" class="btn-modern btn-primary-modern">Sign In</button>
           </div>
         </div>
       </form>

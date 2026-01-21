@@ -259,21 +259,21 @@ class MutasiMasukController extends Controller
       return DataTables::eloquent($mutasi)            ->addIndexColumn()
         ->addColumn('aksi', function ($row) {
             return '
-              <div class="btn-group" role="group">
+              <div class="btn-group-modern" role="group">
                   <a href="' . route('mutasi_masuk.show', $row->mutasi_id) . '" 
-                    class="btn btn-sm btn-warning" 
+                    class="btn-modern btn-secondary-modern" 
                     data-toggle="tooltip" 
                     title="Cetak Surat">
                     <i class="fa fa-print"></i>
                   </a>
                   <a href="' . route('mutasi_masuk.edit', $row->mutasi_id) . '" 
-                      class="btn btn-sm btn-primary" 
+                      class="btn-modern btn-warning-modern" 
                       data-toggle="tooltip" 
                       title="Edit Data">
                       <i class="fa fa-edit"></i>
                   </a>
                   <button onclick="deleteData(' . $row->mutasi_id . ')" 
-                      class="btn btn-sm btn-danger" 
+                      class="btn-modern btn-danger-modern" 
                       data-toggle="tooltip" 
                       title="Hapus Data">
                       <i class="fa fa-trash"></i>
@@ -297,17 +297,17 @@ class MutasiMasukController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return '
-                    <div class="btn-group" role="group">
+                    <div class="btn-group-modern" role="group">
                         <a href="' . route('mutasi_masuk.show', $row->mutasi_id) . '" 
-                           class="btn btn-sm btn-warning">
+                           class="btn-modern btn-secondary-modern">
                             <i class="fa fa-print"></i>
                         </a>
                         <a href="' . route('mutasi_masuk.edit', $row->mutasi_id) . '" 
-                           class="btn btn-sm btn-primary">
+                           class="btn-modern btn-warning-modern">
                             <i class="fa fa-edit"></i>
                         </a>
                         <button onclick="deleteData(' . $row->mutasi_id . ')" 
-                                class="btn btn-sm btn-danger">
+                                class="btn-modern btn-danger-modern">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>

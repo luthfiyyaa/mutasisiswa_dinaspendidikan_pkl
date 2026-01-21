@@ -129,8 +129,9 @@ class JenjangController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a onclick="editForm(%d)" class="btn-action btn-warning-action text-center" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn-action btn-danger-action text-center" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<div class="btn-group-modern">
+                    <a onclick="editForm(%d)" class="btn-modern btn-warning-modern" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a></div>',
                     $row->jenjang_id,
                     $row->jenjang_id
                 );

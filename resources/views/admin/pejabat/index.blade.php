@@ -74,12 +74,18 @@ $(function(){
     searching: true,
     processing: true,
     language: {
-      processing: "Sedang diproses...",
+      processing: '<i class="fa fa-spinner fa-spin"></i> Sedang memproses...',
+      search: "Cari:",
+      lengthMenu: "Tampilkan _MENU_",
+      info: "Menampilkan _START_-_END_ dari _TOTAL_ data",
+      infoFiltered: "(disaring dari _MAX_)",
+      zeroRecords: "Tidak ada data yang ditemukan",
+      emptyTable: "Tidak ada data tersedia",
       paginate: {
-        first: "Pertama",
-        last: "Terakhir",
-        next: "Selanjutnya",
-        previous: "Sebelumnya"
+        first: '«',
+        last: '»',
+        next: '›',
+        previous: '‹'
       }
     },
     ajax: {

@@ -21,6 +21,16 @@
             background-clip: text;
         }
 
+        .login-logo {
+          text-align: center;
+          margin-bottom: 25px;
+          animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .login-logo img {
+          filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
         /* Navbar basic */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
@@ -433,20 +443,29 @@
   border-bottom: 2px solid #f3f4f6;
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 
 .content-card-title {
+  margin: 0;
   font-size: 1.15rem;
   font-weight: 700;
   color: #1a202c;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .content-card-title i {
   color: #66aaea;
   font-size: 1.1rem;
+}
+
+.content-card-header a {
+  flex-shrink: 0;       /* tombol tidak mengecil */
 }
 
 /* Form styling */
@@ -1044,33 +1063,6 @@ table.dataTable tbody tr:hover {
   font-size: 0.8rem;
   color: #ef4444;
   margin-top: 0.35rem;
-}
-
-.app-btn {
-  padding: 0.6rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.3s ease;
-}
-
-.app-btn-secondary {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
-  color: white;
-}
-
-.app-btn-primary {
-  background: linear-gradient(135deg, #66aaea, #4ba2a0);
-  color: white;
-}
-
-.app-btn:hover {
-  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
