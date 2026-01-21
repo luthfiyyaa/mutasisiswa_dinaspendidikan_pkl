@@ -414,16 +414,9 @@ class MutasiMasukController extends Controller
 
             // Load PDF dengan options
             $pdf = Pdf::loadView(
-                'admin.mutasi_masuk.suket_mutasi_masuk_pdf',
+                'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
                 compact('mutasi', 'nomorSurat', 'qrCode')
-            )
-            ->setPaper('A4', 'portrait')
-            ->setOptions([
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-                'defaultFont' => 'sans-serif',
-                'enable_php' => false
-            ]);
+            )->setPaper('A4', 'portrait');
 
             // Return PDF stream
             return $pdf->stream('Surat_Keterangan_Mutasi_' . $mutasi->mutasi_nama_siswa . '.pdf');
