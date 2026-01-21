@@ -25,7 +25,7 @@
 
       <div class="detail-card">
 
-        <a href="{{url('/mutasi-keluar/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn-modern btn-success-modern" style="margin-bottom: 20px;">
+        <a href="{{url('/mutasi-keluar/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn-modern btn-secondary-modern" style="margin-bottom: 20px;">
           <i class="fa fa-print"></i> Cetak Surat Rekomendasi
         </a>
 

@@ -1,12 +1,12 @@
 <?php $hal = "group";
 use App\TUserModel;?>
 @extends('layouts.admin.master')
-@section('title', 'Manajemen User - Menu Group')
+@section('title', 'Manajemen Role')
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="{{asset('admin/bower_components/select2/dist/css/select2.min.css')}}">
-<link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+{{-- <link rel="stylesheet" href="{{asset('admin/bower_components/select2/dist/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}"> --}}
 
 <style>
 .example-modal .modal {
@@ -36,24 +36,18 @@ hr.style3 {
 
 
 
-<section class="content-header">
-  <h1>
+<section class="page-header-modern">
+  <h1 class="page-title-modern">
+                      <a href="{{route('group.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
     Menu Group
-    <!-- <small>Data barang</small> -->
   </h1>
 </section>
 <!-- Main content -->
 <section class="content">
 
-    <div class="box box-default">
-      <div class="box-header with-border">
-        <h3 class="box-title">{{$nama_group}}</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-        </div>
-      </div>
+    <div class="detail-card">
+        <h3 class="section-header">{{$nama_group}}</h3>
+      
       <!-- /.box-header -->
       <div class="box-body" style="">
         <?php if (session('error') == 1) {
@@ -70,16 +64,11 @@ hr.style3 {
 
         <div class="row">
           <div class="col-md-12">
-
-
             <!-- form start -->
             <form class="form-horizontal" action="{{ route('t_user.store') }}" method="post">
               {{csrf_field()}}
               <input type="hidden" name="group_id" value="{{$id}}">
-              <div class="box-header">
-                <a href="{{route('group.index')}}" class="btn btn-warning pull-left"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
-                <button type="submit" class="btn btn-primary btn-save pull-right"><i class="fa fa-floppy-o"></i> Simpan </button>
-              </div>
+              
               <div class="box-body">
                 <hr class="style3" style="margin:-3px">
                 <!-- <?php  ?> -->
@@ -165,9 +154,8 @@ hr.style3 {
                   @endforeach
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-                  <a href="{{route('group.index')}}" class="btn btn-warning pull-left"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
-                  <button type="submit" class="btn btn-primary btn-save pull-right"><i class="fa fa-floppy-o"></i> Simpan </button>
+                <div class="form-footer">
+                  <button type="submit" class="btn-modern btn-primary-modern"><i class="fa fa-floppy-o"></i> Simpan </button>
                 </div>
                 <!-- /.box-footer -->
               </form>

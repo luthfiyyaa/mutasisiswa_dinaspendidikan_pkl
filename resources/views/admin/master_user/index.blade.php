@@ -31,10 +31,10 @@
         </div>
 
         <div class="table-wrapper">
-          <table id="datatable1" class="table table-bordered table-striped">
+          <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
-                <th style="width:5%">No #</th>
+                <th style="width:8%">No #</th>
                 <th style="width:16%">Nama</th>
                 <th style="width:16%">Group</th>
                 <th style="width:16%">Email</th>

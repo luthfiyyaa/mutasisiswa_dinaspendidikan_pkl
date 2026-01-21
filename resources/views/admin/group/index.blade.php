@@ -32,12 +32,12 @@
         
 
         <div class="table-wrapper">
-          <table id="datatable1" class="table table-bordered table-striped">
+          <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
                 <th style="width:10%">No #</th>
-                <th style="width:70%">Nama Group</th>
-                <th style="width:20%">Action</th>
+                <th style="width:60%">Nama Group</th>
+                <th style="text-align:center;width:30%">Action</th>
               </tr>
             </thead>
             <tbody>

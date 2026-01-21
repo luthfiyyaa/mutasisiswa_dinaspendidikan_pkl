@@ -68,6 +68,7 @@
     font-size: 12px;
     color: #e74c3c;
     margin-top: 4px;
+    margin-left: 5px;
   }
 
   @keyframes fadeInDown {

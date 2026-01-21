@@ -471,6 +471,7 @@
 /* Form styling */
 .form-horizontal {
     width: 100%;
+    margin-bottom: 1.5rem;
 }
 
 .form-group {
@@ -491,15 +492,33 @@
     gap: 0.4rem;
 }
 
+/* FORM LAYOUT */
+.form-horizontal .form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.form-horizontal .control-label {
+  font-weight: 600;
+  color: #34495e;
+  padding-top: 10px;
+  text-align: left;
+  font-size: 0.95rem;
+  padding-right: 15px;
+}
+
+/* Untuk memastikan input memanjang penuh */
 .form-control {
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    padding: .7rem 1rem;
-    transition: all .3s ease;
-    background: white;
-    font-size: 0.9rem;
-    width: 100%;
-    display: block;
+  width: 100%;
+  border: 2px solid #e0e6ed;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  height: 42px;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -549,7 +568,7 @@ select.form-control {
 
 .form-footer {
     background: #f8fafc;
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.25rem;
     border-top: 2px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
@@ -574,6 +593,13 @@ select.form-control {
     padding-right: 15px;
 }
 
+.col-sm-3 {
+  width: 25%;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .col-sm-10 {
     width: 83.333333%;
     padding-left: 15px;
@@ -587,6 +613,13 @@ select.form-control {
     padding-top: 0.6rem;
     color: #64748b;
     font-weight: 600;
+}
+
+.col-sm-9 {
+  width: 75%;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 /* MAIN */
@@ -910,9 +943,8 @@ table.dataTable tbody tr:hover {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1rem 1.25rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-bottom: 2rem;
 }
 
 .detail-section {
@@ -935,6 +967,12 @@ table.dataTable tbody tr:hover {
 
 .section-header i {
   font-size: 1.3rem;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 /* FORM MODAL */

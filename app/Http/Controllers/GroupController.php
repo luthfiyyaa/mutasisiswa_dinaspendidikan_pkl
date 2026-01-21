@@ -222,23 +222,23 @@ class GroupController extends Controller
                 $row[] = $no;
                 $row[] = htmlspecialchars($group->group_nama);
                 $row[] = '
-                    <div class="btn-group-modern" role="group">
+                    <div class="btn-group-modern text-center" role="group">
                         <a href="' . route('t_user.show', $group->group_id) . '" 
-                           class="btn-modern btn-secondary-modern" 
+                           class="btn-modern btn-secondary-modern text-center" 
                            data-toggle="tooltip" 
                            data-placement="top" 
                            title="Setting Menu">
                             <i class="fa fa-gear"></i>
                         </a>
                         <button onclick="editForm(' . $group->group_id . ')" 
-                                class="btn-modern btn-warning-modern" 
+                                class="btn-modern btn-warning-modern text-center" 
                                 data-toggle="tooltip" 
                                 data-placement="top" 
                                 title="Edit Data">
                             <i class="fa fa-edit"></i>
                         </button>
                         <button onclick="deleteData(' . $group->group_id . ')" 
-                                class="btn-modern btn-danger-modern" 
+                                class="btn-modern btn-danger-modern text-center" 
                                 data-toggle="tooltip" 
                                 data-placement="top" 
                                 title="Hapus Data">

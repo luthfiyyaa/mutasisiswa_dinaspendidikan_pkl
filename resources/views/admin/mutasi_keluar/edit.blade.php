@@ -13,7 +13,7 @@
   <h1 class="page-title-modern">
     <a href="{{route('mutasi_keluar.index')}}" class="btn-modern btn-warning-modern">
       <i class="fa fa-arrow-circle-left"></i> Kembali
-    </a> |
+    </a> 
     Edit Mutasi Keluar
   </h1>
 </section>
@@ -28,87 +28,94 @@
           {{csrf_field()}}
           {{method_field('PUT')}}
 
-          <div class="form-group-modern">
-            <label for="jenjang_id" class="col-sm-2 control-label">Jenjang</label>
-            <div class="col-sm-10">
-              <select required name="jenjang_id" id="jenjang_id" class="form-control">
-                <?php foreach ($jenjang as $value) { ?>
-                  <option value="{{ $value->jenjang_id }}" {{ $mutasi->jenjang_id==$value->jenjang_id ? 'selected' : '' }}>
-                    {{$value->jenjang_nama}}
-                  </option>
-                <?php } ?>
-              </select>
+          <!-- Section: Jenjang -->
+          <div class="detail-section">
+            <div class="section-header">
+              <i class="fas fa-graduation-cap"></i>
+              <h3>Jenjang Pendidikan</h3>
+            </div>
+
+            <div class="form-group">
+              <label for="jenjang_id" class="col-sm-3 control-label">Jenjang</label>
+              <div class="col-sm-9">
+                <select name="jenjang_id" id="jenjang_id" class="form-control" required>
+                  @foreach ($jenjang as $value)
+                    <option value="{{$value->jenjang_id}}" {{$mutasi->jenjang_id==$value->jenjang_id ? 'selected' : ''}}>
+                      {{$value->jenjang_nama}}
+                    </option>
+                  @endforeach
+                </select>
+              </div>
             </div>
           </div>
 
+          <div class="detail-section">
           <div class="section-header">
             <i class="fas fa-user-graduate"></i>
             IDENTITAS SISWA
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_noinduk" class="col-sm-2 control-label">No. Induk</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_noinduk" class="col-sm-3 control-label">No. Induk</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_noinduk" id="mutasi_noinduk" placeholder="Nomor Induk" value="{{$mutasi->mutasi_noinduk}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_nisn" class="col-sm-2 control-label">NISN</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_nisn" class="col-sm-3 control-label">NISN</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_nisn" id="mutasi_nisn" placeholder="NISN" value="{{$mutasi->mutasi_nisn}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_tingkat_kelas" class="col-sm-2 control-label">Tingkat Kelas</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_tingkat_kelas" class="col-sm-3 control-label">Tingkat Kelas</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_tingkat_kelas" id="mutasi_tingkat_kelas" placeholder="Tingkat Kelas" value="{{$mutasi->mutasi_tingkat_kelas}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_nama_siswa" class="col-sm-2 control-label">Nama Siswa</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_nama_siswa" class="col-sm-3 control-label">Nama Siswa</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_nama_siswa" id="mutasi_nama_siswa" placeholder="Nama Siswa" value="{{$mutasi->mutasi_nama_siswa}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_tempat_lahir" class="col-sm-2 control-label">Tempat/Tgl Lahir</label>
+          <div class="form-group">
+            <label for="mutasi_tempat_lahir" class="col-sm-3 control-label">Tempat/Tgl Lahir</label>
             <div class="col-sm-5">
               <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat Lahir" value="{{$mutasi->mutasi_tempat_lahir}}">
-            </div>
-            <div class="col-sm-1">
-              /
             </div>
             <div class="col-sm-4">
               <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir" placeholder="Tanggal Lahir" value="{{$mutasi->mutasi_tanggal_lahir}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_nama_wali" class="col-sm-2 control-label">Nama Wali</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_nama_wali" class="col-sm-3 control-label">Nama Wali</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_nama_wali" id="mutasi_nama_wali" placeholder="Nama Wali" value="{{$mutasi->mutasi_nama_wali}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_alamat" class="col-sm-2 control-label">Alamat</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_alamat" class="col-sm-3 control-label">Alamat</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_alamat" id="mutasi_alamat" placeholder="Alamat" value="{{$mutasi->mutasi_alamat}}">
             </div>
           </div>
+        </div>
 
           <div class="section-header">
             <i class="fas fa-school"></i>
             SEKOLAH ASAL SISWA
           </div>
 
-          <div class="form-group-modern">
-            <label for="kecamatan_id" class="col-sm-2 control-label">Kecamatan</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="kecamatan_id" class="col-sm-3 control-label">Kecamatan</label>
+            <div class="col-sm-9">
               <select required name="kecamatan_id" id="kecamatan_id" class="form-control js-example-basic-single" style="width: 100%;">
                 <?php foreach ($kecamatan as $value) { ?>
                   <option value="{{ $value->kecamatan_id }}" {{ $kecamatan_id==$value->kecamatan_id ? 'selected' : '' }}>
@@ -119,9 +126,9 @@
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_sekolah_asal_nama" class="col-sm-2 control-label">Nama Sekolah</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_sekolah_asal_nama" class="col-sm-3 control-label">Nama Sekolah</label>
+            <div class="col-sm-9">
               <input type="text" hidden name="kecamatan_search_id" id="kecamatan_search_id">
               <input type="text" hidden name="jenjang_search_id" id="jenjang_search_id">
               <select id="sekolah_id" required name="sekolah_id" class="form-control">
@@ -131,16 +138,16 @@
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_sekolah_asal_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_sekolah_asal_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_sekolah_asal_no_surat" id="mutasi_sekolah_asal_no_surat" placeholder="Nomor Surat" value="{{$mutasi->mutasi_sekolah_asal_no_surat}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_tanggal_mutasi" class="col-sm-2 control-label">Tanggal Surat</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_tanggal_mutasi" class="col-sm-3 control-label">Tanggal Surat</label>
+            <div class="col-sm-9">
               <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_mutasi" id="mutasi_tanggal_mutasi" placeholder="" value="{{$mutasi->mutasi_tanggal_mutasi}}">
             </div>
           </div>
@@ -150,23 +157,23 @@
             SEKOLAH TUJUAN SISWA
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_sekolah_tujuan_nama" class="col-sm-2 control-label">Nama Sekolah</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_sekolah_tujuan_nama" class="col-sm-3 control-label">Nama Sekolah</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder="Nama Sekolah Tujuan" value="{{$mutasi->mutasi_sekolah_tujuan_nama}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
+            <div class="col-sm-9">
               <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_no_surat" id="mutasi_sekolah_tujuan_no_surat" placeholder="Nomor Surat" value="{{$mutasi->mutasi_sekolah_tujuan_no_surat}}">
             </div>
           </div>
 
-          <div class="form-group-modern">
-            <label for="mutasi_tanggal_surat_diterima" class="col-sm-2 control-label">Tanggal Surat</label>
-            <div class="col-sm-10">
+          <div class="form-group">
+            <label for="mutasi_tanggal_surat_diterima" class="col-sm-3 control-label">Tanggal Surat</label>
+            <div class="col-sm-9">
               <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_surat_diterima" id="mutasi_tanggal_surat_diterima" placeholder="" value="{{$mutasi->mutasi_tanggal_surat_diterima}}">
             </div>
           </div>
