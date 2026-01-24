@@ -48,6 +48,9 @@
                   </option>
                 @endforeach
               </select>
+              <small style="color:#f59e0b; display:block; margin-top:5px;">
+                  <i class="fas fa-info-circle"></i> Pilih jenjang dan sistem akan otomatis menampilkan data
+              </small>
             </div>
           </div>
         </div>

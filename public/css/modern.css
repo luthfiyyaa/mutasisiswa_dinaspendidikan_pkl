@@ -135,7 +135,6 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -145,8 +144,8 @@
         }
 
         .profile-img img {
-            width: 60%;
-            height: 60%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
 
