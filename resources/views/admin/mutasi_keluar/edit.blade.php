@@ -119,7 +119,7 @@
           <div class="form-group">
             <label for="kecamatan_id" class="col-sm-3 control-label">Kecamatan</label>
             <div class="col-sm-9">
-              <select required name="kecamatan_id" id="kecamatan_id" class="form-control js-example-basic-single" style="width: 100%;">
+              <select required name="kecamatan_id" id="kecamatan_id" class="form-control" style="width: 100%;">
                 <?php foreach ($kecamatan as $value) { ?>
                   <option value="{{ $value->kecamatan_id }}" {{ $kecamatan_id==$value->kecamatan_id ? 'selected' : '' }}>
                     {{$value->kecamatan_nama}}

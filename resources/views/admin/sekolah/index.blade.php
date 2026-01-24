@@ -47,7 +47,7 @@
                 <th style="width:10%">Jenjang</th>
                 <th style="width:15%">Kecamatan</th>
                 <th style="width:20%">Alamat</th>
-                <th class="text-center" style="width:15%">Action</th>
+                <th class="text-center" style="width:15%">Aksi</th>
               </tr>
             </thead>
             <tbody></tbody>

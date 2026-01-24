@@ -40,7 +40,7 @@
                 <i class="fas fa-graduation-cap"></i>
                 Jenjang Pendidikan
               </label>
-              <select name="jenjang" id="jenjang" class="form-control-modern">
+              <select name="jenjang" id="jenjang" class="form-control">
                 <option disabled selected value="">-- Pilih Jenjang --</option>
                 @foreach ($jenjang as $key => $value)
                   <option value="{{$value->jenjang_id}}" jenjang_id="{{$value->jenjang_id}}" jenjang_nama="{{$value->jenjang_nama}}">

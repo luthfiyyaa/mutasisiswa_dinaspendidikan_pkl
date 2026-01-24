@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class NomorSuratMutasi extends Model
 { 
-  protected $table = 'nomor_surat_mutasi';
+    protected $table = 'nomor_surat_mutasi';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

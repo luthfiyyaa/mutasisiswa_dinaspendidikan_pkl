@@ -19,7 +19,7 @@
             <label for="menu_id_parent" class="app-form-label">
               <i class="fas fa-sitemap"></i> Parent
             </label>
-            <select id="menu_id_parent" name="menu_id_parent" class="app-form-control js-example-basic-single" style="width: 100%;">
+            <select id="menu_id_parent" name="menu_id_parent" class="app-form-control" style="width: 100%;">
               <option value="0">--</option>
               @foreach($menu as $list)
                 <option value="{{ $list->menu_id }}">{{ $list->menu_nama }}</option>

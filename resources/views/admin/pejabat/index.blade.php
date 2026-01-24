@@ -45,7 +45,7 @@
                 <th style="width:25%">Nama</th>
                 <th style="width:17%">Pangkat</th>
                 <th style="width:23%">Jabatan</th>
-                <th class="text-center" style="width:12%">Action</th>
+                <th class="text-center" style="width:12%">Aksi</th>
               </tr>
             </thead>
             <tbody></tbody>

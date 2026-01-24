@@ -76,7 +76,7 @@
               required 
               id="kecamatan_id" 
               name="kecamatan_id" 
-              class="app-form-control js-example-basic-single" 
+              class="app-form-control" 
               style="width: 100%;"
             >
               <option value="">-- Pilih Kecamatan --</option>

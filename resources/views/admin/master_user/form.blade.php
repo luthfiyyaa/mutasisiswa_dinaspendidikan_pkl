@@ -27,7 +27,7 @@
             <label for="group_id" class="app-form-label">
               <i class="fas fa-users"></i> Group
             </label>
-            <select id="group_id" required name="group_id" class="app-form-control js-example-basic-single" style="width: 100%;">
+            <select id="group_id" required name="group_id" class="app-form-control" style="width: 100%;">
               @foreach($group as $list)
               <option value="{{ $list->group_id }}">{{ $list->group_nama }}</option>
               @endforeach

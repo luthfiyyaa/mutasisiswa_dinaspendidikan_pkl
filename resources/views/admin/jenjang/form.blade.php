@@ -41,7 +41,7 @@
               required 
               id="pejabat_id" 
               name="pejabat_id" 
-              class="app-form-control js-example-basic-single" 
+              class="app-form-control" 
               style="width: 100%;"
             >
               <option value="">-- Pilih Pejabat --</option>

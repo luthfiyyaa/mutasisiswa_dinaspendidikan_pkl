@@ -43,7 +43,7 @@
                 <th style="text-align:center;width:10%">No</th>
                 <th style="width:30%">Kode Wilayah</th>
                 <th style="width:40%">Nama Kecamatan</th>
-                <th style="text-align:center;width:20%">Action</th>
+                <th style="text-align:center;width:20%">Aksi</th>
               </tr>
             </thead>
             <tbody></tbody>

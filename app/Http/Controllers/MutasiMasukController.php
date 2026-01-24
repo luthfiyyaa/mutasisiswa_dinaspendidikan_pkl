@@ -414,7 +414,7 @@ class MutasiMasukController extends Controller
 
             // Load PDF dengan options
             $pdf = Pdf::loadView(
-                'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
+                'admin.mutasi_masuk.suket_mutasi_masuk_pdf',
                 compact('mutasi', 'nomorSurat', 'qrCode')
             )->setPaper('A4', 'portrait');
 

@@ -87,8 +87,11 @@
 
             <div class="form-group">
               <label for="mutasi_tempat_lahir" class="col-sm-3 control-label">Tempat/Tgl Lahir</label>
-              <div class="col-sm-4">
+              <div class="col-sm-3">
                 <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat lahir">
+              </div>
+              <div class="col-sm-1">
+                /
               </div>
               <div class="col-sm-5">
                 <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir">
@@ -149,7 +152,7 @@
             <div class="form-group">
               <label for="kecamatan_id" class="col-sm-3 control-label">Kecamatan</label>
               <div class="col-sm-9">
-                <select name="kecamatan_id" required id="kecamatan_id" class="form-control js-example-basic-single" style="width: 100%;">
+                <select name="kecamatan_id" required id="kecamatan_id" class="form-control" style="width: 100%;">
                   <option disabled selected value="">-- Pilih Kecamatan --</option>
                   @foreach ($kecamatan as $value)
                     <option value="{{$value->kecamatan_id}}">{{$value->kecamatan_nama}}</option>

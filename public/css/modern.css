@@ -502,7 +502,7 @@
 .form-control {
   width: 100%;
   border: 2px solid #e0e6ed;
-  border-radius: 10px;
+  border-radius: 10px !important;
   padding: 0.7rem 1rem;
   transition: all 0.3s ease;
   font-size: 0.95rem;
@@ -537,22 +537,6 @@ select.form-control {
 .form-label-modern i {
   font-size: 0.75rem;
   margin-right: 0.25rem;
-}
-
-.form-control-modern {
-  width: 100%;
-  padding: 0.55rem 0.85rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.form-control-modern:focus {
-  border-color: #66aaea;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(102, 170, 234, 0.1);
 }
 
 .form-footer {
@@ -787,6 +771,47 @@ table.dataTable tbody tr:hover {
 .text-center {
   text-align: center;
 }
+
+/* === FIX DATATABLES SORT ICON === */
+table.dataTable thead th {
+  position: relative;
+  padding-right: 28px;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  color: white;
+}
+
+/* default (sortable) */
+table.dataTable thead th.sorting:after {
+  content: "\f0dc"; /* fa-sort */
+}
+
+/* asc */
+table.dataTable thead th.sorting_asc:after {
+  content: "\f0de"; /* fa-sort-up */
+}
+
+/* desc */
+table.dataTable thead th.sorting_desc:after {
+  content: "\f0dd"; /* fa-sort-down */
+}
+
+/* HAPUS ICON BAWAAN DATATABLES */
+table.dataTable thead th::before {
+  display: none !important;
+}
+
 
 /* TABEL MANUAL */
 .detail-table {
