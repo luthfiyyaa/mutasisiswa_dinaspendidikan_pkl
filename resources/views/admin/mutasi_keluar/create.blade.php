@@ -111,7 +111,55 @@
 
             <div class="section-header">
             <i class="fas fa-user-graduate"></i>
+
+             </select>
+              <small style="color:orange">Pilih jenjang dan kecamatan terlebih dahulu</small>
+
+                <!-- <input type="text" class="form-control" name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder=""> -->
+              </div>
+            </div>
+
+            <div class="form-group-modern">
+              <label for="mutasi_sekolah_asal_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
+
+              <div class="col-sm-10">
+                <input type="text" class="form-control" required name="mutasi_sekolah_asal_no_surat" id="mutasi_sekolah_asal_no_surat" placeholder="Nomor Surat">
+              </div>
+            </div>
+
+            <div class="form-group-modern">
+              <label for="mutasi_tanggal_mutasi" class="col-sm-2 control-label">Tanggal Surat</label>
+
+              <div class="col-sm-10">
+                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_mutasi" id="mutasi_tanggal_mutasi" placeholder="">
+              </div>
+            </div>
+
+            <div class="section-header">
+            <i class="fas fa-user-graduate"></i>
             SEKOLAH ASAL SISWA
+            </div>
+
+            <div class="form-group-modern">
+              <label for="mutasi_sekolah_tujuan_nama" class="col-sm-2 control-label">Nama Sekolah</label>
+
+              <div class="col-sm-10">
+                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder="Nama Sekolah Tujuan">
+              </div>
+            </div>
+
+            <div class="form-group-modern">
+              <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
+
+              <div class="col-sm-10">
+                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_no_surat" id="mutasi_sekolah_tujuan_no_surat" placeholder="Nomor Surat">
+              </div>
+            </div>
+
+            <div class="form-group-modern">
+              <label for="mutasi_tanggal_surat_diterima" class="col-sm-2 control-label">Tanggal Surat</label>
+
+            SEKOLAH TUJUAN SISWA
             </div>
 
             <div class="form-group-modern">
@@ -139,53 +187,7 @@
               <input type="text" hidden  name="jenjang_search_id" id="jenjang_search_id">
               <select required id="sekolah_id" name="sekolah_id" class="form-control">
                 <option value="" disabled selected>- Pilih Sekolahan -</option>
-              </select>
-              <small style="color:orange">Pilih jenjang dan kecamatan terlebih dahulu</small>
-
-                <!-- <input type="text" class="form-control" name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder=""> -->
-              </div>
-            </div>
-
-            <div class="form-group-modern">
-              <label for="mutasi_sekolah_asal_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
-
-              <div class="col-sm-10">
-                <input type="text" class="form-control" required name="mutasi_sekolah_asal_no_surat" id="mutasi_sekolah_asal_no_surat" placeholder="Nomor Surat">
-              </div>
-            </div>
-
-            <div class="form-group-modern">
-              <label for="mutasi_tanggal_mutasi" class="col-sm-2 control-label">Tanggal Surat</label>
-
-              <div class="col-sm-10">
-                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_mutasi" id="mutasi_tanggal_mutasi" placeholder="">
-              </div>
-            </div>
-
-            <div class="section-header">
-            <i class="fas fa-user-graduate"></i>
-            SEKOLAH TUJUAN SISWA
-            </div>
-
-            <div class="form-group-modern">
-              <label for="mutasi_sekolah_tujuan_nama" class="col-sm-2 control-label">Nama Sekolah</label>
-
-              <div class="col-sm-10">
-                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder="Nama Sekolah Tujuan">
-              </div>
-            </div>
-
-            <div class="form-group-modern">
-              <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-2 control-label">Nomor Surat</label>
-
-              <div class="col-sm-10">
-                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_no_surat" id="mutasi_sekolah_tujuan_no_surat" placeholder="Nomor Surat">
-              </div>
-            </div>
-
-            <div class="form-group-modern">
-              <label for="mutasi_tanggal_surat_diterima" class="col-sm-2 control-label">Tanggal Surat</label>
-
+              
               <div class="col-sm-10">
                 <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_surat_diterima" id="mutasi_tanggal_surat_diterima" placeholder="">
               </div>

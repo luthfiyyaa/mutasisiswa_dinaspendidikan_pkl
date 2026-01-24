@@ -1,6 +1,6 @@
 <?php $hal = "sekolah"; ?>
 @extends('layouts.admin.master')
-@section('title', 'DISDIKPORA | Sekolah')
+@section('title', 'DINDIK | Sekolah')
 
 @section('css')
 <!-- DataTables -->

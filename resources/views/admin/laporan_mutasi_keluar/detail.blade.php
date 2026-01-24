@@ -1,6 +1,6 @@
 <?php $hal = "laporan_mutasi_keluar"; ?>
 @extends('layouts.admin.master')
-@section('title', 'DISDIKPORA | Detail Laporan Mutasi Keluar')
+@section('title', 'DINDIK | Detail Laporan Mutasi Keluar')
 
 @section('css')
 <link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">

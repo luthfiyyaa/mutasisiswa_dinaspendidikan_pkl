@@ -174,7 +174,7 @@
 		<td class="bottom-left">
 			<b>Tembusan disampaikan kepada Yth :</b>
 			<ol>
-				<li>Kepala Disdikpora Kab. Trenggalek 
+				<li>Kepala DINDIK Kab. Trenggalek 
                     (sebagai Laporan)</li>
 			</ol>
 		</td>
