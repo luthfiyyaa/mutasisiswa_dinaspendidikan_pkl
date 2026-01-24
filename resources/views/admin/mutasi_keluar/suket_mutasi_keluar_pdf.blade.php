@@ -152,71 +152,71 @@
 				<span style="font-size: 11pt;">Nomor: {{ $nomorSurat->nomor_surat ?? '-' }}</span>
 			</div>
 
-  		  <br>
+	<br>
 
-			<p style="text-indent: 40px; line-height: 1.5;">
+			<p style="text-indent: 50px; line-height: 1.5;">
 				Yang bertanda tangan dibawah ini Kepala Dinas Pendidikan Kabupaten Trenggalek menerangkan bahwa:
 			</p>
 
-     	<div style="margin-left: 60px;">
-       		<table border="0" style="width: 100%; line-height: 1.5;">
-   				<tr>
-   					<td style="width:210px; vertical-align: top;">Nama</td>
-   					<td style="width:10px; vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_nama_siswa}}</td>
-   				</tr>
-   				<tr>
-   					<td style="vertical-align: top;">No. Induk / NISN</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_noinduk}} / {{$mutasi->mutasi_nisn}}</td>
-   				</tr>
-   				<tr>
-   					<td style="vertical-align: top;">Tempat/Tanggal Lahir</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_tempat_lahir}}, {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_lahir, false)}}</td>
-   				</tr>
-   				<tr>
-   					<td style="vertical-align: top;">Asal Sekolah</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_sekolah_asal_nama}}</td>
-   				</tr>
-   				<tr>
-   					<td style="vertical-align: top;">Tingkat / Kelas</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_tingkat_kelas}}</td>
-   				</tr>
-        		<tr>
-   					<td style="vertical-align: top;">Nama Orang Tua / Wali</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_nama_wali}}</td>
-   				</tr>
-        		<tr>
-   					<td style="vertical-align: top;">Alamat</td>
-   					<td style="vertical-align: top;">:</td>
-   					<td style="vertical-align: top;">{{$mutasi->mutasi_alamat}}</td>
-   				</tr>
-   			</table>
-     	</div>
-		
-  		<br>
+			<div style="margin-left: 40px;">
+				<table border="0" style="width: 100%; line-height: 1.5;">
+					<tr>
+						<td style="width:210px; vertical-align: top;">Nama</td>
+						<td style="width:10px; vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_nama_siswa}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">No. Induk / NISN</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_noinduk}} / {{$mutasi->mutasi_nisn}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">Tempat/Tanggal Lahir</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_tempat_lahir}}, {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_lahir, false)}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">Asal Sekolah</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_sekolah_asal_nama}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">Tingkat / Kelas</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_tingkat_kelas}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">Nama Orang Tua / Wali</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_nama_wali}}</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">Alamat</td>
+						<td style="vertical-align: top;">:</td>
+						<td style="vertical-align: top;">{{$mutasi->mutasi_alamat}}</td>
+					</tr>
+				</table>
+			</div>
+			
+			<br>
 
-      	<p style="margin-left: 60px; margin-right: 0; text-align: justify; line-height: 1.5;">
-        	Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$mutasi->mutasi_sekolah_asal_nama}} Nomor: {{$mutasi->mutasi_sekolah_asal_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_mutasi, false)}} serta Surat Keterangan Kesediaan Menerima dari {{$mutasi->mutasi_sekolah_tujuan_nama}} Nomor: {{$mutasi->mutasi_sekolah_tujuan_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_surat_diterima, false)}} pada prinsipnya kami menyetujui mutasi siswa tersebut.
-      	</p>
+			<p style="text-indent: 20px; margin-left: 40px; margin-right: 0; text-align: justify; line-height: 1.5;">
+				Berdasarkan Surat Keterangan Pindah / Mutasi dari {{$mutasi->mutasi_sekolah_asal_nama}} Nomor: {{$mutasi->mutasi_sekolah_asal_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_mutasi, false)}} serta Surat Keterangan Kesediaan Menerima dari {{$mutasi->mutasi_sekolah_tujuan_nama}} Nomor: {{$mutasi->mutasi_sekolah_tujuan_no_surat}} Tanggal {{App\Helpers\TanggalIndonesia::format($mutasi->mutasi_tanggal_surat_diterima, false)}} pada prinsipnya kami menyetujui mutasi siswa tersebut.
+			</p> 
 
-      	<p style="margin-left: 60px; margin-right: 0; text-align: justify; line-height: 1.5;">
-        	Demikian surat keterangan ini diberikan untuk dapat digunakan sebagaimana mestinya.
-      	</p>
+			<p style="text-indent: 50px; line-height: 1.5;">
+				Demikian surat keterangan ini diberikan untuk dapat digunakan sebagaimana mestinya.
+			</p>
 
-  	</div>
+		</div>
 
 	<table border="0" style="width: 120%;">
 		<tr>
 			<td style="width: 20%;"></td>
 			<td style="width: 90%; text-align: center; line-height: 1.3;">
-        		<p>Trenggalek, {{App\Helpers\TanggalIndonesia::format($mutasi->tanggal,false)}}</p>
-        		<p>a.n Kepala Dinas Pendidikan Kabupaten Trenggalek</p>
-        		<p>{!! $mutasi->mutasi_pejabat_jabatan !!}</p>
+				<p>Trenggalek, {{App\Helpers\TanggalIndonesia::format($mutasi->tanggal,false)}}</p>
+				<p>a.n Kepala Dinas Pendidikan Kabupaten Trenggalek</p>
+				<p>{!! $mutasi->mutasi_pejabat_jabatan !!}</p>
 				<br>
 				<br>
 				<br>
