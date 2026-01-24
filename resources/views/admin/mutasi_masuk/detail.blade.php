@@ -13,11 +13,8 @@
 @section('content')
 <!-- Page Header -->
 <div class="page-header-modern">
-  <a href="{{route('mutasi_masuk.index')}}" class="btn-modern btn-warning-modern">
-    <i class="fa fa-arrow-circle-left"></i>
-    Kembali
-  </a>
   <h1 class="page-title-modern">
+    <a href="{{route('mutasi_masuk.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i>Kembali</a>
     <i class="fas fa-file-alt"></i>
     Detail Mutasi Masuk
   </h1>
@@ -32,7 +29,7 @@
         
         <!-- Button Cetak -->
         <div style="margin-bottom: 20px;">
-          <a href="{{url('/mutasi-masuk/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn-modern btn-success-modern">
+          <a href="{{url('/mutasi-masuk/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn-modern btn-secondary-modern">
             <i class="fa fa-print"></i>
             Cetak Surat Rekomendasi
           </a>

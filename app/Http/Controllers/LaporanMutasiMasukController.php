@@ -67,7 +67,7 @@ class LaporanMutasiMasukController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn-action btn-info-action text-center" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
+                    '<a href="%s" class="btn-modern btn-action-modern text-center" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
                     route('laporan_mutasi_masuk.show', $row->mutasi_id)
                 );
             })
@@ -109,7 +109,7 @@ class LaporanMutasiMasukController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn btn-secondary-modern" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
+                    '<a href="%s" class="btn-modern btn-action-modern" data-toggle="tooltip" data-placement="bottom" title="Lihat Detail"><i class="fa fa-eye"></i></a>',
                     route('laporan_mutasi_masuk.show', $row->mutasi_id)
                 );
             })

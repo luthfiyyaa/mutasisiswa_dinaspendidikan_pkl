@@ -1,71 +1,61 @@
-<div class="modal fade modal-slide-from-bottom" id="modal-form" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
+<div class="modal fade app-modal modal-slide-from-bottom" id="modal-form" tabindex="-1" data-backdrop="static">
+  <div class="modal-dialog app-modal-dialog">
+    <div class="modal-content app-modal-content">
+      
+      <div class="app-modal-header">
+        <h4 class="app-modal-title">
+          <i class="fas fa-folder-plus"></i> Default Modal
+        </h4>
+        <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">×</button>
+      </div>
 
+      <form class="form-horizontal" data-toggle="validator" method="post">
+        {{ csrf_field() }} {{ method_field('POST') }}
+        
+        <div class="app-modal-body">
+          <input type="hidden" id="id" name="id">
 
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Default Modal</h4>
-        </div>
-        <form class="form-horizontal" data-toggle="validator" method="post">
-          {{ csrf_field() }} {{ method_field('POST') }}
-          <div class="modal-body">
-            <input type="hidden" id="id" name="id">
+          <div class="app-form-group">
+            <label for="menu_id_parent" class="app-form-label">
+              <i class="fas fa-sitemap"></i> Parent
+            </label>
+            <select id="menu_id_parent" name="menu_id_parent" class="app-form-control js-example-basic-single" style="width: 100%;">
+              <option value="0">--</option>
+              @foreach($menu as $list)
+                <option value="{{ $list->menu_id }}">{{ $list->menu_nama }}</option>
+              @endforeach
+            </select>
+          </div>
 
-            <div class="box-body" style="padding-left:30px !important;padding-right:30px !important;">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Parent</label>
+          <div class="app-form-group">
+            <label for="menu_nama" class="app-form-label">
+              <i class="fas fa-bars"></i> Nama Menu
+            </label>
+            <input type="text" class="app-form-control" required name="menu_nama" id="menu_nama" placeholder="Nama Menu">
+            <span class="app-form-error help-block with-errors"></span>
+          </div>
 
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <select  id="menu_id_parent" name="menu_id_parent" class="form-control js-example-basic-single" style="width: 100%;">
-                    <option value="0" >--</option>
-                    @foreach($menu as $list)
-                      <option  value="{{ $list->menu_id }}"> {{ $list->menu_nama }}</option>
-                    @endforeach
-                  </select>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">Nama Menu</label>
-
-                <div class="input-group col-sm-8">
-                  <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                  <input type="text" class="form-control" required name="menu_nama" id="menu_nama" placeholder="Nama Menu" >
-                  <span class="help-block with-errors"></span>
-                </div>
-              </div>
-              <!-- /.form-group -->
-
-
-            <div class="form-group">
-              <label for="inputEmail3" class="col-sm-2 control-label">Link</label>
-
-              <div class="input-group col-sm-8">
-                <!-- <span class="input-group-addon"><i class="fa  fa-user"></i></span> -->
-                <input type="text" class="form-control" required name="menu_link" id="menu_link" placeholder="Nama Link" >
-                <span class="help-block with-errors"></span>
-              </div>
-            </div>
-            <!-- /.form-group -->
-
-
-
+          <div class="app-form-group">
+            <label for="menu_link" class="app-form-label">
+              <i class="fas fa-link"></i> Link
+            </label>
+            <input type="text" class="app-form-control" required name="menu_link" id="menu_link" placeholder="Nama Link">
+            <span class="app-form-error help-block with-errors"></span>
           </div>
 
         </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-warning pull-left" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
-            <button type="submit" class="btn btn-primary btn-save"><i class="fa fa-floppy-o"></i> Simpan </button>
-          </div>
+
+        <div class="app-modal-footer">
+          <button type="button" class="btn-modern btn-danger-modern" data-dismiss="modal">
+            <i class="fa fa-arrow-circle-left"></i> Batal
+          </button>
+          <button type="submit" class="btn-modern btn-secondary-modern btn-save">
+            <i class="fa fa-floppy-o"></i> Simpan
+          </button>
         </div>
 
       </form>
 
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
+</div>

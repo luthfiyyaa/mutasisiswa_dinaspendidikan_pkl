@@ -153,8 +153,9 @@ class MasterUserController extends Controller
                 $list->email,
                 '*************',
                 sprintf(
-                    '<a onclick="editForm(%d)" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<div class="btn-group-modern">
+                    <a onclick="editForm(%d)" class="btn-modern btn-warning-modern" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a></div>',
                     $list->id,
                     $list->id
                 )

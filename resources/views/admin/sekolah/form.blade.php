@@ -2,19 +2,17 @@
   <div class="modal-dialog app-modal-dialog">
     <div class="modal-content app-modal-content">
       <div class="app-modal-header">
-        <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
         <h4 class="app-modal-title">
           <i class="fas fa-school"></i>
-          Form Sekolah
+          Sekolah
         </h4>
+        <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">×</button>
       </div>
       
       <form class="form-horizontal" data-toggle="validator" method="post">
         {{ csrf_field() }} {{ method_field('POST') }}
         
-        <div class="modal-body">
+        <div class="app-modal-body">
           <input type="hidden" id="id" name="id">
 
           <div class="app-form-group">
@@ -108,11 +106,11 @@
         </div>
         
         <div class="app-modal-footer">
-          <button type="button" class="btn-modal btn-danger-modern" data-dismiss="modal">
+          <button type="button" class="btn-modern btn-danger-modern" data-dismiss="modal">
             <i class="fa fa-times"></i>
             Batal
           </button>
-          <button type="submit" class="btn-modal btn-primary-modern">
+          <button type="submit" class="btn-modern btn-primary-modern">
             <i class="fa fa-save"></i>
             Simpan Data
           </button>

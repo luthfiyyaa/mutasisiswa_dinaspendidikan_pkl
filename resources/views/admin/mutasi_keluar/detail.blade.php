@@ -5,61 +5,38 @@
 @section('css')
 <link rel="stylesheet" href="{{asset('admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 <link rel="stylesheet" href="{{asset('admin/bower_components/select2/dist/css/select2.min.css')}}">
-
-
-<style>
-.example-modal .modal {
-  position: relative;
-  top: auto;
-  bottom: auto;
-  right: auto;
-  left: auto;
-  display: block;
-  z-index: 1;
-}
-
-.example-modal .modal {
-  background: transparent !important;
-}
-</style>
 @endsection
-
 
 @section('content')
 <!-- Content Header (Page header) -->
-<section class="content-header">
-  <h1>
-    <a href="{{route('mutasi_keluar.index')}}" class="btn btn-warning"> <i class="fa fa-arrow-circle-left"></i>  Kembali</a> |
-    Detail Mutasi Keluar
-    <!-- <small>Data barang</small> -->
+<section class="page-header-modern">
+  <h1 class="page-title-modern">
+    <a href="{{route('mutasi_keluar.index')}}" class="btn-modern btn-warning-modern">
+      <i class="fa fa-arrow-circle-left"></i> Kembali
+    </a> |
+    <i class="fas fa-file-alt"></i> Detail Mutasi Keluar
   </h1>
 </section>
-
-
 
 <!-- Main content -->
 <section class="content">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
 
+      <div class="detail-card">
 
-      <div class="box box-success">
-        <!-- <div class="box-header with-border">
-          <h3 class="box-title">Form Mutasi Masuk</h3>
-        </div> -->
-        <!-- /.box-header -->
+        <a href="{{url('/mutasi-keluar/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn-modern btn-secondary-modern" style="margin-bottom: 20px;">
+          <i class="fa fa-print"></i> Cetak Surat Rekomendasi
+        </a>
 
-        <div class="box-body">
+        @foreach($mutasi as $data)
+        <div class="detail-section">
+          <div class="section-header">
+            <i class="fas fa-user-graduate"></i>
+            IDENTITAS SISWA
+          </div>
 
-
-          <a style="float:left;" href="{{url('/mutasi-keluar/pdf')}}/{{$mutasi_id}}" target="_blank" class="btn btn-primary"> <i class="fa fa-print"></i>  Cetak Surat Rekomendasi</a>
-          <br><br><br>
-
-          <table class="table table-bordered table-striped" >
-            @foreach($mutasi as $data)
-            <tr>
-              <td colspan="3"> <b>IDENTITAS SISWA</b>  </td>
-            </tr>
+          <table class="detail-table">
             <tr>
               <td style="width:150px;">Nama</td>
               <td style="width:10px;">:</td>
@@ -81,26 +58,33 @@
               <td>{{$data->mutasi_tingkat_kelas}}</td>
             </tr>
             <tr>
-              <td style="width:150px;">Tempat/Tgl Lahir</td>
-              <td style="width:10px;">:</td>
+              <td>Tempat/Tgl Lahir</td>
+              <td>:</td>
               <td>{{$data->mutasi_tempat_lahir}} / {{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_lahir,false)}}</td>
             </tr>
             <tr>
-              <td style="width:150px;">Nama Wali</td>
-              <td style="width:10px;">:</td>
+              <td>Nama Wali</td>
+              <td>:</td>
               <td>{{$data->mutasi_nama_wali}}</td>
             </tr>
             <tr>
-              <td style="width:150px;">Alamat</td>
-              <td style="width:10px;">:</td>
+              <td>Alamat</td>
+              <td>:</td>
               <td>{{$data->mutasi_alamat}}</td>
             </tr>
+          </table>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-header">
+            <i class="fas fa-school"></i>
+            SEKOLAH ASAL SISWA
+          </div>
+
+          <table class="detail-table">
             <tr>
-              <td colspan="3"> <b>SEKOLAH ASAL SISWA</b>  </td>
-            </tr>
-            <tr>
-              <td>Nama Sekolah</td>
-              <td>:</td>
+              <td style="width:150px;">Nama Sekolah</td>
+              <td style="width:10px;">:</td>
               <td>{{$data->mutasi_sekolah_asal_nama}}</td>
             </tr>
             <tr>
@@ -111,14 +95,21 @@
             <tr>
               <td>Tanggal Surat</td>
               <td>:</td>
-              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false) }}  </td>
+              <td>{{ App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_mutasi, false) }}</td>
             </tr>
+          </table>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-header">
+            <i class="fas fa-building"></i>
+            SEKOLAH TUJUAN SISWA
+          </div>
+
+          <table class="detail-table">
             <tr>
-              <td colspan="3"> <b>SEKOLAH TUJUAN SISWA</b>  </td>
-            </tr>
-            <tr>
-              <td>Nama Sekolah</td>
-              <td>:</td>
+              <td style="width:150px;">Nama Sekolah</td>
+              <td style="width:10px;">:</td>
               <td>{{$data->mutasi_sekolah_tujuan_nama}}</td>
             </tr>
             <tr>
@@ -131,20 +122,15 @@
               <td>:</td>
               <td>{{App\Helpers\TanggalIndonesia::format($data->mutasi_tanggal_surat_diterima,false)}}</td>
             </tr>
-            @endforeach
           </table>
-
         </div>
+        @endforeach
 
       </div>
 
-      <!-- /.box -->
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
 
 @endsection
 
@@ -156,9 +142,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-
 });
 </script>
-
 
 @endsection

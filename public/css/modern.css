@@ -21,6 +21,16 @@
             background-clip: text;
         }
 
+        .login-logo {
+          text-align: center;
+          margin-bottom: 25px;
+          animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .login-logo img {
+          filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
         /* Navbar basic */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
@@ -125,7 +135,6 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #66aaea 0%, #4ba2a0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -135,8 +144,8 @@
         }
 
         .profile-img img {
-            width: 60%;
-            height: 60%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
 
@@ -259,16 +268,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: visible;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--card-color) 0%, var(--card-color-light) 100%);
         }
 
         .stat-card:hover {
@@ -433,15 +432,20 @@
   border-bottom: 2px solid #f3f4f6;
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 
 .content-card-title {
+  margin: 0;
   font-size: 1.15rem;
   font-weight: 700;
   color: #1a202c;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .content-card-title i {
@@ -449,9 +453,14 @@
   font-size: 1.1rem;
 }
 
+.content-card-header a {
+  flex-shrink: 0;       /* tombol tidak mengecil */
+}
+
 /* Form styling */
 .form-horizontal {
     width: 100%;
+    margin-bottom: 1.5rem;
 }
 
 .form-group {
@@ -472,15 +481,33 @@
     gap: 0.4rem;
 }
 
+/* FORM LAYOUT */
+.form-horizontal .form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.form-horizontal .control-label {
+  font-weight: 600;
+  color: #34495e;
+  padding-top: 10px;
+  text-align: left;
+  font-size: 0.95rem;
+  padding-right: 15px;
+}
+
+/* Untuk memastikan input memanjang penuh */
 .form-control {
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    padding: .7rem 1rem;
-    transition: all .3s ease;
-    background: white;
-    font-size: 0.9rem;
-    width: 100%;
-    display: block;
+  width: 100%;
+  border: 2px solid #e0e6ed;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  height: 42px;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -530,7 +557,7 @@ select.form-control {
 
 .form-footer {
     background: #f8fafc;
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.25rem;
     border-top: 2px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
@@ -555,6 +582,13 @@ select.form-control {
     padding-right: 15px;
 }
 
+.col-sm-3 {
+  width: 25%;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .col-sm-10 {
     width: 83.333333%;
     padding-left: 15px;
@@ -568,6 +602,13 @@ select.form-control {
     padding-top: 0.6rem;
     color: #64748b;
     font-weight: 600;
+}
+
+.col-sm-9 {
+  width: 75%;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 /* MAIN */
@@ -874,6 +915,17 @@ table.dataTable tbody tr:hover {
   color: white;
 }
 
+.btn-action-modern {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+
+.btn-action-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
+}
+
 .btn-modern:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -891,9 +943,8 @@ table.dataTable tbody tr:hover {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1rem 1.25rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-bottom: 2rem;
 }
 
 .detail-section {
@@ -916,6 +967,12 @@ table.dataTable tbody tr:hover {
 
 .section-header i {
   font-size: 1.3rem;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 /* FORM MODAL */
@@ -1044,33 +1101,6 @@ table.dataTable tbody tr:hover {
   font-size: 0.8rem;
   color: #ef4444;
   margin-top: 0.35rem;
-}
-
-.app-btn {
-  padding: 0.6rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.3s ease;
-}
-
-.app-btn-secondary {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
-  color: white;
-}
-
-.app-btn-primary {
-  background: linear-gradient(135deg, #66aaea, #4ba2a0);
-  color: white;
-}
-
-.app-btn:hover {
-  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

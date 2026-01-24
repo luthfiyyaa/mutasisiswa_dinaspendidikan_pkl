@@ -1,7 +1,3 @@
-<style>
-
-</style>
-
 <div class="modal fade app-modal" id="modal-form" tabindex="-1" data-backdrop="static">
   <div class="modal-dialog app-modal-dialog">
     <div class="modal-content app-modal-content">
@@ -14,7 +10,8 @@
         <button class="app-modal-close" data-dismiss="modal">×</button>
       </div>
 
-      <form method="post">
+      <form class="form-horizontal" data-toggle="validator" method="post">
+        {{ csrf_field() }} {{ method_field('POST') }}
         <div class="app-modal-body">
 
           <div class="app-form-group">
@@ -48,12 +45,13 @@
         </div>
 
         <div class="app-modal-footer">
-          <button type="button" class="app-btn app-btn-secondary" data-dismiss="modal">
+          <button type="button" class="btn-modern btn-danger-modern" data-dismiss="modal">
             <i class="fa fa-times"></i> Batal
           </button>
-          <button type="submit" class="app-btn app-btn-primary">
+          <button type="submit" class="btn-modern btn-secondary-modern">
             <i class="fa fa-save"></i> Simpan Data
           </button>
+          
         </div>
       </form>
 

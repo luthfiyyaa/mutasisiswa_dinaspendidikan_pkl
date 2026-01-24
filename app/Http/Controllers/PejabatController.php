@@ -146,16 +146,16 @@ class PejabatController extends Controller
         ->addIndexColumn()
         ->addColumn('aksi', function ($list) {
           return '
-            <div class="btn-group" role="group">
+            <div class="btn-group-modern" role="group">
                 <button onclick="editForm(' . $list->pejabat_id . ')" 
-                    class="btn-action btn-warning-action text-center" 
+                    class="btn-modern btn-warning-modern" 
                     data-toggle="tooltip" 
                     data-placement="top" 
                     title="Edit Data">
                   <i class="fa fa-edit"></i>
                 </button>
                 <button onclick="deleteData(' . $list->pejabat_id . ')" 
-                    class="btn-action btn-danger-action text-center" 
+                    class="btn-modern btn-danger-modern" 
                     data-toggle="tooltip" 
                     data-placement="top" 
                     title="Hapus Data">

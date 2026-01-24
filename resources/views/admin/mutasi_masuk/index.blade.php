@@ -48,6 +48,9 @@
                   </option>
                 @endforeach
               </select>
+              <small style="color:#f59e0b; display:block; margin-top:5px;">
+                  <i class="fas fa-info-circle"></i> Pilih jenjang dan sistem akan otomatis menampilkan data
+              </small>
             </div>
           </div>
         </div>
@@ -104,19 +107,18 @@ $(function(){
     searching: true,
     processing: true,
     language: {
-      processing: "Sedang diproses...",
+      processing: '<i class="fa fa-spinner fa-spin"></i> Sedang memproses...',
       search: "Cari:",
       lengthMenu: "Tampilkan _MENU_",
       info: "Menampilkan _START_-_END_ dari _TOTAL_ data",
-      infoEmpty: "Tidak ada data",
       infoFiltered: "(disaring dari _MAX_)",
       zeroRecords: "Tidak ada data yang ditemukan",
       emptyTable: "Tidak ada data tersedia",
       paginate: {
-        first: "Pertama",
-        last: "Terakhir",
-        next: "Selanjutnya",
-        previous: "Sebelumnya"
+        first: '«',
+        last: '»',
+        next: '›',
+        previous: '‹'
       }
     },
     ajax: {

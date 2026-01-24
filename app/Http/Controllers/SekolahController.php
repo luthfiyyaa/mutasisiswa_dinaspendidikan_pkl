@@ -159,16 +159,16 @@ class SekolahController extends Controller
             })
             ->addColumn('aksi', function ($row) {
                 return '
-                    <div class="btn-group" role="group">
+                    <div class="btn-group-modern" role="group">
                         <button onclick="editForm(' . $row->sekolah_id . ')" 
-                                class="btn btn-sm btn-primary" 
+                                class="btn-modern btn-warning-modern" 
                                 data-toggle="tooltip" 
                                 data-placement="top" 
                                 title="Edit Data">
                             <i class="fa fa-edit"></i>
                         </button>
                         <button onclick="deleteData(' . $row->sekolah_id . ')" 
-                                class="btn btn-sm btn-danger" 
+                                class="btn-modern btn-danger-modern" 
                                 data-toggle="tooltip" 
                                 data-placement="top" 
                                 title="Hapus Data">

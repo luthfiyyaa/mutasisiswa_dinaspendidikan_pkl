@@ -11,7 +11,7 @@
     {{-- Custom UI --}}
     <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
 
-    <link rel="shortcut icon" href="{{ asset('admin/images/logo_trenggalek.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('admin/images/logo_baru.png') }}" type="image/x-icon">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
@@ -20,7 +20,7 @@
 <body>
     {{-- NAVBAR --}}
     <nav class="navbar">
-         <div class="navbar-left">
+        <div class="navbar-left">
             <button id="sidebarToggle" class="sidebar-toggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -43,7 +43,7 @@
                 </a>
 
                 <a href="{{ route('logout') }}" class="dropdown-item logout"
-                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i> Sign Out
                 </a>
 
@@ -68,7 +68,7 @@
 
             <div class="profile-section">
                 <div class="profile-img">
-                    <img src="{{ asset('admin/images/logo_trenggalek.png') }}" alt="User Image">
+                    <img src="{{ asset('admin/images/logo_baru.png') }}" alt="User Image">
                 </div>
 
                 <div class="profile-name">
@@ -107,7 +107,7 @@
                     ])->get() as $menuItemList)
 
                         <a href="{{ route($menuItemList->menu_link.'.index') }}"
-                           class="nav-item {{ $hal == $menuItemList->menu_link ? 'active' : '' }}">
+                            class="nav-item {{ $hal == $menuItemList->menu_link ? 'active' : '' }}">
                             <i class="fas fa-circle"></i>
                             <span>{{ $menuItemList->menu_nama }}</span>
                         </a>
@@ -176,7 +176,7 @@
 
 <script>
 $(document).ready(function () {
-  $('.sidebar-menu').tree()
+    $('.sidebar-menu').tree()
 })
 
 
