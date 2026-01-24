@@ -88,11 +88,14 @@
 
             <div class="form-group">
               <label for="mutasi_tempat_lahir" class="col-sm-3 control-label">Tempat/Tgl Lahir</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat lahir" value="{{$mutasi->mutasi_tempat_lahir}}">
+              <div class="col-sm-3">
+                <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat lahir">
+              </div>
+              <div class="col-sm-1">
+                /
               </div>
               <div class="col-sm-5">
-                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir" value="{{$mutasi->mutasi_tanggal_lahir}}">
+                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir">
               </div>
             </div>
 
