@@ -11,7 +11,7 @@
     {{-- Custom UI --}}
     <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
 
-    <link rel="shortcut icon" href="{{ asset('admin/images/logo_trenggalek.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('admin/images/logo_baru.ico') }}" type="image/x-icon">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
@@ -68,7 +68,7 @@
 
             <div class="profile-section">
                 <div class="profile-img">
-                    <img src="{{ asset('admin/images/logo_trenggalek.png') }}" alt="User Image">
+                    <img src="{{ asset('admin/images/logo_baru.png') }}" alt="User Image">
                 </div>
 
                 <div class="profile-name">

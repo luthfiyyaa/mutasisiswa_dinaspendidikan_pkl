@@ -271,16 +271,6 @@
             overflow: visible;
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--card-color) 0%, var(--card-color-light) 100%);
-        }
-
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
@@ -924,6 +914,17 @@ table.dataTable tbody tr:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 8px rgba(239, 68, 68, 0.35);
   color: white;
+}
+
+.btn-action-modern {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+
+.btn-action-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
 }
 
 .btn-modern:disabled {
