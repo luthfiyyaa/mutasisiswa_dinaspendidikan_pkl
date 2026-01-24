@@ -41,7 +41,7 @@
                   <label class="form-label-modern">
                     <i class="far fa-calendar-alt"></i>Tanggal Awal
                   </label>
-                  <input type="date" class="form-control-modern" name="tanggal_awal" id="tanggal_awal">
+                  <input type="date" class="form-control" name="tanggal_awal" id="tanggal_awal">
                 </div>
               </div>
               
@@ -50,7 +50,7 @@
                   <label class="form-label-modern">
                     <i class="far fa-calendar-check"></i>Tanggal Akhir
                   </label>
-                  <input type="date" class="form-control-modern" name="tanggal_akhir" id="tanggal_akhir">
+                  <input type="date" class="form-control" name="tanggal_akhir" id="tanggal_akhir">
                 </div>
               </div>
               
@@ -59,7 +59,7 @@
                   <label class="form-label-modern">
                     <i class="fas fa-graduation-cap"></i>Jenjang
                   </label>
-                  <select name="jenjang" id="jenjang" class="form-control-modern">
+                  <select name="jenjang" id="jenjang" class="form-control">
                     <option selected value="all">- Semua Jenjang -</option>
                     <?php
                     foreach ($jenjang as $key => $value) {
@@ -105,7 +105,7 @@
                 <th style="width:10%">NISN</th>
                 <th style="width:20%">Sekolah Asal</th>
                 <th style="width:20%">Sekolah Tujuan</th>
-                <th style="text-align:center;width:8%">Action</th>
+                <th style="text-align:center;width:8%">Aksi</th>
               </tr>
             </thead>
             <tbody></tbody>

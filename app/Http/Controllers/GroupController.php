@@ -44,15 +44,6 @@ class GroupController extends Controller
         return view('admin.group.index');
     }
 
-     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        // Not implemented - using AJAX modal
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -93,17 +84,6 @@ class GroupController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
-    }
-    
-     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        // Not implemented in original code
     }
 
     /**

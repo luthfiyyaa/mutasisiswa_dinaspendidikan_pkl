@@ -34,13 +34,13 @@
           <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
-                <th style="width:8%">No #</th>
+                <th style="width:8%">No</th>
                 <th style="width:16%">Nama</th>
                 <th style="width:16%">Group</th>
                 <th style="width:16%">Email</th>
                 <th style="width:16%">Username</th>
                 <th style="width:16%">Password</th>
-                <th style="width:15%">Action</th>
+                <th style="width:15%">Aksi</th>
               </tr>
             </thead>
             <tbody>

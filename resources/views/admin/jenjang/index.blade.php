@@ -45,7 +45,7 @@
                 <th class="text-center" style="width:10%">No</th>
                 <th style="width:35%">Nama Jenjang</th>
                 <th style="width:45%">Pejabat</th>
-                <th class="text-center" style="width:10%">Action</th>
+                <th class="text-center" style="width:10%">Aksi</th>
               </tr>
             </thead>
             <tbody></tbody>

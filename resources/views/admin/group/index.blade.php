@@ -35,9 +35,9 @@
           <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
-                <th style="width:10%">No #</th>
+                <th style="width:10%">No</th>
                 <th style="width:60%">Nama Group</th>
-                <th style="text-align:center;width:30%">Action</th>
+                <th style="text-align:center;width:30%">Aksi</th>
               </tr>
             </thead>
             <tbody>

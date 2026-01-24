@@ -34,11 +34,11 @@
           <table id="datatable1" class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th style="width:10%">No #</th>
+                <th style="width:10%">No</th>
                 <th style="width:16%">Nama Menu</th>
                 <th style="width:16%">Link</th>
                 <th style="width:16%">Parent</th>
-                <th style="width:10%">Action</th>
+                <th style="width:10%">Aksi</th>
               </tr>
             </thead>
             <tbody>
