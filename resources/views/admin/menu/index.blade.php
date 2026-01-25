@@ -25,9 +25,9 @@
           <h3 class="content-card-title">
             <i class="fas fa-table"></i> Data Master Menu
           </h3>
-          <button onclick="addForm()" class="btn-modern btn-primary-modern">
+          {{-- <button onclick="addForm()" class="btn-modern btn-primary-modern">
             <i class="fa fa-plus"></i> Tambah
-          </button>
+          </button> --}}
         </div>
 
         <div class="table-wrapper">

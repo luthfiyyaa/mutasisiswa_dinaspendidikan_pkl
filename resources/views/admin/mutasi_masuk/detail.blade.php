@@ -47,7 +47,7 @@
             <tr>
               <td class="label">Nama</td>
               <td class="colon">:</td>
-              <td>{{$data->mutasi_nama_siswa}}</td>
+              <td><strong>{{$data->mutasi_nama_siswa}}</strong></td>
             </tr>
             <tr>
               <td class="label">No. Induk</td>
@@ -93,7 +93,7 @@
             <tr>
               <td class="label">Nama Sekolah</td>
               <td class="colon">:</td>
-              <td>{{$data->mutasi_sekolah_asal_nama}}</td>
+              <td><strong>{{$data->mutasi_sekolah_asal_nama}}</strong></td>
             </tr>
             <tr>
               <td class="label">Nomor Surat</td>
@@ -119,7 +119,7 @@
             <tr>
               <td class="label">Nama Sekolah</td>
               <td class="colon">:</td>
-              <td>{{$data->mutasi_sekolah_tujuan_nama}}</td>
+              <td><strong>{{$data->mutasi_sekolah_tujuan_nama}}</strong></td>
             </tr>
             <tr>
               <td class="label">Nomor Surat</td>
