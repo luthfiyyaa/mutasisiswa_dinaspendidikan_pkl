@@ -13,9 +13,8 @@
 @section('content')
 <!-- Page Header -->
 <div class="page-header-modern">
+  <a href="{{route('mutasi_keluar.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i>Kembali</a>
   <h1 class="page-title-modern">
-    <a href="{{route('mutasi_keluar.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i>Kembali</a>
-    <i class="fas fa-file-alt"></i>
     Tambah Mutasi Keluar
   </h1>
 </div>

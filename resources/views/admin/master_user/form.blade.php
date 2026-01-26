@@ -9,7 +9,7 @@
         <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">×</button>
       </div>
 
-      <form class="form-horizontal" data-toggle="validator" method="post" onsubmit="return validateForm()">
+      <form class="form-horizontal" data-toggle="validator" method="post"  action="{{ route('master_user.store') }}">
         {{ csrf_field() }} {{ method_field('POST') }}
         
         <div class="app-modal-body">
@@ -63,7 +63,7 @@
             <label for="confirm_password" class="app-form-label">
               <i class="fas fa-lock"></i> Confirm Password
             </label>
-            <input type="password" onchange="check_pass();" class="app-form-control" name="confirm_password" id="confirm_password" placeholder="Ulangi Password">
+            <input type="password" onchange="check_pass();" class="app-form-control" name="password_confirmation" id="confirm_password" placeholder="Ulangi Password">
             <span id='message'></span>
           </div>
 
@@ -74,7 +74,7 @@
             <i class="fa fa-arrow-circle-left"></i> Batal
           </button>
           <button type="submit" id="submit" class="btn-modern btn-secondary-modern btn-save">
-            <i class="fa fa-floppy-o"></i> Simpan
+            <i class="fa fa-save"></i> Simpan
           </button>
         </div>
 

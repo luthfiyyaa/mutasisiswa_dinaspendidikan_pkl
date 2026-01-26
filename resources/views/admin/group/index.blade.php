@@ -37,7 +37,7 @@
               <tr>
                 <th style="width:10%">No</th>
                 <th style="width:60%">Nama Group</th>
-                <th style="text-align:center;width:30%">Aksi</th>
+                <th style="width:30%">Aksi</th>
               </tr>
             </thead>
             <tbody>

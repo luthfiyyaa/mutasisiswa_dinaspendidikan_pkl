@@ -37,43 +37,31 @@
             INFORMASI AKUN
           </div>
 
-          <div class="form-group-modern">
+          <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Nama</label>
             <div class="col-sm-10">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-smile-o"></i></span>
                 <input type="text" class="form-control" name="name" id="name" placeholder="Nama" value="{{$name}}">
-              </div>
             </div>
           </div>
 
-          <div class="form-group-modern">
+          <div class="form-group">
             <label for="users_email" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-              <div class="input-group">
-                <span class="input-group-addon">@</span>
                 <input type="email" class="form-control" name="users_email" id="users_email" placeholder="Email" value="{{$users_email}}">
-              </div>
             </div>
           </div>
 
-          <div class="form-group-modern">
+          <div class="form-group">
             <label for="email" class="col-sm-2 control-label">Username</label>
             <div class="col-sm-10">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 <input type="text" class="form-control" name="email" id="email" placeholder="Username" value="{{$email}}">
-              </div>
             </div>
           </div>
 
-          <div class="form-group-modern">
+          <div class="form-group">
             <label for="password" class="col-sm-2 control-label">Password</label>
             <div class="col-sm-10">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                 <input type="password" class="form-control" name="password" id="password" placeholder="**********">
-              </div>
             </div>
           </div>
 

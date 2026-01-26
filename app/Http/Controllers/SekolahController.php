@@ -208,13 +208,4 @@ class SekolahController extends Controller
 
         return response()->json($sekolah);
     }
-
-    /**
-     * Export data sekolah (contoh untuk Excel/PDF)
-     */
-    public function export(Request $request)
-    {
-        // Implementasi export jika diperlukan
-        // Bisa pakai Laravel Excel atau TCPDF
-    }
 }

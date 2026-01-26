@@ -37,8 +37,8 @@ hr.style3 {
 
 
 <section class="page-header-modern">
+  <a href="{{route('group.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
   <h1 class="page-title-modern">
-                      <a href="{{route('group.index')}}" class="btn-modern btn-warning-modern"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
     Menu Group
   </h1>
 </section>

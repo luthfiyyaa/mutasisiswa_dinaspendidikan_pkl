@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\GroupModel;
@@ -22,16 +25,6 @@ class MasterUserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -42,9 +35,9 @@ class MasterUserController extends Controller
         $validated = $request->validate([
             'group_id' => 'required|exists:tbl_group,group_id',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|string|max:255|unique:users,email', // USERNAME
             'users_email' => 'required|email|max:255',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         MasterUserModel::create([
@@ -55,18 +48,9 @@ class MasterUserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return response()->json(['success' => true, 'message' => 'User berhasil ditambahkan']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $id)
-    {
-        //
+        return response()->json([
+            'success' => true, 
+            'message' => 'User berhasil ditambahkan']);
     }
 
     /**
@@ -95,9 +79,9 @@ class MasterUserController extends Controller
         $validated = $request->validate([
             'group_id' => 'required|exists:tbl_group,group_id',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|max:255|unique:users,email,' . $id,
             'users_email' => 'required|email|max:255',
-            'password' => 'nullable|string|min:6',
+            'password' => 'nullable|min:6|confirmed',
         ]);
 
         $updateData = [
