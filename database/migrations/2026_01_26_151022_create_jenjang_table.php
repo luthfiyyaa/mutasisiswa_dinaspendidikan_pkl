@@ -12,16 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jenjang', function (Blueprint $table) {
-            $table->bigIncrements('jenjang_id'); // ✅ BIGINT UNSIGNED + PK + AUTO_INCREMENT
+            $table->bigIncrements('jenjang_id');
             $table->string('jenjang_nama', 100);
+            $table->unsignedInteger('bidang_id')->nullable();
             $table->unsignedBigInteger('pejabat_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('bidang_id')
+                ->references('bidang_id')
+                ->on('bidang')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
 
             $table->foreign('pejabat_id')
                 ->references('pejabat_id')
                 ->on('pejabat')
-                ->onUpdate('cascade')
-                ->onDelete('set null');
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 
