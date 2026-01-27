@@ -138,25 +138,57 @@
 </body>
 
 <script>
-    const toggle = document.getElementById('userToggle');
-    const dropdown = document.getElementById('userDropdown');
-
-    toggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
-    });
-
-    document.addEventListener('click', function () {
-        dropdown.classList.remove('show');
-    });
-
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
 
-    sidebarToggle.addEventListener('click', function () {
+    function isMobile() {
+    return window.innerWidth <= 768;
+    }
+
+    sidebarToggle.addEventListener('click', () => {
+    if (isMobile()) {
+        sidebar.classList.toggle('active');
+    } else {
         sidebar.classList.toggle('collapsed');
         mainContent.classList.toggle('expanded');
+    }
+    });
+
+    /* auto reset saat resize */
+    function resetSidebarState() {
+        if (isMobile()) {
+            // Di mobile: hapus semua class, biarkan CSS default bekerja
+            sidebar.classList.remove('collapsed');
+            sidebar.classList.remove('active');
+            mainContent.classList.remove('expanded'); // ✅ Fixed
+        } else {
+            // Di desktop: reset ke state terbuka
+            sidebar.classList.remove('active');
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('expanded');
+        }
+    }
+
+    // Debounce resize untuk performa lebih baik
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            resetSidebarState();
+        }, 250); // ✅ Tunggu 250ms sebelum reset
+    });
+
+    // Set initial state saat load
+    resetSidebarState();
+
+    // Menutup sidebar saat klik di luar area sidebar (mobile only)
+    document.addEventListener('click', (e) => {
+        if (isMobile() && sidebar.classList.contains('active')) {
+            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        }
     });
 </script>
 

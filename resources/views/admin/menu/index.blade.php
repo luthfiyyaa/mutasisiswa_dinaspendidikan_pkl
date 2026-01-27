@@ -30,7 +30,7 @@
           </button> --}}
         </div>
 
-        <div class="table-wrapper">
+        <div class="table-responsive">
           <table id="datatable1" class="table table-bordered table-striped">
             <thead>
               <tr>

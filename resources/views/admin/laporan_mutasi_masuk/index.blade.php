@@ -95,7 +95,7 @@
           </h3>
         </div>
 
-        <div class="table-wrapper">
+        <div class="table-responsive">
           <table id="datatable1" class="table table-bordered table-striped" style="width:100%">
             <thead>
               <tr>
