@@ -18,8 +18,14 @@ class PecahTemplateAdminController extends Controller
   {
     $mutasi_masuk = Mutasi::where('mutasi_jenis', '=', '1')->count();
     $mutasi_keluar = Mutasi::where('mutasi_jenis', '=', '2')->count();
+
+    $kecamatan_data = $this->getMutasiByKecamatan(true);
         
-    return view('admin.index', compact('mutasi_masuk', 'mutasi_keluar'));
+    return view('admin.index', compact(
+        'mutasi_masuk', 
+        'mutasi_keluar', 
+        'kecamatan_data'
+        ));
     }
   /**
      * Get mutasi statistics
@@ -131,6 +137,50 @@ class PecahTemplateAdminController extends Controller
     }
 
     /**
+     * Get statistics by kecamatan with jenis mutasi - ALL kecamatan
+     */
+    private function getMutasiByKecamatan(): array
+    {
+        // Ambil semua kecamatan
+        $allKecamatan = DB::table('kecamatan')
+            ->orderBy('kecamatan_nama', 'asc')
+            ->get();
+
+        // Ambil data mutasi MASUK per kecamatan (berdasarkan sekolah tujuan)
+        $mutasiMasuk = DB::table('mutasi')
+            ->join('sekolah as s_tujuan', 'mutasi.mutasi_sekolah_tujuan_id', '=', 's_tujuan.sekolah_id')
+            ->where('mutasi.mutasi_jenis', '=', '1')
+            ->selectRaw('s_tujuan.kecamatan_id, COUNT(*) as total')
+            ->groupBy('s_tujuan.kecamatan_id')
+            ->pluck('total', 'kecamatan_id');
+
+        // Ambil data mutasi KELUAR per kecamatan (berdasarkan sekolah asal)
+        $mutasiKeluar = DB::table('mutasi')
+            ->join('sekolah as s_asal', 'mutasi.mutasi_sekolah_asal_id', '=', 's_asal.sekolah_id')
+            ->where('mutasi.mutasi_jenis', '=', '2')
+            ->selectRaw('s_asal.kecamatan_id, COUNT(*) as total')
+            ->groupBy('s_asal.kecamatan_id')
+            ->pluck('total', 'kecamatan_id');
+
+        // Gabungkan data
+        $labels = [];
+        $masuk = [];
+        $keluar = [];
+
+        foreach ($allKecamatan as $kecamatan) {
+            $labels[] = $kecamatan->kecamatan_nama;
+            $masuk[] = $mutasiMasuk->get($kecamatan->kecamatan_id, 0);
+            $keluar[] = $mutasiKeluar->get($kecamatan->kecamatan_id, 0);
+        }
+
+        return [
+            'labels' => $labels,
+            'masuk' => $masuk,
+            'keluar' => $keluar,
+        ];
+    }
+
+    /**
      * Clear dashboard cache
      */
     public function clearCache(): void
@@ -149,6 +199,7 @@ class PecahTemplateAdminController extends Controller
                 'statistics' => $this->getMutasiStatistics(),
                 'recent_mutasi' => $this->getRecentMutasi(),
                 'chart_data' => $this->getMonthlyChartData(),
+                'kecamatan_data' => $this->getMutasiByKecamatan(),
             ]
         ]);
     }
