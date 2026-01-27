@@ -61,9 +61,10 @@
             @php
                 $id_user = Auth::user()->id;
 
-                $online = App\Models\UserModel::join('tbl_group', 'users.group_id', '=', 'tbl_group.group_id')
+                // PERBAIKAN: Sesuaikan join dengan foreign key yang benar
+                $online = App\Models\MasterUserModel::join('tbl_group', 'users.group_id', '=', 'tbl_group.group_id')
                     ->where('users.id', $id_user)
-                    ->value('group_nama');
+                    ->value('tbl_group.group_nama');
             @endphp
 
             <div class="profile-section">
@@ -90,11 +91,12 @@
                     <span>Beranda</span>
                 </a>
 
+                {{-- PERBAIKAN: Pastikan join menggunakan kolom yang benar --}}
                 @foreach(App\Models\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')
                 ->orderBy('tbl_menu.menu_id','desc')
                 ->where([
-                    ['menu_id_parent', '=', '0'],
-                    ['group_id', '=', Auth::user()->group_id],
+                    ['tbl_menu.menu_id_parent', '=', '0'],
+                    ['tbl_t_user.group_id', '=', Auth::user()->group_id],
                 ])->get() as $menuItem)
 
                     <div class="nav-title">{{ $menuItem->menu_nama }}</div>
@@ -178,6 +180,6 @@
 $(document).ready(function () {
     $('.sidebar-menu').tree()
 })
-
+</script>
 
 </html>

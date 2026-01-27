@@ -25,11 +25,6 @@ return new class extends Migration
                 ->useCurrentOnUpdate();
 
             $table->timestamp('updated_at')->useCurrent();
-
-            $table->foreign('menu_id_parent')
-                ->references('menu_id')
-                ->on('tbl_menu')
-                ->onDelete('cascade');
         });
     }
 

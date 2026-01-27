@@ -16,6 +16,6 @@ class GroupModel extends Model
 
     public function users()
     {
-        return $this->hasMany(TUserModel::class, 'group_id', 'group_id');
+        return $this->hasMany(MasterUserModel::class, 'group_id', 'group_id');
     }
 }

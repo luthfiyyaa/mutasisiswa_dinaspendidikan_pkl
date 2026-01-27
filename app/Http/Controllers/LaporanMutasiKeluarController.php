@@ -2,24 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use App\Helpers\TanggalIndonesia;
 use App\Models\Mutasi;
 use App\Models\Jenjang;
-use App\Models\Kecamatan;
-use App\Models\Sekolah;
-use App\Models\Pejabat;
-use App\Models\NomorSuratMutasi;
 
 class LaporanMutasiKeluarController extends Controller
 {
@@ -34,8 +24,6 @@ class LaporanMutasiKeluarController extends Controller
         return view('admin.laporan_mutasi_keluar.index', compact('jenjang'));
     }
 
-    
-
     /**
      * Display the specified resource.
      *
@@ -49,8 +37,7 @@ class LaporanMutasiKeluarController extends Controller
         
         return view('admin.laporan_mutasi_keluar.detail', compact('mutasi_id', 'mutasi'));
     }
-
-
+    
     /**
      * Get datatable listing
      *

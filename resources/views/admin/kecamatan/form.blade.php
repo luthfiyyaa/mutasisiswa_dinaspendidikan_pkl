@@ -13,16 +13,19 @@
       <form class="form-horizontal" data-toggle="validator" method="post">
         {{ csrf_field() }} {{ method_field('POST') }}
         <div class="app-modal-body">
+          <input type="hidden" id="id" name="id">
 
           <div class="app-form-group">
             <label class="app-form-label">
               <i class="fas fa-code"></i>
               Kode Wilayah
             </label>
-            <input
-              type="text"
-              class="app-form-control"
-              placeholder="Masukkan kode wilayah kecamatan"
+            <input 
+              type="text" 
+              name="kecamatan_kode_wilayah" 
+              id="kecamatan_kode_wilayah" 
+              class="app-form-control" 
+              placeholder="Masukkan kode wilayah"
               required
             >
             <span class="app-form-error"></span>
@@ -35,6 +38,8 @@
             </label>
             <input
               type="text"
+              name="kecamatan_nama"
+              id="kecamatan_nama"
               class="app-form-control"
               placeholder="Masukkan nama kecamatan"
               required

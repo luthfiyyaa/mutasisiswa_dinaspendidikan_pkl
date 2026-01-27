@@ -146,9 +146,9 @@
             </div>
 
             <div class="form-group">
-              <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
+              <label for="mutasi_sekolah_asal_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_no_surat" id="mutasi_sekolah_tujuan_no_surat" placeholder="Masukkan nomor surat">
+                <input type="text" class="form-control" required name="mutasi_sekolah_asal_no_surat" id="mutasi_sekolah_asal_no_surat" placeholder="Masukkan nomor surat">
               </div>
             </div>
 
@@ -168,16 +168,16 @@
             </div>
 
             <div class="form-group">
-              <label for="mutasi_sekolah_asal_nama" class="col-sm-3 control-label">Nama Sekolah</label>
+              <label for="mutasi_sekolah_tujuan_nama" class="col-sm-3 control-label">Nama Sekolah</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" required name="mutasi_sekolah_asal_nama" id="mutasi_sekolah_asal_nama" placeholder="Masukkan nama sekolah asal">
+                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_nama" id="mutasi_sekolah_tujuan_nama" placeholder="Masukkan nama sekolah asal">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="mutasi_sekolah_asal_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
+              <label for="mutasi_sekolah_tujuan_no_surat" class="col-sm-3 control-label">Nomor Surat</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" required name="mutasi_sekolah_asal_no_surat" id="mutasi_sekolah_asal_no_surat" placeholder="Masukkan nomor surat">
+                <input type="text" class="form-control" required name="mutasi_sekolah_tujuan_no_surat" id="mutasi_sekolah_tujuan_no_surat" placeholder="Masukkan nomor surat">
               </div>
             </div>
 

@@ -38,4 +38,9 @@ class MasterUserModel extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function group()
+    {
+        return $this->belongsTo(GroupModel::class, 'group_id', 'group_id');
+    }
 }
