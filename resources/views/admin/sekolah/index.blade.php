@@ -147,7 +147,7 @@ function editForm(id){
   $('input[name=_method]').val('PATCH');
   $('#modal-form form')[0].reset();
   $.ajax({
-    url : "sekolah/"+id+"/edit",
+    url: "{{ url('sekolah') }}/" + id + "/edit",
     type : "GET",
     dataType : "JSON",
     success : function(data){
@@ -169,7 +169,7 @@ function editForm(id){
 function deleteData(id){
   if(confirm("Apakah yakin data akan dihapus?")){
     $.ajax({
-      url : "sekolah/"+id,
+      url: "{{ url('sekolah') }}/" + id,
       type : "POST",
       data : {'_method' : 'DELETE', '_token' : $('meta[name=csrf-token]').attr('content')},
       success : function(data){
