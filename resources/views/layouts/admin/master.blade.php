@@ -151,6 +151,29 @@
 <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/validator.js') }}"></script>
 
+<script>
+    // User Menu Toggle
+    const userToggle = document.getElementById('userToggle');
+    const userDropdown = document.getElementById('userDropdown');
+    const userMenu = document.getElementById('userMenu');
+
+    userToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!userMenu.contains(e.target)) {
+            userDropdown.classList.remove('show');
+        }
+    });
+
+    // Prevent dropdown from closing when clicking inside it
+    userDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+</script>
 
 <script>
     const sidebarToggle = document.getElementById('sidebarToggle');
