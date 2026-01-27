@@ -80,7 +80,7 @@ Route::middleware(['auth'])->group(function () {
         // Sekolah
         Route::resource('sekolah', SekolahController::class);
         Route::get('data_sekolah', [SekolahController::class, 'listData'])->name('data_sekolah');
-
+        
         // ========== MANAJEMEN USER ==========
         // Group
         Route::resource('group', GroupController::class);
