@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Mutasi;
+use App\Models\Bidang;
 use App\Models\Sekolah;
 use Carbon\Carbon;
 
@@ -21,15 +22,13 @@ class PecahTemplateAdminController extends Controller
 
     $kecamatan_data = $this->getMutasiByKecamatan(true);
     $statistik_bidang = $this->getStatistikBidang();
-    $can_see_all = $this->canSeeAllBidang();
 
         
     return view('admin.index', compact(
         'mutasi_masuk', 
         'mutasi_keluar', 
         'kecamatan_data',
-        'statistik_bidang',
-        'can_see_all'
+        'statistik_bidang'
         ));
     }
 
@@ -83,126 +82,71 @@ class PecahTemplateAdminController extends Controller
     private function getStatistikBidang()
     {
         $user = Auth::user();
-        $userRole = $user->role ?? 'administrator';
+        $groupId = $user->group_id ?? null;
         
-        // Tentukan bidang yang ditampilkan
-        if (in_array($userRole, ['administrator', 'usc'])) {
-            $bidangToShow = ['paud', 'sd', 'smp'];
-        } else {
-            $bidangToShow = [];
-            if (str_contains($userRole, 'paud')) {
-                $bidangToShow[] = 'paud';
-            } elseif (str_contains($userRole, 'sd')) {
-                $bidangToShow[] = 'sd';
-            } elseif (str_contains($userRole, 'smp')) {
-                $bidangToShow[] = 'smp';
+        // Query bidang dengan filter berdasarkan group_id
+        $bidangQuery = Bidang::with('jenjang');
+        
+        // group_id 1 = admin, group_id 13 = op_usc -> bisa lihat semua
+        if (!in_array($groupId, [1, 13])) {
+            // group_id 4 = op_bidang -> filter berdasarkan nama user
+            if ($groupId == 4) {
+                $userName = strtoupper($user->name ?? '');
+                
+                // Deteksi bidang dari nama user
+                if (str_contains($userName, 'PAUD')) {
+                    $bidangQuery->where('bidang_id', 1);
+                } elseif (str_contains($userName, 'SD')) {
+                    $bidangQuery->where('bidang_id', 2);
+                } elseif (str_contains($userName, 'SMP')) {
+                    $bidangQuery->where('bidang_id', 3);
+                } else {
+                    // Nama user tidak mengandung bidang, return empty
+                    return [];
+                }
+            } else {
+                // Group ID tidak dikenali, return empty
+                return [];
             }
         }
         
-        // Fungsi untuk menentukan bidang berdasarkan nama jenjang
-        $getBidangFromJenjang = function($jenjangNama) {
-            if (!$jenjangNama) return null;
-            
-            $jenjangUpper = strtoupper(trim($jenjangNama));
-            
-            // PAUD group
-            if (str_contains($jenjangUpper, 'PAUD') || 
-                str_contains($jenjangUpper, 'TK') || 
-                str_contains($jenjangUpper, 'KB') ||
-                str_contains($jenjangUpper, 'TPA') ||
-                str_contains($jenjangUpper, 'SKB') ||
-                str_contains($jenjangUpper, 'PKBM')) {
-                return 'paud';
-            }
-            
-            // SD group
-            if (str_contains($jenjangUpper, 'SD') || 
-                str_contains($jenjangUpper, 'MI')) {
-                return 'sd';
-            }
-            
-            // SMP group
-            if (str_contains($jenjangUpper, 'SMP') || 
-                str_contains($jenjangUpper, 'MTS') ||
-                str_contains($jenjangUpper, 'TSANAWIYAH')) {
-                return 'smp';
-            }
-            
-            return null;
-        };
-        
-        // Inisialisasi statistik
+        $bidangList = $bidangQuery->get();
         $statistik = [];
-        foreach ($bidangToShow as $bidang) {
-            $statistik[$bidang] = [
-                'nama' => strtoupper($bidang),
-                'jenjang' => '',
-                'mutasi_masuk' => 0,
-                'mutasi_keluar' => 0,
-                'total' => 0,
-                'jenjang_list' => []
+        
+        foreach ($bidangList as $bidang) {
+            // Ambil ID jenjang dalam bidang ini
+            $jenjangIds = $bidang->jenjang->pluck('jenjang_id')->toArray();
+            
+            if (empty($jenjangIds)) {
+                continue; // Skip jika tidak ada jenjang
+            }
+            
+            // Hitung mutasi MASUK
+            $mutasiMasuk = DB::table('mutasi')
+                ->join('sekolah', 'mutasi.mutasi_sekolah_tujuan_id', '=', 'sekolah.sekolah_id')
+                ->where('mutasi.mutasi_jenis', '1')
+                ->whereIn('sekolah.jenjang_id', $jenjangIds)
+                ->count();
+            
+            // Hitung mutasi KELUAR
+            $mutasiKeluar = DB::table('mutasi')
+                ->join('sekolah', 'mutasi.mutasi_sekolah_asal_id', '=', 'sekolah.sekolah_id')
+                ->where('mutasi.mutasi_jenis', '2')
+                ->whereIn('sekolah.jenjang_id', $jenjangIds)
+                ->count();
+            
+            $key = strtolower($bidang->bidang_nama);
+            
+            $statistik[$key] = [
+                'nama' => strtoupper($bidang->bidang_nama),
+                'jenjang' => $bidang->jenjang->pluck('jenjang_nama')->implode(', '),
+                'mutasi_masuk' => $mutasiMasuk,
+                'mutasi_keluar' => $mutasiKeluar,
+                'total' => $mutasiMasuk + $mutasiKeluar
             ];
         }
         
-        // Query untuk MUTASI MASUK (gunakan sekolah TUJUAN)
-        $mutasiMasuk = DB::table('mutasi')
-            ->leftJoin('sekolah', 'mutasi.mutasi_sekolah_tujuan_id', '=', 'sekolah.sekolah_id')
-            ->leftJoin('jenjang', 'sekolah.jenjang_id', '=', 'jenjang.jenjang_id')
-            ->where('mutasi.mutasi_jenis', '1')
-            ->select('jenjang.jenjang_nama')
-            ->get();
-        
-        // Query untuk MUTASI KELUAR (gunakan sekolah ASAL)
-        $mutasiKeluar = DB::table('mutasi')
-            ->leftJoin('sekolah', 'mutasi.mutasi_sekolah_asal_id', '=', 'sekolah.sekolah_id')
-            ->leftJoin('jenjang', 'sekolah.jenjang_id', '=', 'jenjang.jenjang_id')
-            ->where('mutasi.mutasi_jenis', '2')
-            ->select('jenjang.jenjang_nama')
-            ->get();
-        
-        // Hitung mutasi masuk per bidang
-        foreach ($mutasiMasuk as $mutasi) {
-            $bidang = $getBidangFromJenjang($mutasi->jenjang_nama);
-            
-            if ($bidang && in_array($bidang, $bidangToShow)) {
-                if ($mutasi->jenjang_nama && !in_array($mutasi->jenjang_nama, $statistik[$bidang]['jenjang_list'])) {
-                    $statistik[$bidang]['jenjang_list'][] = $mutasi->jenjang_nama;
-                }
-                $statistik[$bidang]['mutasi_masuk']++;
-            }
-        }
-        
-        // Hitung mutasi keluar per bidang
-        foreach ($mutasiKeluar as $mutasi) {
-            $bidang = $getBidangFromJenjang($mutasi->jenjang_nama);
-            
-            if ($bidang && in_array($bidang, $bidangToShow)) {
-                if ($mutasi->jenjang_nama && !in_array($mutasi->jenjang_nama, $statistik[$bidang]['jenjang_list'])) {
-                    $statistik[$bidang]['jenjang_list'][] = $mutasi->jenjang_nama;
-                }
-                $statistik[$bidang]['mutasi_keluar']++;
-            }
-        }
-        
-        // Finalisasi data
-        foreach ($statistik as $key => $data) {
-            $statistik[$key]['total'] = $data['mutasi_masuk'] + $data['mutasi_keluar'];
-            $statistik[$key]['jenjang'] = implode(', ', $data['jenjang_list']) ?: 'Tidak ada data';
-            unset($statistik[$key]['jenjang_list']);
-        }
-        
         return $statistik;
-    }
-
-    /**
-     * Check if user can see all bidang
-     */
-    private function canSeeAllBidang(): bool
-    {
-        $user = Auth::user();
-        $userRole = $user->role ?? 'administrator';
-        
-        return in_array($userRole, ['administrator', 'usc']);
     }
 
     /**

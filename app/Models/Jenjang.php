@@ -27,4 +27,12 @@ class Jenjang extends Model
     {
         return $this->hasMany(Sekolah::class, 'jenjang_id', 'jenjang_id');
     }
+
+    /**
+     * Relasi ke bidang (many to one)
+     */
+    public function bidang()
+    {
+        return $this->belongsTo(Bidang::class, 'bidang_id', 'bidang_id');
+    }
 }

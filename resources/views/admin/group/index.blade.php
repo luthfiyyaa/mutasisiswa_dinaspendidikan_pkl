@@ -10,7 +10,7 @@
 <!-- Content Header (Page header) -->
 <section class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-users"></i> Data Group
+    <i class="fa-solid fa-user-group"></i> Data Group
   </h1>
 </section>
 

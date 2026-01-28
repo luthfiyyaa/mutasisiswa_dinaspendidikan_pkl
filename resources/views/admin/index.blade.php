@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
                         label: 'jumlah mutasi masuk',
                         data: @json($kecamatan_data['masuk']),
-                        backgroundColor: 'rgba(68, 114, 196, 0.8)',
-                        borderColor: 'rgba(68, 114, 196, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
                         borderWidth: 1,
                         barPercentage: 0.8,
                         categoryPercentage: 0.9
@@ -127,8 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
                         label: 'jumlah mutasi keluar',
                         data: @json($kecamatan_data['keluar']),
-                        backgroundColor: 'rgba(237, 125, 49, 0.8)',
-                        borderColor: 'rgba(237, 125, 49, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
                         borderWidth: 1,
                         barPercentage: 0.8,
                         categoryPercentage: 0.9

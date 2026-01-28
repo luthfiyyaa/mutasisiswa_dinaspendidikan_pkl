@@ -11,7 +11,7 @@
 <!-- Content Header (Page header) -->
 <section class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-bars"></i> Master Menu
+    <i class="fa-solid fa-folder-closed"></i> Master Menu
   </h1>
 </section>
 
@@ -25,9 +25,6 @@
           <h3 class="content-card-title">
             <i class="fas fa-table"></i> Data Master Menu
           </h3>
-          {{-- <button onclick="addForm()" class="btn-modern btn-primary-modern">
-            <i class="fa fa-plus"></i> Tambah
-          </button> --}}
         </div>
 
         <div class="table-responsive">

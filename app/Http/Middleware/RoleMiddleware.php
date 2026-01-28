@@ -8,8 +8,6 @@ class RoleMiddleware
 {
     public function handle($request, Closure $next, ...$roles)
     {
-        //dd(auth()->user()->group_id, $roles);
-
         $user = auth()->user();
 
         if (!$user) {
