@@ -361,9 +361,10 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 350px)); /* ganti auto-fit jadi auto-fill dan 1fr jadi 350px */
             gap: 1.5rem;
             margin-bottom: 2rem;
+            justify-content: start; /* atau center jika mau di tengah */
         }
 
         .stat-card {
@@ -463,6 +464,7 @@
             background: rgba(255,255,255,0.95);
             height: calc(100vh - 64px);
             max-height: calc(100vh - 64px); 
+            min-height: calc(100vh - 64px);
             position: fixed;
             top: 64px;
             left: 0;
@@ -490,6 +492,7 @@
         @media (max-width: 768px) {
           .sidebar {
             transform: translateX(-100%);
+            min-height: calc(100vh - 50px);
             top: 48px;
           }
 
@@ -1009,9 +1012,9 @@ table.dataTable thead th::before {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .btn-group-modern {
+  /* .btn-group-modern {
     flex-direction: column;
-  }
+  } */
   
   .content-card {
     padding: 0.875rem;
@@ -1045,6 +1048,9 @@ table.dataTable thead th::before {
   align-items: center;
   gap: 0.4rem;
   text-decoration: none;
+  flex: 0 0 auto; 
+  width: auto;
+  white-space: nowrap; 
 }
 
 .btn-modern i {
@@ -1118,6 +1124,7 @@ table.dataTable thead th::before {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 /* SECTION */

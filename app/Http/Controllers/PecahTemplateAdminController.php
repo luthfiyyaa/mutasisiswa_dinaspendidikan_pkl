@@ -15,8 +15,8 @@ use Carbon\Carbon;
 
 class PecahTemplateAdminController extends Controller
 {
-  public function index(): View
-  {
+    public function index(): View
+    {
     $mutasi_masuk = Mutasi::where('mutasi_jenis', '=', '1')->count();
     $mutasi_keluar = Mutasi::where('mutasi_jenis', '=', '2')->count();
 
