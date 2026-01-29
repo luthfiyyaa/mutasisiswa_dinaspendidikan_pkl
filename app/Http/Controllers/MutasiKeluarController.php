@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Mutasi;
 use App\Models\Jenjang;
 use App\Models\Kecamatan;
@@ -71,9 +70,6 @@ class MutasiKeluarController extends Controller
             $sekolah_asal_alamat = $sekolah->sekolah_alamat;
             $jenjang_id = $sekolah->jenjang_id;
 
-            // Generate unique scan code
-            $kode_scan = md5(uniqid(now()->format('Y-m-d H:i:s'), true));
-
             // Get pejabat data
             $pejabat_id = Jenjang::where('jenjang_id', $jenjang_id)->value('pejabat_id');
             $pejabat = Pejabat::find($pejabat_id);
@@ -101,7 +97,6 @@ class MutasiKeluarController extends Controller
                 'mutasi_tanggal_surat_diterima' => $validated['mutasi_tanggal_surat_diterima'],
                 'jenjang_id' => $validated['jenjang_id'],
                 'mutasi_luar_kota' => null,
-                'mutasi_kode_scan' => $kode_scan,
                 'mutasi_pejabat_nip' => optional($pejabat)->pejabat_nip,
                 'mutasi_pejabat_nama' => optional($pejabat)->pejabat_nama,
                 'mutasi_pejabat_pangkat' => optional($pejabat)->pejabat_pangkat,
@@ -109,7 +104,7 @@ class MutasiKeluarController extends Controller
             ]);
 
             // Create nomor surat
-            $this->generateNomorSurat($mutasi_keluar->mutasi_id, '421.2');
+            $this->generateNomorSurat($mutasi_keluar->mutasi_id, '421.1');
 
             return redirect()->route('mutasi_keluar.index')
                 ->with('success', 'Data mutasi keluar berhasil ditambahkan!');
@@ -325,20 +320,15 @@ class MutasiKeluarController extends Controller
             ini_set('memory_limit', '512M');
 
             // Create nomor surat if not exists
-            $this->generateNomorSurat($mutasi_id, '421.2');
+            $this->generateNomorSurat($mutasi_id, '421.1');
 
             // Get nomor surat
             $mutasi = Mutasi::findOrFail($mutasi_id);
             $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
 
-            // Get QR code
-            $mutasi_kode_scan = Mutasi::where('mutasi_id', $mutasi_id)->value('mutasi_kode_scan');
-            $qrCode = QrCode::style('round')->size(75)->generate(url('qr_read', $mutasi_kode_scan));
-            $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
-
             $pdf = Pdf::loadView(
                 'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
-                compact('mutasi', 'nomorSurat', 'qrCode')
+                compact('mutasi', 'nomorSurat')
             )->setPaper('A4', 'portrait');
 
             return $pdf->stream('Surat_Keterangan_Mutasi_'.$mutasi->mutasi_nama_siswa.'.pdf');
@@ -363,18 +353,14 @@ class MutasiKeluarController extends Controller
             set_time_limit(300);
             ini_set('memory_limit', '512M');
 
-            $this->generateNomorSurat($mutasi_id, '421.2');
+            $this->generateNomorSurat($mutasi_id, '421.1');
 
             $mutasi = Mutasi::findOrFail($mutasi_id);
             $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
 
-            $qrCodeUrl = url('qr_read/' . $mutasi->mutasi_kode_scan);
-            $qrCode = QrCode::style('round')->size(75)->generate($qrCodeUrl);
-            $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
-
             $pdf = Pdf::loadView(
                 'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
-                compact('mutasi', 'nomorSurat', 'qrCode')
+                compact('mutasi', 'nomorSurat')
             )
             ->setPaper('A4', 'portrait')
             ->setOptions([
@@ -415,7 +401,7 @@ class MutasiKeluarController extends Controller
                 'mutasi_id' => $mutasi_id,
                 'nomor' => $nomor,
                 'tanggal' => $tanggal_ini,
-                'nomor_surat' => "{$kode_surat}/      /406.009/{$tahun_ini}"
+                'nomor_surat' => "{$kode_surat}/______/406.009/{$tahun_ini}"
             ]);
         }
     }

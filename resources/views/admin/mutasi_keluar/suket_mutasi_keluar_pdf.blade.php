@@ -134,7 +134,7 @@
 					<p style="font-size:13pt; font-weight: bold; margin: 2px 0;">PEMERINTAH KABUPATEN TRENGGALEK</p>
 					<p style="font-size:16pt; font-weight: bold; margin: 2px 0;">DINAS PENDIDIKAN</p>
 					<p style="font-size:9.5pt; margin: 2px 0;">Jl. RA. Kartini No.76 Trenggalek (0355) 791344 (0355) 791129, 791473</p>
-					<p style="font-size:9.5pt; margin: 2px 0;">dinaspendidikan@trenggalekkab.go.id Laman : https://disdik.trenggalekkab.go.id</p>
+					<p style="font-size:9.5pt; margin: 2px 0;">dinaspendidikan@trenggalekkab.go.id Laman: https://dindik.trenggalekkab.go.id</p>
 				</td>
 			</tr>
 		</table>
