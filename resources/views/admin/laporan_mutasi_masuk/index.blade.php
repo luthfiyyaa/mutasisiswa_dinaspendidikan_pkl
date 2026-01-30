@@ -15,7 +15,7 @@
 <!-- Page Header -->
 <div class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-file-alt"></i>Laporan Mutasi Masuk
+    <i class="fas fa-sign-in-alt"></i>Laporan Mutasi Masuk
   </h1>
 </div>
 
@@ -76,6 +76,10 @@
               <button type="submit" id="btnTampilkan" class="btn-modern btn-primary-modern">
                 <i class="fa fa-search"></i>
                 Tampilkan Data
+              </button>
+              <button type="button" id="btnReset" class="btn-modern btn-warning-modern">
+                <i class="fa fa-undo"></i>
+                Reset Filter
               </button>
               <button type="button" id="btnCetak" class="btn-modern btn-secondary-modern" disabled>
                 <i class="fa fa-print"></i>
@@ -220,7 +224,21 @@ $(document).ready(function() {
       window.open("{{url('laporan_mutasi_masuk_excel_file')}}/"+tanggal_awal+"/"+tanggal_akhir+"/"+jenjang+"/"+query);
     }
   });
+});
 
+$('#btnReset').click(function (e) {
+  e.preventDefault();
+  
+  // Reset semua input filter
+  $('#tanggal_awal').val('');
+  $('#tanggal_akhir').val('');
+  $('#jenjang').val('all');
+  
+  table.ajax.url("{{ route('data_laporan_mutasi_masuk') }}").load();
+  
+  document.getElementById("btnCetak").disabled = true;
+
+  alert('Filter telah direset');
 });
 
 </script>

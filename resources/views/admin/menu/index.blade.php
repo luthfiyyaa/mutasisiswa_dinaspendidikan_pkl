@@ -11,7 +11,7 @@
 <!-- Content Header (Page header) -->
 <section class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fa-solid fa-folder-closed"></i> Master Menu
+    <i class="fa-solid fa-folder-closed"></i> Data Menu
   </h1>
 </section>
 

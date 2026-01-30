@@ -91,7 +91,6 @@
                     <span>Beranda</span>
                 </a>
 
-                {{-- PERBAIKAN: Pastikan join menggunakan kolom yang benar --}}
                 @foreach(App\Models\MenuModel::join('tbl_t_user','tbl_t_user.menu_id','=','tbl_menu.menu_id')
                 ->orderBy('tbl_menu.menu_id','desc')
                 ->where([
@@ -108,9 +107,27 @@
                         ['tbl_t_user.group_id', '=', Auth::user()->group_id],
                     ])->get() as $menuItemList)
 
+                        @php
+                            $icons = [
+                                'laporan_mutasi_masuk' => 'fas fa-sign-in-alt',
+                                'laporan_mutasi_keluar' => 'fas fa-sign-out-alt',
+                                'mutasi_masuk' => 'fa fa-exchange-alt',
+                                'mutasi_keluar' => 'fa fa-exchange-alt',
+                                'kecamatan' => 'fas fa-map-marked-alt',
+                                'pejabat' => 'fa-solid fa-clipboard-user',
+                                'jenjang' => 'fas fa-layer-group',
+                                'sekolah' => 'fa-solid fa-school',
+                                'group' => 'fa-solid fa-object-group',
+                                'master_user' => 'fas fa-users',
+                                'menu' => 'fa-solid fa-folder-closed',
+                            ];
+                            
+                            $icon = $icons[$menuItemList->menu_link] ?? 'fas fa-circle';
+                        @endphp
+
                         <a href="{{ route($menuItemList->menu_link.'.index') }}"
                             class="nav-item {{ $hal == $menuItemList->menu_link ? 'active' : '' }}">
-                            <i class="fas fa-circle"></i>
+                            <i class="{{ $icon }}"></i>
                             <span>{{ $menuItemList->menu_nama }}</span>
                         </a>
 
@@ -127,7 +144,7 @@
 
     {{-- FOOTER --}}
     <footer class="footer">
-        Copyright © 2026 PKL FILKOM UB
+        Copyright © 2026
         <a href="https://dindik.trenggalekkab.go.id/">
             Dinas Pendidikan Kabupaten Trenggalek
         </a>.

@@ -229,34 +229,53 @@ $(document).ready(function() {
     $('#jenjang_search_id').val(id);
   });
 
-  $("#sekolah_id").select2({
-    minimumInputLength: 0,
-    ajax: {
-      placeholder: 'Cari Sekolah',
-      cache: false,
-      url: '{{  url('search_sekolah') }}',
-      dataType: 'json',
-      type: "GET",
-      quietMillis: 50,
-      data: function (params) {
-        return {
-          select: $.trim(params.term),
-          kecamatan_id: $('#kecamatan_search_id').val(),
-          jenjang_id: $('#jenjang_search_id').val()
-        };
-      },
-      processResults: function (data) {
-        return {
-          results: $.map(data, function (item) {
-            return {
-              text: item.sekolah_nama,
-              id: item.sekolah_id
-            }
-          })
-        };
-      }
+  $(document).ready(function() {
+
+  $('#kecamatan_search_id').val("0");
+  $('#jenjang_search_id').val("0");
+
+  // Fungsi untuk load sekolah
+  function loadSekolah() {
+    var kecamatan_id = $('#kecamatan_search_id').val();
+    var jenjang_id = $('#jenjang_search_id').val();
+    
+    if (kecamatan_id != "0" && jenjang_id != "0") {
+      $.ajax({
+        url: '{{ url('search_sekolah') }}',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+          select: '',
+          kecamatan_id: kecamatan_id,
+          jenjang_id: jenjang_id
+        },
+        success: function(data) {
+          $('#sekolah_id').empty();
+          $('#sekolah_id').append('<option value="" disabled selected>-- Pilih Sekolah --</option>');
+          
+          $.each(data, function(key, value) {
+            $('#sekolah_id').append('<option value="'+ value.sekolah_id +'">'+ value.sekolah_nama +'</option>');
+          });
+        }
+      });
     }
+  }
+
+  $(document).on('change','#kecamatan_id',function(a) {
+    var id = $(this).val();
+    console.log(id);
+    $('#kecamatan_search_id').val(id);
+    loadSekolah(); 
   });
+
+  $(document).on('change','#jenjang_id',function(a) {
+    var id = $(this).val();
+    console.log(id);
+    $('#jenjang_search_id').val(id);
+    loadSekolah(); 
+  });
+
+});
 
   $('.js-example-basic-single').select2();
 

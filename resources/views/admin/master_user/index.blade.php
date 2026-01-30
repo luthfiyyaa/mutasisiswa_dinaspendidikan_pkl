@@ -11,7 +11,7 @@
 <!-- Content Header (Page header) -->
 <section class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-users"></i> Master Users
+    <i class="fas fa-users"></i> Data Users
   </h1>
 </section>
 

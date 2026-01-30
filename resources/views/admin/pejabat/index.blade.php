@@ -14,7 +14,7 @@
 <!-- Page Header -->
 <div class="page-header-modern">
   <h1 class="page-title-modern">
-    <i class="fas fa-user-tie"></i>
+    <i class="fa-solid fa-clipboard-user"></i>
     Data Pejabat
   </h1>
 </div>

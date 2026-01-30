@@ -74,33 +74,43 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
-        // Get current user
-        $user = Auth::user();
-        
-        // Dynamic validation - email unique kecuali untuk user saat ini
-        $rules = $this->aturan;
-        $rules['email'][] = 'unique:users,email,' . $user->id;
+        try {
+            // Get current user
+            $user = Auth::user();
+            
+            // Dynamic validation - email unique kecuali untuk user saat ini
+            $rules = $this->aturan;
+            $rules['email'][] = 'unique:users,email,' . $user->id;
 
-        // Validate request
-        $validated = $request->validate($rules, $this->pesan);
-        
-        // Find user model
-        $userModel = User::findOrFail($user->id);
-        
-        // Update user data
-        $userModel->name = $validated['name'];
-        $userModel->email = $validated['email'];
-        $userModel->users_email = $validated['users_email'] ?? null;
-        
-        // Update password only if provided
-        if (!empty($validated['password'])) {
-            $userModel->password = Hash::make($validated['password']);
+            // Validate request
+            $validated = $request->validate($rules, $this->pesan);
+            
+            // Find user model
+            $userModel = User::findOrFail($user->id);
+            
+            // Update user data
+            $userModel->name = $validated['name'];
+            $userModel->email = $validated['email'];
+            $userModel->users_email = $validated['users_email'] ?? null;
+            
+            // Update password only if provided
+            if (!empty($validated['password'])) {
+                $userModel->password = Hash::make($validated['password']);
+            }
+
+            $userModel->save();
+            
+            Alert::success('Profil berhasil diubah', 'Success');
+            
+            return redirect()->route('admin.profil.index');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Ambil pesan error pertama saja
+            $firstError = collect($e->errors())->first()[0];
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $firstError);
         }
-
-        $userModel->save();
-        
-        Alert::success('Profil berhasil diubah', 'Success');
-        
-        return redirect()->route('admin.profil.index');
     }
 }

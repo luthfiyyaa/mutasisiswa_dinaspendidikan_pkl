@@ -16,7 +16,7 @@
 <div class="page-header-modern">
   <h1 class="page-title-modern">
     <i class="fas fa-school"></i>
-    Master Sekolah
+    Data Sekolah
   </h1>
 </div>
 

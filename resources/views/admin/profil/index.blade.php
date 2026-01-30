@@ -3,6 +3,65 @@
 @section('title', 'Admin-Profil')
 
 @section('css')
+<style>
+.alert-simple {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  animation: slideDown 0.3s ease;
+}
+
+.alert-danger-simple {
+  background-color: #fee;
+  border-left: 4px solid #dc3545;
+  color: #721c24;
+}
+
+.alert-success-simple {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  color: #155724;
+}
+
+.alert-simple i {
+  font-size: 18px;
+}
+
+.alert-simple span {
+  flex: 1;
+  font-size: 14px;
+}
+
+.close-simple {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-simple:hover {
+  opacity: 1;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
 @endsection
 
 @section('content')
@@ -22,15 +81,21 @@
         <form class="form-horizontal" action="{{route('admin_user.store')}}" method="POST">
           {{ csrf_field() }}
 
-          @if ($errors->any())
-          <div class="alert alert-danger">
-            <ul>
-              @foreach($errors->all() as $error)
-              <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
-          @endif
+      @if (session('error'))
+      <div class="alert-simple alert-danger-simple">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{{ session('error') }}</span>
+        <button type="button" class="close-simple" onclick="this.parentElement.remove()">×</button>
+      </div>
+      @endif
+
+      @if (session('success'))
+      <div class="alert-simple alert-success-simple">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ session('success') }}</span>
+        <button type="button" class="close-simple" onclick="this.parentElement.remove()">×</button>
+      </div>
+      @endif
 
           <div class="section-header">
             <i class="fas fa-user-circle"></i>

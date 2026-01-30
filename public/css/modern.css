@@ -295,7 +295,7 @@
             color: #a0aec0;
             font-weight: 600;
             letter-spacing: 0.5px;
-            margin-bottom: 0.75rem;
+            margin-top: 0.75rem;
         }
 
         .nav-item {
@@ -1012,9 +1012,11 @@ table.dataTable thead th::before {
 
 /* Responsive */
 @media (max-width: 768px) {
-  /* .btn-group-modern {
-    flex-direction: column;
-  } */
+  .btn-group-modern {
+    overflow-x: auto; /* Bisa di-scroll horizontal */
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+  }
   
   .content-card {
     padding: 0.875rem;

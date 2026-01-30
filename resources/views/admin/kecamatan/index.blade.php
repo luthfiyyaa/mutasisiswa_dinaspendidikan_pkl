@@ -27,7 +27,7 @@
       <div class="content-card">
         <div class="content-card-header">
           <h3 class="content-card-title">
-            <i class="fas fa-database"></i>
+            <i class="fas fa-table"></i>
             Data Master Kecamatan
           </h3>
           <button onclick="addForm()" class="btn-modern btn-primary-modern">

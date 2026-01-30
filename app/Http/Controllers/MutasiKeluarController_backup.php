@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Collection;
 use App\Models\Mutasi;
 use App\Models\Jenjang;
 use App\Models\Kecamatan;
@@ -15,7 +12,7 @@ use App\Models\Sekolah;
 use App\Models\Pejabat;
 use App\Models\NomorSuratMutasi;
 
-class MutasiKeluarController_backup extends Controller
+class MutasiKeluarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +21,7 @@ class MutasiKeluarController_backup extends Controller
      */
     public function index()
     {
-        $jenjang = Jenjang::all();
+        $jenjang = Jenjang::orderBy('jenjang_nama')->get();
         return view('admin.mutasi_keluar.index', compact('jenjang'));
     }
 
@@ -35,8 +32,8 @@ class MutasiKeluarController_backup extends Controller
      */
     public function create()
     {
-        $jenjang = Jenjang::all();
-        $kecamatan = Kecamatan::all();
+        $jenjang = Jenjang::orderBy('jenjang_nama')->get();
+        $kecamatan = Kecamatan::orderBy('kecamatan_nama')->get();
         return view('admin.mutasi_keluar.create', compact('jenjang', 'kecamatan'));
     }
 
@@ -48,73 +45,77 @@ class MutasiKeluarController_backup extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'sekolah_id' => 'required|exists:sekolah,sekolah_id',
-            'mutasi_nama_siswa' => 'required|string|max:255',
-            'mutasi_sekolah_asal_no_surat' => 'required|string|max:255',
-            'mutasi_tanggal_mutasi' => 'required|date',
-            'mutasi_nisn' => 'required|string|max:50',
-            'mutasi_noinduk' => 'required|string|max:50',
-            'mutasi_tempat_lahir' => 'required|string|max:255',
-            'mutasi_tanggal_lahir' => 'required|date',
-            'mutasi_tingkat_kelas' => 'required|string|max:50',
-            'mutasi_nama_wali' => 'required|string|max:255',
-            'mutasi_alamat' => 'required|string',
-            'mutasi_sekolah_tujuan_nama' => 'required|string|max:255',
-            'mutasi_sekolah_tujuan_no_surat' => 'nullable|string|max:255',
-            'mutasi_tanggal_surat_diterima' => 'nullable|date',
-            'jenjang_id' => 'required|exists:jenjang,jenjang_id',
-        ]);
+        try {
+            $validated = $request->validate([
+                'sekolah_id' => 'required|exists:sekolah,sekolah_id',
+                'mutasi_nama_siswa' => 'required|string|max:255',
+                'mutasi_sekolah_asal_no_surat' => 'required|string|max:255',
+                'mutasi_tanggal_mutasi' => 'required|date',
+                'mutasi_nisn' => 'required|string|max:200',
+                'mutasi_noinduk' => 'required|string|max:200',
+                'mutasi_tempat_lahir' => 'required|string|max:200',
+                'mutasi_tanggal_lahir' => 'required|date',
+                'mutasi_tingkat_kelas' => 'required|string|max:200',
+                'mutasi_nama_wali' => 'required|string|max:200',
+                'mutasi_alamat' => 'required|string|max:200',
+                'mutasi_sekolah_tujuan_nama' => 'required|string|max:255',
+                'mutasi_sekolah_tujuan_no_surat' => 'nullable|string|max:255',
+                'mutasi_tanggal_surat_diterima' => 'nullable|date',
+                'jenjang_id' => 'required|exists:jenjang,jenjang_id',
+            ]);
 
-        // Get sekolah asal data
-        $sekolah = Sekolah::with('kecamatan')->findOrFail($validated['sekolah_id']);
-        $kecamatan_nama = $sekolah->kecamatan->kecamatan_nama ?? '';
-        
-        $sekolah_asal_nama = "{$sekolah->sekolah_nama} {$kecamatan_nama} Kabupaten Trenggalek";
-        $sekolah_asal_alamat = $sekolah->sekolah_alamat;
-        $jenjang_id = $sekolah->jenjang_id;
+            $sekolah = Sekolah::with(['kecamatan'])->findOrFail($validated['sekolah_id']);
 
-        // Generate unique scan code
-        $kode_scan = md5(uniqid(now()->format('Y-m-d H:i:s'), true));
+            $sekolah_asal_nama = "{$sekolah->sekolah_nama} {$sekolah->kecamatan->kecamatan_nama} Kabupaten Trenggalek";
+            $sekolah_asal_alamat = $sekolah->sekolah_alamat;
+            $jenjang_id = $sekolah->jenjang_id;
 
-        // Get pejabat data
-        $pejabat_id = Jenjang::where('jenjang_id', $jenjang_id)->value('pejabat_id');
-        $pejabat = Pejabat::find($pejabat_id);
+            // Get pejabat data
+            $pejabat_id = Jenjang::where('jenjang_id', $jenjang_id)->value('pejabat_id');
+            $pejabat = Pejabat::find($pejabat_id);
 
-        // Create mutasi
-        $mutasi_keluar = Mutasi::create([
-            'mutasi_jenis' => '2',
-            'mutasi_nama_siswa' => $validated['mutasi_nama_siswa'],
-            'mutasi_sekolah_asal_id' => $validated['sekolah_id'],
-            'mutasi_sekolah_asal_nama' => $sekolah_asal_nama,
-            'mutasi_sekolah_asal_alamat' => $sekolah_asal_alamat,
-            'mutasi_sekolah_asal_no_surat' => $validated['mutasi_sekolah_asal_no_surat'],
-            'mutasi_tanggal_mutasi' => $validated['mutasi_tanggal_mutasi'],
-            'mutasi_nisn' => $validated['mutasi_nisn'],
-            'mutasi_noinduk' => $validated['mutasi_noinduk'],
-            'mutasi_tempat_lahir' => $validated['mutasi_tempat_lahir'],
-            'mutasi_tanggal_lahir' => $validated['mutasi_tanggal_lahir'],
-            'mutasi_tingkat_kelas' => $validated['mutasi_tingkat_kelas'],
-            'mutasi_nama_wali' => $validated['mutasi_nama_wali'],
-            'mutasi_alamat' => $validated['mutasi_alamat'],
-            'mutasi_sekolah_tujuan_id' => '',
-            'mutasi_sekolah_tujuan_nama' => $validated['mutasi_sekolah_tujuan_nama'],
-            'mutasi_sekolah_tujuan_alamat' => '',
-            'mutasi_sekolah_tujuan_no_surat' => $validated['mutasi_sekolah_tujuan_no_surat'] ?? '',
-            'mutasi_tanggal_surat_diterima' => $validated['mutasi_tanggal_surat_diterima'] ?? null,
-            'jenjang_id' => $validated['jenjang_id'],
-            'mutasi_luar_kota' => '',
-            'mutasi_kode_scan' => $kode_scan,
-            'mutasi_pejabat_nip' => $pejabat->pejabat_nip ?? '',
-            'mutasi_pejabat_nama' => $pejabat->pejabat_nama ?? '',
-            'mutasi_pejabat_pangkat' => $pejabat->pejabat_pangkat ?? '',
-            'mutasi_pejabat_jabatan' => $pejabat->pejabat_jabatan ?? '',
-        ]);
+            // Create mutasi
+            $mutasi_keluar = Mutasi::create([
+                'mutasi_jenis' => '2',
+                'mutasi_nama_siswa' => $validated['mutasi_nama_siswa'],
+                'mutasi_sekolah_asal_id' => $validated['sekolah_id'],
+                'mutasi_sekolah_asal_nama' => $sekolah_asal_nama,
+                'mutasi_sekolah_asal_alamat' => $sekolah_asal_alamat,
+                'mutasi_sekolah_asal_no_surat' => $validated['mutasi_sekolah_asal_no_surat'],
+                'mutasi_tanggal_mutasi' => $validated['mutasi_tanggal_mutasi'],
+                'mutasi_nisn' => $validated['mutasi_nisn'],
+                'mutasi_noinduk' => $validated['mutasi_noinduk'],
+                'mutasi_tempat_lahir' => $validated['mutasi_tempat_lahir'],
+                'mutasi_tanggal_lahir' => $validated['mutasi_tanggal_lahir'],
+                'mutasi_tingkat_kelas' => $validated['mutasi_tingkat_kelas'],
+                'mutasi_nama_wali' => $validated['mutasi_nama_wali'],
+                'mutasi_alamat' => $validated['mutasi_alamat'],
+                'mutasi_sekolah_tujuan_id' => null,
+                'mutasi_sekolah_tujuan_nama' => $validated['mutasi_sekolah_tujuan_nama'],
+                'mutasi_sekolah_tujuan_alamat' => null,
+                'mutasi_sekolah_tujuan_no_surat' => $validated['mutasi_sekolah_tujuan_no_surat'],
+                'mutasi_tanggal_surat_diterima' => $validated['mutasi_tanggal_surat_diterima'],
+                'jenjang_id' => $validated['jenjang_id'],
+                'mutasi_luar_kota' => null,
+                'mutasi_pejabat_nip' => optional($pejabat)->pejabat_nip,
+                'mutasi_pejabat_nama' => optional($pejabat)->pejabat_nama,
+                'mutasi_pejabat_pangkat' => optional($pejabat)->pejabat_pangkat,
+                'mutasi_pejabat_jabatan' => optional($pejabat)->pejabat_jabatan,
+            ]);
 
-        // Create nomor surat
-        $this->createNomorSurat($mutasi_keluar->mutasi_id);
+            // Create nomor surat
+            $this->generateNomorSurat($mutasi_keluar->mutasi_id, '421.1');
 
-        return redirect()->route('sukses_tambah_mutasi_keluar', $mutasi_keluar->mutasi_id);
+            return redirect()->route('mutasi_keluar.index')
+                ->with('success', 'Data mutasi keluar berhasil ditambahkan!');
+                
+        } catch (\Exception $e) {
+            \Log::error('Error creating mutasi keluar: ' . $e->getMessage());
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -173,13 +174,13 @@ class MutasiKeluarController_backup extends Controller
             'mutasi_nama_siswa' => 'required|string|max:255',
             'mutasi_sekolah_asal_no_surat' => 'required|string|max:255',
             'mutasi_tanggal_mutasi' => 'required|date',
-            'mutasi_nisn' => 'required|string|max:50',
-            'mutasi_noinduk' => 'required|string|max:50',
-            'mutasi_tempat_lahir' => 'required|string|max:255',
+            'mutasi_nisn' => 'required|string|max:200',
+            'mutasi_noinduk' => 'required|string|max:200',
+            'mutasi_tempat_lahir' => 'required|string|max:200',
             'mutasi_tanggal_lahir' => 'required|date',
-            'mutasi_tingkat_kelas' => 'required|string|max:50',
-            'mutasi_nama_wali' => 'required|string|max:255',
-            'mutasi_alamat' => 'required|string',
+            'mutasi_tingkat_kelas' => 'required|string|max:200',
+            'mutasi_nama_wali' => 'required|string|max:200',
+            'mutasi_alamat' => 'required|string|max:200',
             'mutasi_sekolah_tujuan_nama' => 'required|string|max:255',
             'mutasi_sekolah_tujuan_no_surat' => 'nullable|string|max:255',
             'mutasi_tanggal_surat_diterima' => 'nullable|date',
@@ -187,8 +188,8 @@ class MutasiKeluarController_backup extends Controller
         ]);
 
         // Get sekolah asal data
-        $sekolah = Sekolah::findOrFail($validated['sekolah_id']);
-        $sekolah_asal_nama = "{$sekolah->sekolah_nama} Kabupaten Trenggalek";
+        $sekolah = Sekolah::with(['kecamatan'])->findOrFail($validated['sekolah_id']);
+        $sekolah_asal_nama = "{$sekolah->sekolah_nama} {$sekolah->kecamatan->kecamatan_nama} Kabupaten Trenggalek";
         $sekolah_asal_alamat = $sekolah->sekolah_alamat;
         $jenjang_id = $sekolah->jenjang_id;
 
@@ -213,20 +214,20 @@ class MutasiKeluarController_backup extends Controller
             'mutasi_tingkat_kelas' => $validated['mutasi_tingkat_kelas'],
             'mutasi_nama_wali' => $validated['mutasi_nama_wali'],
             'mutasi_alamat' => $validated['mutasi_alamat'],
-            'mutasi_sekolah_tujuan_id' => '',
+            'mutasi_sekolah_tujuan_id' => null,
             'mutasi_sekolah_tujuan_nama' => $validated['mutasi_sekolah_tujuan_nama'],
-            'mutasi_sekolah_tujuan_alamat' => '',
-            'mutasi_sekolah_tujuan_no_surat' => $validated['mutasi_sekolah_tujuan_no_surat'] ?? '',
-            'mutasi_tanggal_surat_diterima' => $validated['mutasi_tanggal_surat_diterima'] ?? null,
+            'mutasi_sekolah_tujuan_alamat' => null,
+            'mutasi_sekolah_tujuan_no_surat' => $validated['mutasi_sekolah_tujuan_no_surat'],
+            'mutasi_tanggal_surat_diterima' => $validated['mutasi_tanggal_surat_diterima'],
             'jenjang_id' => $validated['jenjang_id'],
-            'mutasi_luar_kota' => '',
-            'mutasi_pejabat_nip' => $pejabat->pejabat_nip ?? '',
-            'mutasi_pejabat_nama' => $pejabat->pejabat_nama ?? '',
-            'mutasi_pejabat_pangkat' => $pejabat->pejabat_pangkat ?? '',
-            'mutasi_pejabat_jabatan' => $pejabat->pejabat_jabatan ?? '',
+            'mutasi_luar_kota' => null,
+            'mutasi_pejabat_nip' => $pejabat->pejabat_nip ?? null,
+            'mutasi_pejabat_nama' => $pejabat->pejabat_nama ?? null,
+            'mutasi_pejabat_pangkat' => $pejabat->pejabat_pangkat ?? null,
+            'mutasi_pejabat_jabatan' => $pejabat->pejabat_jabatan ?? null,
         ]);
 
-        return redirect()->route('mutasi_keluar.index');
+        return redirect()->route('mutasi_keluar.index')->with('success', 'Data mutasi keluar berhasil diupdate!');
     }
 
     /**
@@ -253,18 +254,17 @@ class MutasiKeluarController_backup extends Controller
     public function listData()
     {
         $mutasi_keluar = Mutasi::query()
-            ->join('jenjang', 'mutasi.jenjang_id', '=', 'jenjang.jenjang_id')
             ->where('mutasi.mutasi_jenis', '2')
-            ->select('mutasi.*', 'jenjang.jenjang_nama')
             ->orderBy('mutasi.mutasi_id', 'DESC');
 
         return DataTables::of($mutasi_keluar)
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
-                    <a href="%s" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<div class="btn-group-modern">
+                    <a href="%s" class="btn-modern btn-secondary-modern"  data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
+                    <a href="%s" class="btn-modern btn-warning-modern" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a></div>',
                     route('mutasi_keluar.show', $row->mutasi_id),
                     route('mutasi_keluar.edit', $row->mutasi_id),
                     $row->mutasi_id
@@ -293,9 +293,10 @@ class MutasiKeluarController_backup extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($row) {
                 return sprintf(
-                    '<a href="%s" class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
-                    <a href="%s" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
-                    <a onclick="deleteData(%d)" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a>',
+                    '<div class="btn-group-modern">
+                    <a href="%s" class="btn-modern btn-secondary-modern" data-toggle="tooltip" data-placement="bottom" title="Cetak Surat Rekomendasi"><i class="fa fa-print"></i></a>
+                    <a href="%s" class="btn-modern btn-warning-modern" data-toggle="tooltip" data-placement="bottom" title="Edit Data" style="color:white;"><i class="fa fa-edit"></i></a>
+                    <a onclick="deleteData(%d)" class="btn-modern btn-danger-modern" data-toggle="tooltip" data-placement="bottom" title="Hapus Data" style="color:white;"><i class="fa fa-trash"></i></a></div>',
                     route('mutasi_keluar.show', $row->mutasi_id),
                     route('mutasi_keluar.edit', $row->mutasi_id),
                     $row->mutasi_id
@@ -306,19 +307,6 @@ class MutasiKeluarController_backup extends Controller
     }
 
     /**
-     * Show success page after creating mutasi
-     *
-     * @param  int  $mutasi_id
-     * @return \Illuminate\Http\Response
-     */
-    public function sukses_tambah_mutasi_keluar(int $mutasi_id)
-    {
-        $mutasi = Mutasi::where('mutasi_id', $mutasi_id)->get();
-        
-        return view('admin.mutasi_keluar.sukses_tambah', compact('mutasi_id', 'mutasi'));
-    }
-
-    /**
      * Generate PDF surat keterangan mutasi keluar
      *
      * @param  int  $mutasi_id
@@ -326,45 +314,78 @@ class MutasiKeluarController_backup extends Controller
      */
     public function suket_mutasi_keluar_pdf(int $mutasi_id)
     {
-        // Create nomor surat if not exists
-        $this->createNomorSurat($mutasi_id);
+        try {
+            // Set timeout dan memory
+            set_time_limit(300);
+            ini_set('memory_limit', '512M');
 
-        // Get nomor surat
-        $no_usulan_tampil = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->get();
+            // Create nomor surat if not exists
+            $this->generateNomorSurat($mutasi_id, '421.1');
 
-        // Get mutasi data
-        $mutasi = Mutasi::query()
-            ->join('nomor_surat_mutasi', 'mutasi.mutasi_id', '=', 'nomor_surat_mutasi.mutasi_id')
-            ->where('mutasi.mutasi_id', $mutasi_id)
-            ->select('mutasi.*', 'nomor_surat_mutasi.*')
-            ->get();
+            // Get nomor surat
+            $mutasi = Mutasi::findOrFail($mutasi_id);
+            $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
 
-        // Get QR code
-        $mutasi_kode_scan = Mutasi::where('mutasi_id', $mutasi_id)->value('mutasi_kode_scan');
-        $qrCode = QrCode::style('round')->size(75)->generate(url('qr_read', $mutasi_kode_scan));
-        $qrCode = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $qrCode);
+            $pdf = Pdf::loadView(
+                'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
+                compact('mutasi', 'nomorSurat')
+            )->setPaper('A4', 'portrait');
 
-        $data = [
-            'mutasi' => $mutasi,
-            'no_usulan_tampil' => $no_usulan_tampil,
-            'qrCode' => $qrCode
-        ];
+            return $pdf->stream('Surat_Keterangan_Mutasi_'.$mutasi->mutasi_nama_siswa.'.pdf');
 
-        $pdf = PDF::loadView('admin.mutasi_masuk.suket_mutasi_masuk_pdf', $data, [], [
-            'format' => 'A4',
-            'orientation' => 'P'
-        ]);
+        } catch (\Exception $e) {
+            // Log error
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal generate PDF: ' . $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
+        }
+    }
 
-        return $pdf->stream('suket_mutasi_masuk_pdf.pdf');
+    public function download_suket_mutasi_keluar_pdf(int $mutasi_id)
+    {
+        try {
+            set_time_limit(300);
+            ini_set('memory_limit', '512M');
+
+            $this->generateNomorSurat($mutasi_id, '421.1');
+
+            $mutasi = Mutasi::findOrFail($mutasi_id);
+            $nomorSurat = NomorSuratMutasi::where('mutasi_id', $mutasi_id)->firstOrFail();
+
+            $pdf = Pdf::loadView(
+                'admin.mutasi_keluar.suket_mutasi_keluar_pdf',
+                compact('mutasi', 'nomorSurat')
+            )
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'sans-serif'
+            ]);
+
+            return $pdf->download('Surat_Keterangan_Mutasi_' . $mutasi->mutasi_nama_siswa . '.pdf');
+
+        } catch (\Exception $e) {
+            \Log::error('PDF Download Error: ' . $e->getMessage());
+            
+            return back()->with('error', 'Gagal download PDF: ' . $e->getMessage());
+        }
     }
 
     /**
      * Create nomor surat mutasi
      *
      * @param  int  $mutasi_id
+     * @param  string  $kode_surat
      * @return void
      */
-    private function createNomorSurat(int $mutasi_id): void
+    private function generateNomorSurat(int $mutasi_id, string $kode_surat): void
     {
         $tahun_ini = now()->year;
         $tanggal_ini = now()->format('Y-m-d');
@@ -380,7 +401,7 @@ class MutasiKeluarController_backup extends Controller
                 'mutasi_id' => $mutasi_id,
                 'nomor' => $nomor,
                 'tanggal' => $tanggal_ini,
-                'nomor_surat' => "421.2/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/406.009/{$tahun_ini}"
+                'nomor_surat' => "{$kode_surat}/______/406.009/{$tahun_ini}"
             ]);
         }
     }

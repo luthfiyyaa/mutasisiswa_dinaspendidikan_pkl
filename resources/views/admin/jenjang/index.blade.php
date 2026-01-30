@@ -17,7 +17,7 @@
 <div class="page-header-modern">
   <h1 class="page-title-modern">
     <i class="fas fa-layer-group"></i>
-    Master Jenjang
+    Data Jenjang
   </h1>
 </div>
 

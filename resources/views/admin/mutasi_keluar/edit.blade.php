@@ -84,13 +84,13 @@
           <div class="form-group">
               <label for="mutasi_tempat_lahir" class="col-sm-3 control-label">Tempat/Tgl Lahir</label>
               <div class="col-sm-3">
-                <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat lahir">
+                <input type="text" class="form-control" required name="mutasi_tempat_lahir" id="mutasi_tempat_lahir" placeholder="Tempat lahir" value="{{$mutasi->mutasi_tempat_lahir}}">
               </div>
               <div class="col-sm-1">
                 /
               </div>
               <div class="col-sm-5">
-                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir">
+                <input type="date" max="{{$hari_ini}}" class="form-control" required name="mutasi_tanggal_lahir" id="mutasi_tanggal_lahir" value="{{$mutasi->mutasi_tanggal_lahir}}">
               </div>
             </div>
 
@@ -118,11 +118,11 @@
             <label for="kecamatan_id" class="col-sm-3 control-label">Kecamatan</label>
             <div class="col-sm-9">
               <select required name="kecamatan_id" id="kecamatan_id" class="form-control" style="width: 100%;">
-                <?php foreach ($kecamatan as $value) { ?>
-                  <option value="{{ $value->kecamatan_id }}" {{ $kecamatan_id==$value->kecamatan_id ? 'selected' : '' }}>
+                @foreach ($kecamatan as $value)
+                  <option value="{{$value->kecamatan_id}}" {{$kecamatan_id==$value->kecamatan_id ? 'selected' : ''}}>
                     {{$value->kecamatan_nama}}
                   </option>
-                <?php } ?>
+                @endforeach
               </select>
             </div>
           </div>
@@ -130,12 +130,14 @@
           <div class="form-group">
             <label for="mutasi_sekolah_asal_nama" class="col-sm-3 control-label">Nama Sekolah</label>
             <div class="col-sm-9">
-              <input type="text" hidden name="kecamatan_search_id" id="kecamatan_search_id">
-              <input type="text" hidden name="jenjang_search_id" id="jenjang_search_id">
+              <input type="hidden" name="kecamatan_search_id" id="kecamatan_search_id">
+              <input type="hidden" name="jenjang_search_id" id="jenjang_search_id">
               <select id="sekolah_id" required name="sekolah_id" class="form-control">
-                <option value="" disabled selected>- Pilih Sekolahan -</option>
+                <option value="" disabled selected>-- Pilih Sekolah --</option>
               </select>
-              <small style="color:orange">Pilih jenjang dan kecamatan terlebih dahulu</small>
+              <small style="color:#f59e0b; display:block; margin-top:5px;">
+                <i class="fas fa-info-circle"></i> Pilih jenjang dan kecamatan terlebih dahulu
+              </small>
             </div>
           </div>
 
@@ -204,57 +206,53 @@ $(document).ready(function() {
   $('#kecamatan_search_id').val("{{$kecamatan_id}}");
   $('#jenjang_search_id').val("{{$mutasi->jenjang_id}}");
 
-  var sekolah_selected = "<option value="+"{{$mutasi_sekolah_asal_id}}"+">"+"{{$sekolah_nama}}"+"</option>"
+  var sekolah_selected = "<option value='{{$mutasi_sekolah_asal_id}}'>{{$sekolah_nama}}</option>";
   $('#sekolah_id').html(sekolah_selected);
+
+  // Fungsi untuk load sekolah
+  function loadSekolah() {
+    var kecamatan_id = $('#kecamatan_search_id').val();
+    var jenjang_id = $('#jenjang_search_id').val();
+    
+    if (kecamatan_id && jenjang_id) {
+      $.ajax({
+        url: '{{ url('search_sekolah') }}',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+          select: '',
+          kecamatan_id: kecamatan_id,
+          jenjang_id: jenjang_id
+        },
+        success: function(data) {
+          $('#sekolah_id').empty();
+          $('#sekolah_id').append('<option value="" disabled selected>-- Pilih Sekolah --</option>');
+          
+          $.each(data, function(key, value) {
+            $('#sekolah_id').append('<option value="'+ value.sekolah_id +'">'+ value.sekolah_nama +'</option>');
+          });
+        }
+      });
+    }
+  }
 
   $(document).on('change','#kecamatan_id',function(a) {
     var id = $(this).val();
     console.log(id);
     $('#kecamatan_search_id').val(id);
+    loadSekolah(); 
   });
 
   $(document).on('change','#jenjang_id',function(a) {
     var id = $(this).val();
     console.log(id);
     $('#jenjang_search_id').val(id);
+    loadSekolah(); 
   });
 
-  $("#sekolah_id").select2({
-    minimumInputLength: 0,
-    ajax: {
-      placeholder: 'Cari Sekolah',
-      cache: false,
-      url: '{{  url('search_sekolah') }}',
-      dataType: 'json',
-      type: "GET",
-      quietMillis: 50,
-      data: function (params) {
-        return {
-          select: $.trim(params.term),
-          kecamatan_id: $('#kecamatan_search_id').val(),
-          jenjang_id: $('#jenjang_search_id').val()
-        };
-      },
-      processResults: function (data) {
-        return {
-          results: $.map(data, function (item) {
-            return {
-              text:item.sekolah_nama,
-              id: item.sekolah_id
-            }
-          })
-        };
-      }
-    }
-  });
+  $('.js-example-basic-single').select2();
 
 });
-</script>
-
-<script>
-  $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-  });
 </script>
 
 @endsection
