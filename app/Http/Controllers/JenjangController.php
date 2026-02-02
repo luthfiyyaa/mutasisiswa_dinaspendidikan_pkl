@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Jenjang;
 use App\Models\Pejabat;
@@ -23,46 +24,27 @@ class JenjangController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'jenjang_nama' => 'required|string|max:255',
             'pejabat_id' => 'required|exists:pejabat,pejabat_id',
         ]);
 
-        Jenjang::create([
-            'jenjang_nama' => $validated['jenjang_nama'],
-            'pejabat_id' => $validated['pejabat_id'],
+        $jenjang = Jenjang::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil ditambahkan',
+            'data' => $jenjang
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -83,20 +65,22 @@ class JenjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id): JsonResponse
     {
+        $jenjang = Jenjang::findOrFail($id);
+        
         $validated = $request->validate([
             'jenjang_nama' => 'required|string|max:255',
             'pejabat_id' => 'required|exists:pejabat,pejabat_id',
         ]);
 
-        $jenjang = Jenjang::findOrFail($id);
-        $jenjang->update([
-            'jenjang_nama' => $validated['jenjang_nama'],
-            'pejabat_id' => $validated['pejabat_id'],
-        ]);
+        $jenjang->update($validated);
 
-        return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil diperbarui',
+            'data' => $jenjang
+        ]);
     }
 
     /**

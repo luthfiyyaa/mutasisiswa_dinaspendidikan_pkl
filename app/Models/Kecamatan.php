@@ -12,7 +12,7 @@ class Kecamatan extends Model
 
    protected $fillable = [
         'kecamatan_nama',
-        'kecamatan_kode',
+        'kecamatan_kode_wilayah',
     ];
 
     protected $casts = [

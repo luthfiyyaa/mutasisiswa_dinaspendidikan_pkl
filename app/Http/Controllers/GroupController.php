@@ -55,7 +55,7 @@ class GroupController extends Controller
         try {
             // Validate request
             $validator = Validator::make($request->all(), [
-                'group_nama' => ['required', 'string', 'max:100', 'unique:groups,group_nama']
+                'group_nama' => ['required', 'string', 'max:100', 'unique:tbl_group,group_nama']
             ], $this->pesan);
 
             if ($validator->fails()) {
@@ -96,11 +96,10 @@ class GroupController extends Controller
         try {
             $group = GroupModel::findOrFail($id);
             
-            return response()->json([
-                'success' => true,
-                'data' => $group
-            ]);
-         } catch (\Exception $e) {
+            // Langsung return data group tanpa wrapper
+            return response()->json($group);
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Group tidak ditemukan'
@@ -117,13 +116,14 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-      try {
-            // Find group
+        try {
+            // Find group - ubah dari group_id menjadi $id langsung
             $group = GroupModel::findOrFail($id);
 
-            // Validate request - unique except current id
+            // Validate request - PERBAIKI INI: gunakan primary key yang benar
             $validator = Validator::make($request->all(), [
-                'group_nama' => ['required', 'string', 'max:100', 'unique:groups,group_nama,' . $id . ',group_id']
+                'group_nama' => ['required', 'string', 'max:100', 'unique:tbl_group,group_nama,' . $group->group_id . ',group_id']
+                // Pastikan ini sesuai dengan primary key di model
             ], $this->pesan);
 
             if ($validator->fails()) {
@@ -133,6 +133,7 @@ class GroupController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
+            
             // Update group
             $group->group_nama = $request->group_nama;
             $group->save();
@@ -142,14 +143,14 @@ class GroupController extends Controller
                 'message' => 'Group berhasil diupdate',
                 'data' => $group
             ]);
-          } catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
     }
-     
+        
      /**
      * Remove the specified resource from storage.
      *
@@ -202,13 +203,6 @@ class GroupController extends Controller
                 $row[] = htmlspecialchars($group->group_nama);
                 $row[] = '
                     <div class="btn-group-modern text-center" role="group">
-                        <a href="' . route('t_user.show', $group->group_id) . '" 
-                           class="btn-modern btn-secondary-modern text-center" 
-                           data-toggle="tooltip" 
-                           data-placement="top" 
-                           title="Setting Menu">
-                            <i class="fa fa-gear"></i>
-                        </a>
                         <button onclick="editForm(' . $group->group_id . ')" 
                                 class="btn-modern btn-warning-modern text-center" 
                                 data-toggle="tooltip" 

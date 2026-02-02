@@ -105,7 +105,7 @@ $(function(){
     ]
   });
 
-  $('#modal-form form').validator().on('submit', function(e){
+  $('#modal-form form').on('submit', function(e){
     if(!e.isDefaultPrevented()){
       var id = $('#id').val();
       if(save_method == "add") url = "{{ route('pejabat.store') }}";

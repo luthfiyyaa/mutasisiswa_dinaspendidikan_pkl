@@ -10,7 +10,7 @@
         <button type="button" class="app-modal-close" data-dismiss="modal">×</button>
       </div>
       
-      <form class="form-horizontal" data-toggle="validator" method="post">
+      <form class="form-horizontal" method="post">
         {{ csrf_field() }} {{ method_field('POST') }}
         
         <div class="app-modal-body">

@@ -74,15 +74,27 @@ class MasterUserController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        // Debug
+        \Log::info('Update Request:', $request->all());
+        
         $master_user = MasterUserModel::findOrFail($id);
 
-        $validated = $request->validate([
+        // Validasi dasar tanpa password dulu
+        $rules = [
             'group_id' => 'required|exists:tbl_group,group_id',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|max:255|unique:users,email,' . $id . ',id',
             'users_email' => 'required|email|max:255',
-            'password' => 'nullable|min:6|confirmed',
-        ]);
+        ];
+        
+        // Jika password diisi, tambahkan validasi password
+        if ($request->filled('password')) {
+            $rules['password'] = 'required|string|min:6|confirmed';
+        }
+        
+        $validated = $request->validate($rules);
+        
+        \Log::info('Validated:', $validated);
 
         $updateData = [
             'group_id' => $validated['group_id'],
@@ -93,8 +105,10 @@ class MasterUserController extends Controller
 
         // Only update password if provided
         if ($request->filled('password')) {
-            $updateData['password'] = Hash::make($validated['password']);
+            $updateData['password'] = Hash::make($request->password);
         }
+        
+        \Log::info('Update Data:', $updateData);
 
         $master_user->update($updateData);
 

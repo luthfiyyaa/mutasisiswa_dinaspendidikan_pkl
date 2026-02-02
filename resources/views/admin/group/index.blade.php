@@ -85,27 +85,39 @@ $(function(){
       "type" : "GET"
     }
   });
-  $('#modal-form form').validator().on('submit', function(e){
-    if(!e.isDefaultPrevented()){
-      var id = $('#id').val();
-      if(save_method == "add") url = "{{ route('group.store') }}";
-      else url = "group/"+id;
-      $.ajax({
-        url : url,
-        type : "POST",
-        data : $('#modal-form form').serialize(),
-        success : function(data){
-          $('#modal-form').modal('hide');
-          table.ajax.reload();
-        },
-        error : function(){
-          alert("Tidak dapat menyimpan data!");
-        }
-      });
-      return false;
+  
+  $('#modal-form form').on('submit', function(e){
+    e.preventDefault(); // Tambahkan ini
+    
+    var id = $('#id').val();
+    var url; // Deklarasikan variabel
+    
+    if(save_method == "add") {
+        url = "{{ route('group.store') }}";
+    } else {
+        url = "{{ url('group') }}/" + id;
     }
+    
+    $.ajax({
+      url : url,
+      type : "POST",
+      data : $('#modal-form form').serialize(),
+      success : function(data){
+        console.log('Success:', data); // Debug
+        $('#modal-form').modal('hide');
+        table.ajax.reload();
+        alert('Data berhasil disimpan!');
+      },
+      error : function(xhr){
+        console.log('Error:', xhr.responseJSON); // Debug
+        alert("Tidak dapat menyimpan data!");
+      }
+    });
+    
+    return false;
   });
 });
+
 function addForm(){
   save_method = "add";
   $('input[name=_method]').val('POST');
@@ -113,6 +125,7 @@ function addForm(){
   $('#modal-form form')[0].reset();
   $('.modal-title').text('Tambah Data Group');
 }
+
 function editForm(id){
   save_method = "edit";
   $('input[name=_method]').val('PATCH');
@@ -122,16 +135,19 @@ function editForm(id){
     type : "GET",
     dataType : "JSON",
     success : function(data){
+      console.log('Edit data:', data); // Debug
       $('#modal-form').modal('show');
       $('.modal-title').text('Edit Data Group');
       $('#id').val(data.group_id);
       $('#group_nama').val(data.group_nama);
     },
-    error : function(){
+    error : function(xhr){
+      console.log('Edit error:', xhr.responseJSON); // Debug
       alert("Tidak dapat menampilkan data !!!");
     }
   });
 }
+
 function deleteData(id){
   if(confirm("Apakah yakin data akan dihapus?")){
     $.ajax({
@@ -139,28 +155,17 @@ function deleteData(id){
       type : "POST",
       data : {'_method' : 'DELETE', '_token' : $('meta[name=csrf-token]').attr('content')},
       success : function(data){
+        console.log('Delete success:', data); // Debug
         table.ajax.reload();
+        alert('Data berhasil dihapus!');
       },
-      error : function(){
+      error : function(xhr){
+        console.log('Delete error:', xhr.responseJSON); // Debug
         alert("Tidak dapat menghapus data!");
       }
     });
   }
 }
-</script>
-
-<script>
-$(function () {
-  $('#example1').DataTable()
-  $('#example2').DataTable({
-    'paging'      : true,
-    'lengthChange': false,
-    'searching'   : false,
-    'ordering'    : true,
-    'info'        : true,
-    'autoWidth'   : false
-  })
-})
 </script>
 
 @endsection

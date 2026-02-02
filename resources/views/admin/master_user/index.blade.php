@@ -86,25 +86,76 @@ $(function(){
       "type" : "GET"
     }
   });
-  $('#modal-form form').validator().on('submit', function(e){
-    if(!e.isDefaultPrevented()){
-      var id = $('#id').val();
-      if(save_method == "add") url = "{{ route('master_user.store') }}";
-      else url = "master_user/"+id;
-      $.ajax({
-        url : url,
-        type : "POST",
-        data : $('#modal-form form').serialize(),
-        success : function(data){
-          $('#modal-form').modal('hide');
-          table.ajax.reload();
-        },
-        error : function(){
-          alert("Tidak dapat menyimpan data!");
-        }
-      });
-      return false;
+
+  // HAPUS .validator() - INI YANG BERMASALAH!
+  $('#modal-form form').on('submit', function(e){
+    e.preventDefault(); // Prevent default submit
+    
+    var id = $('#id').val();
+    var url;
+    
+    // Validasi manual
+    var password = $('#password').val();
+    var confirm = $('#confirm_password').val();
+    
+    // Jika password diisi, harus sama dengan konfirmasi
+    if(password !== '' || confirm !== '') {
+      if(password !== confirm) {
+        alert('Password dan konfirmasi password tidak sama!');
+        return false;
+      }
+      if(password.length < 6) {
+        alert('Password minimal 6 karakter!');
+        return false;
+      }
     }
+    
+    if(save_method == "add") {
+      url = "{{ route('master_user.store') }}";
+    } else {
+      url = "{{ url('master_user') }}/" + id;
+    }
+    
+    var formData = $(this).serialize();
+    
+    console.log('=== SUBMIT DEBUG ===');
+    console.log('Method:', save_method);
+    console.log('URL:', url);
+    console.log('Form Data:', formData);
+    
+    $.ajax({
+      url : url,
+      type : "POST",
+      data : formData,
+      dataType: 'json',
+      success : function(response){
+        console.log('Success:', response);
+        $('#modal-form').modal('hide');
+        table.ajax.reload();
+        alert(response.message || 'Data berhasil disimpan!');
+      },
+      error : function(xhr, status, error){
+        console.log('=== ERROR DEBUG ===');
+        console.log('Status:', xhr.status);
+        console.log('Response:', xhr.responseText);
+        console.log('Error:', error);
+        
+        var errorMessage = 'Tidak dapat menyimpan data!';
+        
+        if(xhr.responseJSON && xhr.responseJSON.errors) {
+          errorMessage = '';
+          $.each(xhr.responseJSON.errors, function(key, value) {
+            errorMessage += value[0] + '\n';
+          });
+        } else if(xhr.responseJSON && xhr.responseJSON.message) {
+          errorMessage = xhr.responseJSON.message;
+        }
+        
+        alert(errorMessage);
+      }
+    });
+    
+    return false;
   });
 });
 function addForm(){
@@ -113,11 +164,23 @@ function addForm(){
   $('#modal-form').modal('show');
   $('#modal-form form')[0].reset();
   $('.app-modal-title').text('Tambah Data Users');
+  
+  $('#password').prop('required', true);
+  $('#confirm_password').prop('required', true);
+  $('#message').html('');
+  $('#submit').prop('disabled', false);
 }
+
 function editForm(id){
   save_method = "edit";
   $('input[name=_method]').val('PATCH');
   $('#modal-form form')[0].reset();
+  
+  $('#password').prop('required', false);
+  $('#confirm_password').prop('required', false);
+  $('#message').html('');
+  $('#submit').prop('disabled', false);
+  
   $.ajax({
     url : "master_user/"+id+"/edit",
     type : "GET",
@@ -130,6 +193,9 @@ function editForm(id){
       $('#name').val(data.name);
       $('#email').val(data.email);
       $('#users_email').val(data.users_email);
+      // Password dikosongkan saat edit
+      $('#password').val('');
+      $('#confirm_password').val('');
     },
     error : function(){
       alert("Tidak dapat menampilkan data !!!");
@@ -174,21 +240,24 @@ $(function () {
     });
   });
 
-  $('#confirm_password').on('keyup', function () {
-    if ($('#password').val() == $('#confirm_password').val()) {
-      $('#message').html('').css('color', 'green');
-    } else {
-      $('#message').html('Password tidak cocok').css('color', 'red');
-    }
-  });
-
-  $('#confirm_password').keyup(function(){
+  // Validasi password hanya jika diisi
+  $('#confirm_password, #password').on('keyup', function () {
     var pass = $('#password').val();
     var cpass = $('#confirm_password').val();
-    if(pass != cpass){
-      $('#submit').attr({disabled:true});
+    
+    // Jika password diisi
+    if(pass !== '' || cpass !== '') {
+      if (pass === cpass) {
+        $('#message').html('Password cocok ✓').css('color', 'green');
+        $('#submit').prop('disabled', false);
+      } else {
+        $('#message').html('Password tidak cocok ✗').css('color', 'red');
+        $('#submit').prop('disabled', true);
+      }
     } else {
-      $('#submit').attr({disabled:false});
+      // Jika password kosong (edit tanpa ubah password)
+      $('#message').html('');
+      $('#submit').prop('disabled', false);
     }
   });
 </script>

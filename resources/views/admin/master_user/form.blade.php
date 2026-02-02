@@ -9,7 +9,7 @@
         <button type="button" class="app-modal-close" data-dismiss="modal" aria-label="Close">×</button>
       </div>
 
-      <form class="form-horizontal" data-toggle="validator" method="post"  action="{{ route('master_user.store') }}">
+      <form class="form-horizontal" method="post"  action="{{ route('master_user.store') }}">
         {{ csrf_field() }} {{ method_field('POST') }}
         
         <div class="app-modal-body">
@@ -55,7 +55,13 @@
             <label for="password" class="app-form-label">
               <i class="fas fa-lock"></i> Password
             </label>
-            <input type="password" onchange="check_pass();" required class="app-form-control" name="password" id="password" placeholder="Isikan Password">
+            <input 
+              type="password" 
+              class="app-form-control" 
+              name="password" 
+              id="password" 
+              placeholder="Kosongkan jika tidak ingin mengubah"
+            >
             <span class="app-form-error help-block with-errors"></span>
           </div>
 
@@ -63,7 +69,13 @@
             <label for="confirm_password" class="app-form-label">
               <i class="fas fa-lock"></i> Confirm Password
             </label>
-            <input type="password" onchange="check_pass();" class="app-form-control" name="password_confirmation" id="confirm_password" placeholder="Ulangi Password">
+            <input 
+              type="password" 
+              class="app-form-control" 
+              name="password_confirmation" 
+              id="confirm_password" 
+              placeholder="Konfirmasi password"
+            >
             <span id='message'></span>
           </div>
 

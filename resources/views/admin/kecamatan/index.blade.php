@@ -94,7 +94,7 @@ $(function(){
     if(!e.isDefaultPrevented()){
       var id = $('#id').val();
       if(save_method == "add") url = "{{ route('kecamatan.store') }}";
-      else url = "kecamatan/"+id;
+      else url = "{{ url('kecamatan') }}/"+id;
       $.ajax({
         url : url,
         type : "POST",
